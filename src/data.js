@@ -70,9 +70,12 @@ export const insuranceTypes = {
       desc: "Matkustajan hoitoturva, peruuntuminen, keskeytyminen, myöhästyminen, matkatavarat ja matkavastuu.",
       detailFlow: "travel",
       materials: [
-        m("Tuoteseloste", "https://core-public.editaprima.fi/lahitapiola/download/5303/10"),
-        m("Avaintietoasiakirja", "https://core-public.editaprima.fi/lahitapiola/download/5534/10"),
-        m("Vakuutusehdot", "https://core-public.editaprima.fi/lahitapiola/download/5300/10"),
+        m("Jatkuva matkavakuutus: tuoteseloste", "https://core-public.editaprima.fi/lahitapiola/download/5152/10"),
+        m("Jatkuva matkavakuutus: avaintiedot", "https://public.egate.fi/lahitapiola/lahitapiola/fi/tiedostot/224725/"),
+        m("Jatkuva matkavakuutus: vakuutusehdot", "https://core-public.editaprima.fi/lahitapiola/download/5282/10"),
+        m("Matkakohtainen matkavakuutus: tuoteseloste", "https://core-public.editaprima.fi/lahitapiola/download/5303/10"),
+        m("Matkakohtainen matkavakuutus: avaintiedot", "https://core-public.editaprima.fi/lahitapiola/download/5534/10"),
+        m("Matkakohtainen matkavakuutus: vakuutusehdot", "https://core-public.editaprima.fi/lahitapiola/download/5300/10"),
         m("Yleiset sopimusehdot", GENERAL_TERMS_PERSONAL)
       ]
     },
@@ -597,9 +600,9 @@ export const detailFlows = {
     },
     travel: {
       title: "Matkavakuutus",
-      sourceNote: "Perustuu matkavakuutuksen materiaaleihin: matkustajan hoitoturva, peruuntuminen, keskeytyminen, myöhästyminen ja matkatavarat.",
+      sourceNote: "Perustuu jatkuvan matkavakuutuksen ja matkakohtaisen eli määräaikaisen matkavakuutuksen materiaaleihin.",
       questions: [
-        q("tripPattern", "Millainen matkustaminen kuvaa sinua parhaiten?", "Matkan pituus ja toistuvuus vaikuttavat ratkaisuun.", false, [["single", "Yksittäinen matka"], ["several", "Useita matkoja vuodessa"], ["long", "Yli kolmen kuukauden matka"], ["domestic", "Pääosin kotimaanmatkoja yli 50 km päähän"]]),
+        q("tripPattern", "Millainen matkustaminen kuvaa sinua parhaiten?", "Matkojen määrä ja kesto ratkaisevat, kannattaako tutkia jatkuvaa vai matkakohtaista vakuutusta.", false, [["single", "Yksittäinen matka tai matkustan harvoin"], ["several", "Useita matkoja vuodessa"], ["long", "Yli kolmen kuukauden matka"], ["domestic", "Pääosin kotimaanmatkoja yli 50 km päähän"]]),
         q("travelConcerns", "Mikä matkustamisessa huolestuttaa?", "Voit valita useamman.", true, [["medical", "Sairastuminen tai tapaturma matkalla"], ["cancel", "Matkan peruuntuminen"], ["interrupt", "Matkan keskeytyminen"], ["delay", "Jatkoyhteydeltä myöhästyminen"], ["luggage", "Matkatavaroiden vahinko tai viivästyminen"], ["liability_legal", "Matkavastuu tai matkaoikeusturva"]]),
         q("travelers", "Ketkä matkustavat?", "Matkatavaravakuutus voi kattaa samassa taloudessa asuvat yhteisellä matkalla.", false, [["alone", "Matkustan yksin"], ["partner", "Matkustan puolison kanssa"], ["family", "Matkustan perheen kanssa"], ["child_alone", "Lapsi matkustaa yksin"]]),
         q("travelDeductible", "Mikä omavastuulinja tuntuu sopivalta matkatavaroille?", "Sovita omavastuu tavaroiden arvoon.", false, [["low", "Matala omavastuu"], ["medium", "Keskitasoinen omavastuu"], ["high", "Korkeampi omavastuu"]])

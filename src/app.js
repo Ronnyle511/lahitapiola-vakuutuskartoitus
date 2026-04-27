@@ -558,6 +558,7 @@ async function copySummary() {
 }
 
 function renderSummaryList() {
+  if (!$("summaryList")) return;
   const recommendation = st().recommendation;
   const answered = Object.keys(st().quickAnswers).length;
   const detailEntries = Object.entries(st().detailResults);

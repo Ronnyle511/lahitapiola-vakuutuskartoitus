@@ -133,24 +133,42 @@ function buildTravelResult(profileId, flowKey, a) {
   const concerns = toArray(a.travelConcerns);
   const covers = ["Matkustajan hoitoturva"];
   const notes = [];
+  let contractType = "Matkavakuutuksen sopimusmuoto jatkoselvitykseen";
 
   if (has(concerns, "cancel")) covers.push("Peruuntumisturva");
   if (has(concerns, "interrupt")) covers.push("Keskeytymisturva");
   if (has(concerns, "delay")) covers.push("Myöhästymisturva");
   if (has(concerns, "luggage")) covers.push("Matkatavaravakuutus");
   if (has(concerns, "liability_legal")) covers.push("Matkavastuu ja matkaoikeusturva");
-  if (a.tripPattern === "long") notes.push("Yli kolmen kuukauden matka vaatii voimassaolon erillisen tarkistuksen.");
+
+  if (a.tripPattern === "single") {
+    contractType = "Matkakohtainen eli määräaikainen matkavakuutus";
+    notes.push("Matkakohtainen vakuutus sopii erityisesti yksittäiselle tai harvoin tehtävälle matkalle.");
+  }
+  if (a.tripPattern === "several") {
+    contractType = "Jatkuva matkavakuutus";
+    notes.push("Jatkuva matkavakuutus on yleensä luonteva vaihtoehto, jos matkoja on useita vuodessa.");
+  }
+  if (a.tripPattern === "long") {
+    contractType = "Jatkuva matkavakuutus ja voimassaolon pidennys jatkoselvitykseen";
+    notes.push("Yli kolmen kuukauden matka vaatii voimassaolon erillisen tarkistuksen tai pidennyksen.");
+  }
+  if (a.tripPattern === "domestic") {
+    contractType = "Jatkuva matkavakuutus tai matkakohtainen kotimaan matkalle";
+    notes.push("Kotimaan matkoilla matkavakuutuksen voimassaolo kannattaa tarkistaa erityisesti yli 50 kilometrin matkoille.");
+  }
 
   return result(
     "Matkavakuutuksen ehdotus",
-    covers.join(" + "),
+    `${contractType}: ${covers.join(" + ")}`,
     [
       { label: "Matkustamisen tyyppi", value: labelFor(profileId, flowKey, "tripPattern", a.tripPattern) },
+      { label: "Ehdotettu sopimusmuoto", value: contractType },
       { label: "Ehdotetut turvat", value: covers.join(", ") },
       { label: "Matkustajat", value: labelFor(profileId, flowKey, "travelers", a.travelers) },
       { label: "Matkatavaroiden omavastuu", value: labelFor(profileId, flowKey, "travelDeductible", a.travelDeductible) }
     ],
-    ["matkaturva kannattaa sovittaa matkojen toistuvuuteen, kestoon ja siihen, huolettaako hoito, peruutus, tavarat vai vastuu"],
+    ["matkaturva kannattaa sovittaa matkojen toistuvuuteen, kestoon ja siihen, tarvitaanko jatkuva vai matkakohtainen vakuutus"],
     notes,
     "Varmista matkakohteet, matkan kesto, vakuutettavat henkilöt, matkatavaroiden arvo ja mahdolliset terveyteen liittyvät rajoitukset."
   );

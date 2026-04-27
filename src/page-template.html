@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vakuutuskartoitus | LähiTapiola</title>
+  <link rel="stylesheet" href="./src/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-topline" aria-label="Asiakasryhmät">
+      <span>Henkilöasiakkaat</span>
+      <span>Yritysasiakkaat</span>
+      <span>Maatila-asiakkaat</span>
+      <span>Asiakkaalle</span>
+    </div>
+    <div class="site-nav">
+      <div class="site-brand" aria-label="LähiTapiola">
+        <span class="brand-mark">LT</span>
+        <span>LähiTapiola</span>
+      </div>
+      <nav class="site-links" aria-label="Päänavigaatio">
+        <a href="#appShell">Vakuutukset</a>
+        <a href="#materiaalit">Tuoteselosteet</a>
+        <a href="#contactView">Yhteydenotto</a>
+      </nav>
+      <button class="btn btn-secondary btn-small" type="button">Kirjaudu</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-inner">
+        <div class="modebar">
+          <div>
+            <div class="eyebrow">Vakuutuskartoitus</div>
+            <p class="mode-help">Valitse ensin, kartoitatko henkilöasiakkaan vai yrityksen vakuutuksia.</p>
+          </div>
+          <div class="segmented" role="group" aria-label="Asiakastyyppi">
+            <button id="modePersonal" class="active" type="button">Henkilöasiakas</button>
+            <button id="modeBusiness" type="button">Yritysasiakas</button>
+          </div>
+        </div>
+
+        <h1 id="heroTitle"></h1>
+        <p class="lead" id="heroLead"></p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="startAssessment" type="button">Aloita vakuutuskartoitus</button>
+        </div>
+
+        <div class="hero-note" aria-label="Kartoituksen vaiheet">
+          <div><strong>1. Vastaa lyhyesti</strong><span>Kysymme vain tilanteen kannalta olennaiset asiat.</span></div>
+          <div><strong>2. Tutki suosituksia</strong><span>Näet perustelut ja pääset tuoteselosteisiin.</span></div>
+          <div><strong>3. Pyydä yhteydenottoa</strong><span>Valitse aiheet, joista haluat keskustella asiantuntijan kanssa.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-shell hidden" id="appShell" aria-labelledby="appTitle">
+      <div class="app-panel">
+        <div class="section">
+          <div class="navrow">
+            <div>
+              <p class="eyebrow compact" id="modeLabel"></p>
+              <h2 id="appTitle">Kartoitus</h2>
+            </div>
+            <div class="top-actions">
+              <button class="btn btn-secondary btn-small" id="showRecommendations" type="button">Suositukset</button>
+              <button class="btn btn-secondary btn-small" id="openContact" type="button">Yhteydenotto</button>
+            </div>
+          </div>
+
+          <ol class="stepper" aria-label="Vaihepolku">
+            <li class="step active" id="step1"><span>1</span><div><strong>Lyhyt kysely</strong><p>Perustilanne ja olennaiset riskit.</p></div></li>
+            <li class="step" id="step2"><span>2</span><div><strong>Suositukset</strong><p>Vakuutuslajit ja perustelut.</p></div></li>
+            <li class="step" id="step3"><span>3</span><div><strong>Tarkennus</strong><p>Turva, lisäturvat ja omavastuu.</p></div></li>
+            <li class="step" id="step4"><span>4</span><div><strong>Yhteydenotto</strong><p>Kooste asiakaspalvelulle.</p></div></li>
+          </ol>
+
+          <div id="introView">
+            <h3 id="introTitle"></h3>
+            <p class="muted" id="introText"></p>
+            <div class="intro-grid">
+              <div class="intro-box"><h4>Lyhyt kartoitus</h4><p id="shortText"></p><div class="chip-row" id="shortChips"></div></div>
+              <div class="intro-box"><h4>Tarkempi suositus</h4><p id="detailText"></p><div class="chip-row" id="detailChips"></div></div>
+            </div>
+            <div class="actions">
+              <button class="btn btn-primary" id="startQuick" type="button">Aloita lyhyt kysely</button>
+            </div>
+          </div>
+
+          <div id="questionView" class="hidden" aria-live="polite">
+            <h3 class="question-title" id="questionTitle"></h3>
+            <p class="question-desc" id="questionDesc"></p>
+            <div class="progress" aria-hidden="true"><div id="questionProgress"></div></div>
+            <div class="answers" id="answerList"></div>
+            <p class="multi-note hidden" id="multiNote">Voit valita useamman vaihtoehdon.</p>
+            <div class="actions">
+              <button class="btn btn-secondary" id="questionBack" type="button">Takaisin</button>
+              <button class="btn btn-primary" id="questionNext" type="button">Seuraava</button>
+            </div>
+          </div>
+
+          <div id="resultsView" class="hidden">
+            <h3>Suositellut vakuutuslajit</h3>
+            <p class="muted">Vakuutukset on jaettu sen mukaan, kuinka vahvasti ne nousivat esiin vastauksistasi.</p>
+            <div class="top-actions spaced">
+              <button class="btn btn-primary" id="refineTop" type="button">Tarkenna tärkeintä suositusta</button>
+              <button class="btn btn-secondary" id="restartAssessment" type="button">Tee kartoitus uudelleen</button>
+              <button class="btn btn-soft" id="contactFromResults" type="button">Pyydä yhteydenottoa</button>
+            </div>
+            <div id="recommendationBuckets"></div>
+          </div>
+
+          <div id="detailView" class="hidden" aria-live="polite">
+            <p class="eyebrow compact" id="detailSource"></p>
+            <h3 class="question-title" id="detailTitle"></h3>
+            <p class="question-desc" id="detailDesc"></p>
+            <div class="progress" aria-hidden="true"><div id="detailProgress"></div></div>
+            <div class="answers" id="detailAnswers"></div>
+            <p class="multi-note hidden" id="detailMultiNote">Voit valita useamman vaihtoehdon.</p>
+            <div class="actions">
+              <button class="btn btn-secondary" id="detailBack" type="button">Takaisin</button>
+              <button class="btn btn-primary" id="detailNext" type="button">Seuraava</button>
+            </div>
+          </div>
+
+          <div id="detailResultView" class="hidden">
+            <p class="eyebrow compact">Tarkennettu ehdotus</p>
+            <h3 id="detailResultTitle"></h3>
+            <div id="detailResult"></div>
+            <div class="top-actions spaced">
+              <button class="btn btn-secondary" id="detailAgain" type="button">Tee tarkennus uudelleen</button>
+              <button class="btn btn-soft" id="backToResults" type="button">Palaa suosituksiin</button>
+              <button class="btn btn-primary" id="contactFromDetail" type="button">Pyydä yhteydenottoa</button>
+            </div>
+          </div>
+
+          <div id="contactView" class="hidden">
+            <h3>Yhteydenottopyyntö</h3>
+            <p class="muted">Valitse aiheet, joista haluat keskustella. Suositellut ja tarkennetut vakuutukset esivalitaan.</p>
+            <div class="contact-list" id="contactChoices"></div>
+            <div class="form-grid">
+              <label class="field">Nimi <input id="contactName" autocomplete="name" required></label>
+              <label class="field">Yritys tai talous <input id="contactOrg"></label>
+              <label class="field">Sähköposti <input id="contactEmail" type="email" autocomplete="email" required></label>
+              <label class="field">Puhelin <input id="contactPhone" autocomplete="tel"></label>
+              <label class="field">Toivottu yhteydenottotapa <select id="contactChannel"><option>Puhelu</option><option>Sähköposti</option><option>Verkkotapaaminen</option></select></label>
+              <label class="field">Paras aika <input id="contactTime" placeholder="Esim. arkisin klo 9-12"></label>
+              <label class="field full">Jos mikään suositelluista vakuutuksista ei auttanut, kerro tilanteestasi vapaasanaisesti.
+                <textarea id="freeText" placeholder="Kuvaa tilannettasi omin sanoin"></textarea>
+              </label>
+              <label class="consent full"><input id="privacyConsent" type="checkbox"> Hyväksyn, että antamiani tietoja käytetään yhteydenottopyynnön käsittelyyn. <a href="https://www.lahitapiola.fi/henkilo/tietosuoja/" target="_blank" rel="noopener noreferrer">Tietosuoja</a></label>
+            </div>
+            <p class="form-error hidden" id="formError"></p>
+            <div class="actions">
+              <button class="btn btn-secondary" id="contactBack" type="button">Takaisin suosituksiin</button>
+              <button class="btn btn-primary" id="createSummary" type="button">Luo yhteenveto</button>
+            </div>
+          </div>
+
+          <div id="summaryView" class="hidden">
+            <h3>Yhteenveto yhteydenottoon</h3>
+            <p class="muted">Tämän tekstin voi kopioida asiakaspalvelun taustatiedoksi.</p>
+            <textarea id="crmSummary" class="summary-box" readonly></textarea>
+            <div class="actions">
+              <button class="btn btn-secondary" id="backToContact" type="button">Muokkaa yhteydenottoa</button>
+              <button class="btn btn-primary" id="copySummary" type="button">Kopioi yhteenveto</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="support-grid">
+        <section class="support-card" id="materiaalit">
+          <h3>Tuoteselosteet ja ehdot</h3>
+          <p class="muted small" id="libraryIntro"></p>
+          <div class="library-list" id="pdfLibrary"></div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
