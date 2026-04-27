@@ -1,0 +1,12 @@
+{
+  "name": "lahitapiola-vakuutuskartoitus",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-standalone.mjs",
+    "serve": "node server.mjs",
+    "test": "node tests/smoke.test.mjs",
+    "check:links": "node tests/link-check.mjs"
+  }
+}
