@@ -1,4 +1,4 @@
-import { detailFlows, getAnswerLabels, getOptionLabel, insuranceTypes, profiles, quickQuestions } from "./data.js";
+import { coverageModels, detailFlows, getAnswerLabels, getOptionLabel, insuranceTypes, profiles, quickQuestions } from "./data.js";
 import { buildDetailResult } from "./detailResults.js";
 import { calculateScores, recommendedKeys, toArray } from "./scoring.js";
 import { track } from "./analytics.js";
@@ -23,6 +23,7 @@ function freshState() {
     detailIndex: 0,
     detailAnswers: {},
     detailResults: {},
+    priceEstimateInterest: false,
     contact: {}
   };
 }
@@ -47,7 +48,7 @@ function init() {
   bindEvents();
   renderShellTexts();
   renderIntro();
-  renderLibrary();
+  renderCalculatorPanel();
   renderSummaryList();
 }
 
@@ -83,7 +84,7 @@ function setMode(nextMode) {
   $("modeBusiness").classList.toggle("active", mode === "business");
   renderShellTexts();
   renderIntro();
-  renderLibrary();
+  renderCalculatorPanel();
   renderSummaryList();
   showView("intro");
   track("assessment_mode_changed", { mode });
@@ -95,7 +96,6 @@ function renderShellTexts() {
   $("heroLead").textContent = p.heroLead;
   $("modeLabel").textContent = p.label;
   $("appTitle").textContent = `${p.label}: vakuutuskartoitus`;
-  $("libraryIntro").textContent = p.materialsIntro;
 }
 
 function openAssessment() {
@@ -278,6 +278,7 @@ function renderRecommendationCard(item, bucketKey) {
   const reasons = item.reasons.length ? item.reasons : ["tämä vakuutus ei noussut vastauksissa vahvasti esiin"];
   const canDetail = Boolean(meta.detailFlow && flow(meta.detailFlow));
   const existing = item.existing ? `<span class="status-pill possible">Nykyinen turva: tarkista riittävyys</span>` : "";
+  const comparisonLabel = meta.detailFlow && coverageModels[mode]?.[meta.detailFlow]?.label;
 
   return `
     <article class="rec-card">
@@ -288,13 +289,13 @@ function renderRecommendationCard(item, bucketKey) {
         <div class="chip-row">
           <span class="status-pill ${bucketKey === "primary" ? "primary" : bucketKey === "possible" ? "possible" : ""}">${item.score} pistettä</span>
           ${existing}
+          ${comparisonLabel ? `<span class="status-pill possible">${escapeHtml(comparisonLabel)}</span>` : ""}
         </div>
         <div class="reason-list">${reasons.slice(0, 3).map((reason) => `<div class="reason">${escapeHtml(capitalize(reason))}.</div>`).join("")}</div>
         <details class="source-details">
           <summary>Perustuu näihin vastauksiin</summary>
           <p>${escapeHtml(reasons.join("; "))}</p>
         </details>
-        ${renderMaterialLinks(meta.materials)}
       </div>
       <div class="rec-actions">
         ${canDetail ? `<button class="btn btn-primary btn-small" type="button" data-detail="${escapeHtml(meta.detailFlow)}">Tarkenna tätä vakuutusta</button>` : ""}
@@ -398,10 +399,139 @@ function renderDetailResult(detailKey, result) {
       </div>
       ${result.notes.length ? `<div class="notice"><strong>Huomioi jatkossa:</strong><br>${result.notes.map(escapeHtml).join("<br>")}</div>` : ""}
       <div class="notice"><strong>Seuraava tarkistus:</strong><br>${escapeHtml(result.nextStep)}</div>
-      ${renderMaterialLinks(meta.materials)}
+      ${renderCoverageComparison(result.comparison, detailKey)}
+      ${renderProductMaterials(meta.materials)}
     </div>
   `;
+  bindCalculatorActions($("detailResult"));
+  renderCalculatorPanel();
   renderSummaryList();
+}
+
+function renderCoverageComparison(comparison, detailKey = "") {
+  if (!comparison) return "";
+  const recommendedLabels = comparison.recommended.map((option) => option.title).join(", ");
+  const alternatives = comparison.alternatives.map((option) => option.title).join(", ");
+  const tableRows = [
+    ["Kattavuuden yleistaso", (option) => option.level],
+    ["Mitä taso tarkoittaa", (option) => option.means],
+    ["Kenelle sopii", (option) => option.fit],
+    ["Tärkeimmät hyödyt", (option) => option.covers],
+    ["Mahdolliset rajoitukset", (option) => option.limits],
+    ["Sopivuus vastausten perusteella", (option) => comparison.recommendedKeys.includes(option.key) ? "Vaikuttaa sopivalta" : "Vertailtava vaihtoehto"],
+    ["Hinta-arvio", (option) => option.priceNote]
+  ];
+
+  return `
+    <section class="coverage-compare" aria-label="${escapeHtml(comparison.title)}">
+      <div class="coverage-head">
+        <div>
+          <p class="eyebrow compact">Turvan vertailu</p>
+          <h4>${escapeHtml(comparison.title)}</h4>
+          <p class="muted">${escapeHtml(comparison.notice)}</p>
+        </div>
+      </div>
+      <div class="best-fit">
+        <strong>Sopivin vaihtoehto vastaustesi perusteella: ${escapeHtml(recommendedLabels)}</strong>
+        <span>${escapeHtml(comparison.basis)}</span>
+        ${alternatives ? `<span>Voit vertailla myös: ${escapeHtml(alternatives)}.</span>` : ""}
+      </div>
+      <div class="calculator-summary-card">
+        <h5>Yhteenveto</h5>
+        <div class="calculator-product">
+          <strong>${escapeHtml(recommendedLabels)}</strong>
+          <span>${escapeHtml(comparison.title)}</span>
+        </div>
+        <div class="calculator-highlight">
+          <span>Hinta-arvio muodostetaan LähiTapiolan laskurissa</span>
+          <strong>Ei vielä lopullinen tarjous</strong>
+        </div>
+        <div class="calculator-total">
+          <span>Arvioitava kokonaisuus</span>
+          <strong>${escapeHtml(recommendedLabels)}</strong>
+        </div>
+        <div class="calculator-actions">
+          <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(detailKey)}">Pyydä tarkempi hinta-arvio</button>
+          <button class="btn btn-secondary" type="button" data-calculator-more>Lisää toinen vakuutus</button>
+        </div>
+      </div>
+      <div class="coverage-table-wrap">
+        <table class="coverage-table">
+          <thead>
+            <tr>
+              <th>Mitä vakuutus korvaa tai painottaa?</th>
+              ${comparison.options.map((option) => `
+                <th class="${comparison.recommendedKeys.includes(option.key) ? "selected" : ""}">
+                  <span class="radio-dot" aria-hidden="true"></span>
+                  <strong>${escapeHtml(option.title)}</strong>
+                </th>
+              `).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRows.map(([label, getValue]) => `
+              <tr>
+                <th scope="row">${escapeHtml(label)}</th>
+                ${comparison.options.map((option) => `<td class="${comparison.recommendedKeys.includes(option.key) ? "selected" : ""}">${escapeHtml(getValue(option))}</td>`).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+      <div class="calculator-slot">
+        <strong>Seuraava vaihe</strong>
+        <span>${escapeHtml(comparison.calculatorAction)}</span>
+      </div>
+    </section>
+  `;
+}
+
+function bindCalculatorActions(root) {
+  root.querySelectorAll("[data-calculator-contact]").forEach((button) => {
+    button.addEventListener("click", () => requestPriceEstimate(button.dataset.calculatorContact || ""));
+  });
+  root.querySelectorAll("[data-calculator-more]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (st().recommendation) openRecommendations();
+      else startQuick();
+    });
+  });
+  root.querySelectorAll("[data-calculator-start]").forEach((button) => {
+    button.addEventListener("click", () => startQuick());
+  });
+}
+
+function requestPriceEstimate(detailKey = "") {
+  const context = calculatorContext();
+  const typeKey = detailKey ? typeKeyFromDetail(detailKey) : context.typeKey;
+  st().priceEstimateInterest = true;
+  if (typeKey) st().selectedContact[typeKey] = true;
+  openContact();
+}
+
+function typeKeyFromDetail(detailKey) {
+  return Object.keys(types()).find((key) => types()[key].detailFlow === detailKey) || "";
+}
+
+function renderProductMaterials(materials = []) {
+  if (!materials.length) return "";
+  return `
+    <section class="materials-panel" aria-label="Tuotetiedot ja ehdot">
+      <details open>
+        <summary>
+          <span>Tuotetiedot ja ehdot</span>
+          <small>Avaa tarkemmat materiaalit ennen lopullista valintaa</small>
+        </summary>
+        <div class="material-links">
+          ${materials.map((item) => `
+            <a class="material-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">
+              ${escapeHtml(item.label)}
+            </a>
+          `).join("")}
+        </div>
+      </details>
+    </section>
+  `;
 }
 
 function primeContactSelection() {
@@ -524,11 +654,23 @@ function buildCrmSummary(contact) {
       const typeKey = Object.keys(types()).find((key) => types()[key].detailFlow === detailKey);
       lines.push(`${typeKey ? types()[typeKey].title : detailKey}: ${result.title}`);
       result.rows.forEach((row) => lines.push(`  - ${row.label}: ${row.value}`));
+      if (result.comparison) {
+        lines.push(`  - Ehdotettu turvataso/rakenne: ${result.comparison.recommended.map((option) => option.title).join(", ")}`);
+        lines.push(`  - Tarkastellut vaihtoehdot: ${result.comparison.options.map((option) => option.title).join(", ")}`);
+        lines.push(`  - Perustelu: ${result.comparison.basis}`);
+        lines.push("  - Hinta-arvio: edellyttää laskuri-integraatiota tai asiantuntijan arviota.");
+      }
       if (result.notes.length) result.notes.forEach((note) => lines.push(`  - Huomio: ${note}`));
       lines.push(`  - Seuraava tarkistus: ${result.nextStep}`);
     });
   } else {
     lines.push("- Syventävää tarkennusta ei tehty.");
+  }
+  if (st().priceEstimateInterest) {
+    lines.push("");
+    lines.push("Hinta-arvio");
+    lines.push("- Asiakas kiinnostunut hinta-arviosta.");
+    lines.push("- Hinta-arvio edellyttää laskuri-integraatiota tai asiantuntijan arviota.");
   }
   if (contact.freeText) {
     lines.push("");
@@ -584,19 +726,93 @@ function renderSummaryList() {
   $("summaryList").innerHTML = parts.join("");
 }
 
-function renderLibrary() {
-  $("pdfLibrary").innerHTML = Object.values(types()).map((item) => `
-    <div class="library-item">
-      <div class="library-title">${escapeHtml(item.title)}</div>
-      <div class="muted small">${escapeHtml(item.desc)}</div>
-      ${renderMaterialLinks(item.materials, "library-links")}
+function renderCalculatorPanel() {
+  const panel = $("calculatorPanel");
+  if (!panel) return;
+
+  const context = calculatorContext();
+  if (!context.title) {
+    panel.innerHTML = `
+      <p class="eyebrow compact">Hinta-arvion laskuri</p>
+      <h3>Yhteenveto</h3>
+      <p class="muted small">Kun vastaat kartoitukseen, tähän muodostuu vakuutuskohtainen hinta-arvion esinäkymä.</p>
+      <button class="btn btn-primary full-width" type="button" data-calculator-start>Aloita kartoitus</button>
+      <ul class="calculator-benefits">
+        <li>Selkeä turvan laajuus ennen hinta-arviota</li>
+        <li>Valitut vakuutukset mukaan yhteydenottoon</li>
+        <li>CRM-yhteenveto asiantuntijalle</li>
+      </ul>
+    `;
+    bindCalculatorActions(panel);
+    return;
+  }
+
+  panel.innerHTML = `
+    <p class="eyebrow compact">Hinta-arvion laskuri</p>
+    <h3>Yhteenveto</h3>
+    <div class="calculator-side-card">
+      <div class="calculator-product">
+        <strong>${escapeHtml(context.title)}</strong>
+        <span>${escapeHtml(context.subtitle)}</span>
+      </div>
+      <div class="calculator-highlight">
+        <span>Hinta-arvio muodostetaan LähiTapiolan laskurissa</span>
+        <strong>${escapeHtml(context.recommended)}</strong>
+      </div>
+      <div class="calculator-total">
+        <span>Seuraava vaihe</span>
+        <strong>${escapeHtml(context.nextStep)}</strong>
+      </div>
+      <div class="calculator-actions stacked">
+        <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey)}">Pyydä tarkempi hinta-arvio</button>
+        <button class="btn btn-secondary" type="button" data-calculator-more>Lisää toinen vakuutus</button>
+      </div>
     </div>
-  `).join("");
+    <ul class="calculator-benefits">
+      <li>Suositus perustuu antamiisi vastauksiin</li>
+      <li>Lopullinen hinta ja soveltuvuus varmistetaan laskurissa tai asiantuntijan kanssa</li>
+    </ul>
+  `;
+  bindCalculatorActions(panel);
 }
 
-function renderMaterialLinks(materials = [], className = "pdf-links") {
-  if (!materials.length) return "";
-  return `<div class="${className}">${materials.map((item) => `<a class="pdf-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.label)}</a>`).join("")}</div>`;
+function calculatorContext() {
+  const detailEntries = Object.entries(st().detailResults);
+  const activeDetail = st().activeDetail && st().detailResults[st().activeDetail] ? st().activeDetail : "";
+  const detailKey = activeDetail || (detailEntries.length ? detailEntries[detailEntries.length - 1][0] : "");
+
+  if (detailKey) {
+    const result = st().detailResults[detailKey];
+    const typeKey = typeKeyFromDetail(detailKey);
+    const meta = typeKey ? types()[typeKey] : null;
+    const recommended = result.comparison?.recommended?.map((option) => option.title).join(", ") || result.primaryTag;
+    return {
+      title: meta?.title || result.title,
+      subtitle: result.title,
+      recommended,
+      nextStep: "Hinta-arvio",
+      detailKey,
+      typeKey
+    };
+  }
+
+  const recommendation = st().recommendation;
+  if (recommendation) {
+    const item = recommendation.primary[0] || recommendation.possible[0] || recommendation.items[0];
+    if (!item) return {};
+    const meta = types()[item.key];
+    const comparisonLabel = meta.detailFlow && coverageModels[mode]?.[meta.detailFlow]?.label;
+    return {
+      title: meta.title,
+      subtitle: item.reasons.slice(0, 2).join("; ") || meta.desc,
+      recommended: comparisonLabel || "Tarkenna vakuutus ennen lopullista hinta-arviota",
+      nextStep: meta.detailFlow ? "Tarkennus tai hinta-arvio" : "Asiantuntijan hinta-arvio",
+      detailKey: meta.detailFlow || "",
+      typeKey: item.key
+    };
+  }
+
+  return {};
 }
 
 function showView(next) {
@@ -613,6 +829,7 @@ function showView(next) {
   views.forEach((id) => $(id).classList.toggle("hidden", id !== activeView));
   updateSteps(next);
   renderSummaryList();
+  renderCalculatorPanel();
 }
 
 function updateSteps(viewName) {

@@ -21,7 +21,7 @@
       </div>
       <nav class="site-links" aria-label="Päänavigaatio">
         <a href="#appShell">Vakuutukset</a>
-        <a href="#materiaalit">Tuoteselosteet</a>
+        <a href="#laskuri">Laskuri</a>
         <a href="#contactView">Yhteydenotto</a>
       </nav>
       <button class="btn btn-secondary btn-small" type="button">Kirjaudu</button>
@@ -51,8 +51,8 @@
 
         <div class="hero-note" aria-label="Kartoituksen vaiheet">
           <div><strong>1. Vastaa lyhyesti</strong><span>Kysymme vain tilanteen kannalta olennaiset asiat.</span></div>
-          <div><strong>2. Tutki suosituksia</strong><span>Näet perustelut ja pääset tuoteselosteisiin.</span></div>
-          <div><strong>3. Pyydä yhteydenottoa</strong><span>Valitse aiheet, joista haluat keskustella asiantuntijan kanssa.</span></div>
+          <div><strong>2. Vertaa vaihtoehtoja</strong><span>Näet perustelut, turvan laajuuden ja hinta-arvion paikan.</span></div>
+          <div><strong>3. Jatka hinta-arvioon</strong><span>Valitse aiheet, joista haluat laskurin tai asiantuntijan arvion.</span></div>
         </div>
       </div>
     </section>
@@ -173,10 +173,8 @@
       </div>
 
       <aside class="support-grid">
-        <section class="support-card" id="materiaalit">
-          <h3>Tuoteselosteet ja ehdot</h3>
-          <p class="muted small" id="libraryIntro"></p>
-          <div class="library-list" id="pdfLibrary"></div>
+        <section class="support-card calculator-panel" id="laskuri" aria-label="Hinta-arvion laskuri">
+          <div id="calculatorPanel"></div>
         </section>
       </aside>
     </section>

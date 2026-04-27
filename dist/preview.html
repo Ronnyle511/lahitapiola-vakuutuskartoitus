@@ -656,33 +656,6 @@ h4 {
   min-width: 168px;
 }
 
-.pdf-links,
-.library-links {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-
-.pdf-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  padding: 6px 10px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--blue-700);
-  background: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.pdf-link:hover {
-  border-color: var(--blue-700);
-  background: var(--blue-050);
-}
-
 details.source-details {
   margin-top: 12px;
   color: var(--muted);
@@ -744,6 +717,260 @@ details.source-details summary {
   color: var(--blue-950);
 }
 
+.coverage-compare {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.coverage-head p {
+  max-width: 760px;
+  margin: 8px 0 0;
+}
+
+.best-fit {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid #b7d7e8;
+  border-radius: 8px;
+  background: var(--blue-100);
+}
+
+.best-fit strong {
+  color: var(--blue-950);
+  font-size: 17px;
+}
+
+.calculator-summary-card,
+.calculator-side-card {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.calculator-summary-card {
+  max-width: 520px;
+}
+
+.calculator-summary-card h5 {
+  margin: 0;
+  color: var(--blue-950);
+  font-size: 20px;
+}
+
+.calculator-product {
+  display: grid;
+  gap: 3px;
+}
+
+.calculator-product strong {
+  color: #071d33;
+  font-size: 18px;
+}
+
+.calculator-product span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.calculator-highlight {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-radius: 6px;
+  color: var(--blue-950);
+  background: var(--blue-100);
+}
+
+.calculator-total {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-top: 6px;
+  color: #071d33;
+  font-weight: 800;
+}
+
+.calculator-total span {
+  color: var(--blue-900);
+}
+
+.calculator-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.calculator-actions.stacked {
+  display: grid;
+}
+
+.coverage-table-wrap {
+  width: 100%;
+  margin-top: 18px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.coverage-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.coverage-table th,
+.coverage-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.coverage-table th:last-child,
+.coverage-table td:last-child {
+  border-right: 0;
+}
+
+.coverage-table tr:last-child th,
+.coverage-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.coverage-table thead th {
+  color: var(--blue-950);
+  background: var(--blue-050);
+  font-size: 14px;
+}
+
+.coverage-table thead th:first-child {
+  min-width: 220px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.coverage-table tbody th {
+  width: 220px;
+  color: #071d33;
+  background: #fff;
+  font-weight: 700;
+}
+
+.coverage-table td {
+  color: #294f6b;
+  font-size: 13px;
+}
+
+.coverage-table .selected {
+  background: #eef7fc;
+  box-shadow: inset 4px 0 0 rgba(0, 125, 184, 0.18);
+}
+
+.radio-dot {
+  display: block;
+  width: 22px;
+  height: 22px;
+  margin: 0 auto 8px 0;
+  border: 2px solid #8eb3ca;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.coverage-table .selected .radio-dot {
+  border-color: var(--blue-700);
+  box-shadow: inset 0 0 0 5px #fff;
+  background: var(--blue-700);
+}
+
+.calculator-slot {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px dashed #9fc4dc;
+  border-radius: 8px;
+  background: var(--blue-050);
+}
+
+.calculator-slot span {
+  flex: 1;
+  color: var(--muted);
+}
+
+.calculator-slot .btn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.materials-panel {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.materials-panel details {
+  display: grid;
+  gap: 12px;
+}
+
+.materials-panel summary {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  color: var(--blue-950);
+  font-weight: 800;
+}
+
+.materials-panel summary small {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.material-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.material-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--blue-700);
+  background: var(--blue-050);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.material-link:hover {
+  border-color: var(--blue-700);
+  background: #ffffff;
+}
+
 .support-grid {
   display: grid;
   gap: 18px;
@@ -757,8 +984,39 @@ details.source-details summary {
   background: var(--blue-050);
 }
 
+.calculator-panel h3 {
+  margin-bottom: 12px;
+}
+
+.calculator-benefits {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  color: #071d33;
+  font-size: 14px;
+}
+
+.calculator-benefits li {
+  position: relative;
+  padding-left: 26px;
+}
+
+.calculator-benefits li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--blue-700);
+  font-weight: 800;
+}
+
+.full-width {
+  width: 100%;
+}
+
 .summary-list,
-.library-list,
 .contact-list {
   display: grid;
   gap: 10px;
@@ -766,7 +1024,6 @@ details.source-details summary {
 }
 
 .summary-item,
-.library-item,
 .check-card {
   padding: 12px;
   border: 1px solid var(--line);
@@ -774,14 +1031,9 @@ details.source-details summary {
   background: #fff;
 }
 
-.summary-item strong,
-.library-title {
+.summary-item strong {
   display: block;
   color: var(--ink);
-}
-
-.library-title {
-  font-weight: 800;
 }
 
 .form-grid {
@@ -972,6 +1224,26 @@ details.source-details summary {
     min-width: 0;
   }
 
+  .calculator-slot {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .calculator-highlight,
+  .calculator-total {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .materials-panel summary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .calculator-actions .btn {
+    width: 100%;
+  }
+
   .segmented,
   .segmented button,
   .btn {
@@ -1000,7 +1272,7 @@ details.source-details summary {
       </div>
       <nav class="site-links" aria-label="Päänavigaatio">
         <a href="#appShell">Vakuutukset</a>
-        <a href="#materiaalit">Tuoteselosteet</a>
+        <a href="#laskuri">Laskuri</a>
         <a href="#contactView">Yhteydenotto</a>
       </nav>
       <button class="btn btn-secondary btn-small" type="button">Kirjaudu</button>
@@ -1030,8 +1302,8 @@ details.source-details summary {
 
         <div class="hero-note" aria-label="Kartoituksen vaiheet">
           <div><strong>1. Vastaa lyhyesti</strong><span>Kysymme vain tilanteen kannalta olennaiset asiat.</span></div>
-          <div><strong>2. Tutki suosituksia</strong><span>Näet perustelut ja pääset tuoteselosteisiin.</span></div>
-          <div><strong>3. Pyydä yhteydenottoa</strong><span>Valitse aiheet, joista haluat keskustella asiantuntijan kanssa.</span></div>
+          <div><strong>2. Vertaa vaihtoehtoja</strong><span>Näet perustelut, turvan laajuuden ja hinta-arvion paikan.</span></div>
+          <div><strong>3. Jatka hinta-arvioon</strong><span>Valitse aiheet, joista haluat laskurin tai asiantuntijan arvion.</span></div>
         </div>
       </div>
     </section>
@@ -1152,10 +1424,8 @@ details.source-details summary {
       </div>
 
       <aside class="support-grid">
-        <section class="support-card" id="materiaalit">
-          <h3>Tuoteselosteet ja ehdot</h3>
-          <p class="muted small" id="libraryIntro"></p>
-          <div class="library-list" id="pdfLibrary"></div>
+        <section class="support-card calculator-panel" id="laskuri" aria-label="Hinta-arvion laskuri">
+          <div id="calculatorPanel"></div>
         </section>
       </aside>
     </section>
@@ -1180,14 +1450,14 @@ const profiles = {
     id: "personal",
     label: "Henkilöasiakas",
     heroTitle: "Löydä tilanteeseesi sopivat vakuutukset",
-    heroLead: "Vastaa lyhyesti elämäntilanteestasi, tutki perustellut suositukset ja avaa tuoteselosteet ennen yhteydenottoa.",
+    heroLead: "Vastaa lyhyesti elämäntilanteestasi, tutki perustellut suositukset ja jatka hinta-arvioon tai asiantuntijan yhteydenottoon.",
     introTitle: "Aloita omasta tilanteestasi",
     introText: "Kartoitus tunnistaa ensin olennaiset vakuutuslajit. Vasta sen jälkeen voit tarkentaa yksittäistä vakuutusta, kuten kotia, ajoneuvoa, matkaa, terveyttä, henkeä tai lemmikkiä.",
     shortText: "Kysymme asumisesta, ajoneuvoista, matkoista, terveydestä, läheisistä, eläimistä, omaisuudesta ja taloudellisesta puskurista.",
     detailText: "Syventävä vaihe antaa konkreettisen ehdotuksen turvatasosta, lisäturvista, omavastuusta ja jatkotarkistuksista.",
     layer1Chips: ["Asuminen", "Ajoneuvot", "Matkat", "Terveys", "Läheiset", "Eläimet", "Omaisuus"],
     layer2Chips: ["Koti", "Ajoneuvo", "Matka", "Terveys", "Henki", "Koira ja kissa"],
-    materialsIntro: "Henkilöasiakkaan materiaalit ja suorat PDF-linkit silloin, kun ne on varmistettu."
+    materialsIntro: "Hinta-arvio muodostetaan laskuri-integraatiossa tai asiantuntijan kanssa."
   },
   business: {
     id: "business",
@@ -1200,7 +1470,7 @@ const profiles = {
     detailText: "Syventävä vaihe tarkentaa esimerkiksi vakuutettavaa omaisuutta, vastuun lähdettä, keskeytyksen syytä, kyberturvaa tai henkilöstöratkaisua.",
     layer1Chips: ["Yrityksen koko", "Toimiala", "Omaisuus", "Ihmiset", "Liikkuminen", "Digitaalisuus", "Kassa"],
     layer2Chips: ["Omaisuus", "Vastuu", "Keskeytys", "Kyber", "Henkilöstö", "Ajoneuvot", "Matka", "Kuljetus"],
-    materialsIntro: "Yritysasiakkaiden materiaalit perustuvat LähiTapiolan yritysasiakkaiden materiaalilistaan ja suoriin PDF-linkkeihin."
+    materialsIntro: "Hinta-arvio muodostetaan laskuri-integraatiossa tai asiantuntijan kanssa."
   }
 };
 
@@ -1742,7 +2012,7 @@ const detailFlows = {
   personal: {
     home: {
       title: "Kotivakuutus",
-      sourceNote: "Perustuu kotivakuutuksen tuoteselosteeseen: Laaja, Perus, Suppea, Laaja Plus, matkatavaraturva, irtaimisto ja rakennus.",
+      sourceNote: "Perustuu kotivakuutuksen tuotetietoihin: Laaja, Perus, Suppea, Laaja Plus, matkatavaraturva, irtaimisto ja rakennus.",
       questions: [
         q("role", "Mikä kuvaa parhaiten rooliasi?", "Rooli ratkaisee, painottuuko ehdotuksessa irtaimisto, rakennus, vastuu vai vuokrattava kohde.", false, [["tenant", "Asun vuokralla"], ["owner_occupier", "Asun omistusasunnossa"], ["landlord", "Olen vuokranantaja"], ["house_owner", "Omistan ja asun omakotitalossa"], ["holiday_owner", "Omistan vapaa-ajan asunnon tai mökin"]]),
         q("insuredObject", "Mitä haluat vakuuttaa?", "Kerros- ja rivitalossa painotus on usein irtaimistossa ja kiinteissä sisustuksissa. Omakotitalossa rakennus on usein mukana.", false, [["contents", "Irtaimisto"], ["building_and_contents", "Rakennus ja irtaimisto"], ["building_only", "Rakennus"]]),
@@ -1755,7 +2025,7 @@ const detailFlows = {
     },
     vehicle: {
       title: "Ajoneuvovakuutus",
-      sourceNote: "Perustuu ajoneuvovakuutuksen tuoteselosteeseen: liikennevakuutus, suppea/laaja kasko ja lisäturvat.",
+      sourceNote: "Perustuu ajoneuvovakuutuksen tuotetietoihin: liikennevakuutus, suppea/laaja kasko ja lisäturvat.",
       questions: [
         q("vehicleType", "Mikä ajoneuvo on kyseessä?", "Ajoneuvon tyyppi vaikuttaa saataviin turviin ja lisäturviin.", false, [["car", "Henkilöauto tai pakettiauto"], ["motorcycle", "Moottoripyörä, mopo tai mönkijä"], ["camper", "Matkailuauto tai matkailuperävaunu"], ["other", "Muu ajoneuvo"]]),
         q("finance", "Onko ajoneuvo rahoitettu, leasingissä tai kallis korvata itse?", "Rahoitus- ja leasingtilanne kannattaa tarkistaa kaskon yhteydessä.", false, [["yes", "Kyllä"], ["no", "Ei"], ["unsure", "En osaa sanoa"]]),
@@ -1766,7 +2036,7 @@ const detailFlows = {
     },
     travel: {
       title: "Matkavakuutus",
-      sourceNote: "Perustuu jatkuvan matkavakuutuksen ja matkakohtaisen eli määräaikaisen matkavakuutuksen materiaaleihin.",
+      sourceNote: "Perustuu jatkuvan matkavakuutuksen ja matkakohtaisen eli määräaikaisen matkavakuutuksen tuotetietoihin.",
       questions: [
         q("tripPattern", "Millainen matkustaminen kuvaa sinua parhaiten?", "Matkojen määrä ja kesto ratkaisevat, kannattaako tutkia jatkuvaa vai matkakohtaista vakuutusta.", false, [["single", "Yksittäinen matka tai matkustan harvoin"], ["several", "Useita matkoja vuodessa"], ["long", "Yli kolmen kuukauden matka"], ["domestic", "Pääosin kotimaanmatkoja yli 50 km päähän"]]),
         q("travelConcerns", "Mikä matkustamisessa huolestuttaa?", "Voit valita useamman.", true, [["medical", "Sairastuminen tai tapaturma matkalla"], ["cancel", "Matkan peruuntuminen"], ["interrupt", "Matkan keskeytyminen"], ["delay", "Jatkoyhteydeltä myöhästyminen"], ["luggage", "Matkatavaroiden vahinko tai viivästyminen"], ["liability_legal", "Matkavastuu tai matkaoikeusturva"]]),
@@ -1776,7 +2046,7 @@ const detailFlows = {
     },
     health: {
       title: "Terveys- ja tapaturmavakuutus",
-      sourceNote: "Perustuu terveysvakuutuksen materiaaleihin: sairauden hoitoturva, tapaturman hoitoturva, urheiluturva, haitta- ja päivärahat.",
+      sourceNote: "Perustuu terveysvakuutuksen tuotetietoihin: sairauden hoitoturva, tapaturman hoitoturva, urheiluturva, haitta- ja päivärahat.",
       questions: [
         q("healthTarget", "Kenelle turvaa haetaan?", "Terveysvakuutusta voi hakea itselle, puolisolle, lapselle tai syntyvälle lapselle.", false, [["self", "Itselleni"], ["partner", "Puolisolle"], ["child", "Lapselle"], ["unborn", "Syntyvälle lapselle"]]),
         q("healthNeeds", "Mitä haluat suojata?", "Voit valita useamman.", true, [["illness_full", "Sairauden laajemmat hoitokulut"], ["illness_basic", "Yleislääkärikäynnit ja perustason sairauskulut"], ["accident", "Tapaturmien hoitokulut"], ["sports", "Urheilutapaturmat"], ["income", "Päiväraha työkyvyttömyyden varalle"], ["permanent", "Pysyvä haitta tai tapaturmainen kuolema"]]),
@@ -1786,7 +2056,7 @@ const detailFlows = {
     },
     life: {
       title: "Henkivakuutus",
-      sourceNote: "Perustuu henkiturvan materiaaleihin: kuolemanvaraturva, vakavan sairauden kertakorvaus, vakuutusmäärä ja edunsaaja.",
+      sourceNote: "Perustuu henkiturvan tuotetietoihin: kuolemanvaraturva, vakavan sairauden kertakorvaus, vakuutusmäärä ja edunsaaja.",
       questions: [
         q("dependents", "Keiden talous olisi turvattava?", "Lähtökohta on se, kenelle korvaus olisi tarkoitettu.", false, [["family", "Puoliso ja/tai lapset"], ["loan", "Asuntolainan tai muun velan turvaaminen"], ["business", "Yritykseen tai yhteiseen talouteen liittyvä vastuu"], ["none", "Ei selkeää riippuvuutta"]]),
         q("lifeGoal", "Mihin turvaa ensisijaisesti tarvitaan?", "Voit valita useamman.", true, [["death", "Kuolemanvaraturva läheisille"], ["serious_illness", "Vakavan sairauden kertakorvaus"], ["declining", "Velan mukana aleneva vakuutusmäärä"], ["fixed", "Selkeä sovittu kertakorvaus"]]),
@@ -1796,7 +2066,7 @@ const detailFlows = {
     },
     pet: {
       title: "Koira- ja kissavakuutus",
-      sourceNote: "Perustuu koira- ja kissavakuutuksen materiaaleihin: eläinlääkärikulut, henki, Hoitoturva Plus, käyttöominaisuus ja koiran vastuu.",
+      sourceNote: "Perustuu koira- ja kissavakuutuksen tuotetietoihin: eläinlääkärikulut, henki, Hoitoturva Plus, käyttöominaisuus ja koiran vastuu.",
       questions: [
         q("petType", "Mikä eläin on kyseessä?", "Koira- ja kissavakuutuksessa turvat ovat osin samat, mutta vastuuvakuutus koskee koiraa.", false, [["dog", "Koira"], ["cat", "Kissa"], ["both", "Sekä koira että kissa"]]),
         q("petAge", "Minkä ikäinen eläin on?", "Vakuutuksen myöntämisikä ja lisäturvat riippuvat eläimen iästä.", false, [["puppy_kitten", "5 viikkoa - alle 1 vuotta"], ["young", "1 - alle 5 vuotta"], ["adult", "5 - alle 8 vuotta"], ["older", "8 vuotta tai vanhempi"]]),
@@ -1809,7 +2079,7 @@ const detailFlows = {
   business: {
     bizProperty: {
       title: "Yrityksen omaisuus- ja esinevakuutus",
-      sourceNote: "Perustuu ES1 Esinevakuutukseen, huoneistoturvaan, kiinteistö- ja rakennustyömateriaaleihin sekä suojeluohjeisiin.",
+      sourceNote: "Perustuu yritysomaisuuden tuotetietoihin: esinevakuutus, huoneistoturva, kiinteistö ja rakennustyö.",
       questions: [
         q("propertyAssets", "Mitä omaisuutta halutaan suojata?", "Voit valita useamman.", true, [["premises", "Toimitila tai liiketila"], ["equipment", "Koneet, laitteet ja työkalut"], ["inventory", "Varasto ja vaihto-omaisuus"], ["tenant_improvements", "Vuokratilan muutostyöt ja kiinteät sisustukset"], ["building", "Rakennus tai kiinteistö"], ["construction", "Rakennus- tai asennuskohde"]]),
         q("propertyControl", "Miten kohde on yrityksen käytössä?", "Omistus- ja vuokrasuhde vaikuttaa vakuutettavaan omaisuuteen.", false, [["owned", "Yritys omistaa kohteen"], ["leased", "Yritys toimii vuokratilassa"], ["multiple", "Useita toimipaikkoja tai liikkuvaa omaisuutta"], ["project", "Projektikohtainen kohde"]]),
@@ -1819,7 +2089,7 @@ const detailFlows = {
     },
     bizLiability: {
       title: "Yrityksen vastuuvakuutukset",
-      sourceNote: "Perustuu toiminnan vastuun, tuotevastuun, varallisuusvastuun, IT-vastuun, hallinnon vastuun ja VY1-ehtojen kokonaisuuteen.",
+      sourceNote: "Perustuu vastuuvakuutusten tuotetietoihin: toiminnan vastuu, tuotevastuu, varallisuusvastuu, IT-vastuu ja hallinnon vastuu.",
       questions: [
         q("liabilityActivity", "Mihin vastuu ensisijaisesti liittyy?", "Valinta ohjaa vastuuvakuutuksen rakennetta.", false, [["operations", "Toiminnan aiheuttamat henkilö- tai esinevahingot"], ["products", "Tuotteet, valmistus, myynti tai maahantuonti"], ["professional", "Neuvonta, suunnittelu tai konsultointi"], ["it", "IT-palvelut, data tai järjestelmät"], ["management", "Johto, hallitus tai päätöksenteko"], ["healthcare", "Terveyden- tai sairaanhoito"]]),
         q("liabilityConcerns", "Mitä vastuutilanteita haluat korostaa?", "Voit valita useamman.", true, [["injury_property", "Henkilö- ja esinevahingot"], ["financial_loss", "Taloudellinen vahinko ilman esinevahinkoa"], ["ip", "Immateriaalioikeudet"], ["environment", "Ympäristövahingot"], ["recall", "Tuotteen takaisinveto"], ["contract", "Sopimusvaatimukset"]]),
@@ -1829,7 +2099,7 @@ const detailFlows = {
     },
     bizInterruption: {
       title: "Keskeytysvakuutus",
-      sourceNote: "Perustuu KE1, KE2, KE3 ja KE4-keskeytysmateriaaleihin.",
+      sourceNote: "Perustuu keskeytysvakuutusten tuotetietoihin: KE1, KE2, KE3 ja KE4.",
       questions: [
         q("interruptionCause", "Mikä keskeyttäisi toiminnan pahiten?", "Voit valita useamman.", true, [["property", "Omaisuusvahinko toimitilassa, koneessa tai tuotannossa"], ["person", "Yrittäjän tai avainhenkilön poissaolo"], ["supplier", "Tärkeä toimittaja tai asiakas"], ["rent", "Vuokratuoton menetys"], ["event", "Sesonki tai tapahtuma peruuntuu"]]),
         q("recoveryTime", "Kuinka kauan palautuminen voisi kestää?", "Arvio auttaa hahmottamaan vastuuajan tarvetta.", false, [["short", "Alle 1 kuukausi"], ["medium", "1-3 kuukautta"], ["long", "3-12 kuukautta"], ["very_long", "Yli 12 kuukautta"]]),
@@ -1839,7 +2109,7 @@ const detailFlows = {
     },
     bizCyber: {
       title: "Kybervakuutus",
-      sourceNote: "Perustuu CY2 Kybervakuutukseen ja Kybervakuutus Pro -materiaaliin.",
+      sourceNote: "Perustuu kybervakuutuksen tuotetietoihin ja Kybervakuutus Pro -vaihtoehtoon.",
       questions: [
         q("cyberExposure", "Mikä altistaa yrityksen kyberriskille?", "Voit valita useamman.", true, [["personal_data", "Henkilö- tai asiakasdata"], ["payments", "Verkkokauppa, maksut tai ajanvaraus"], ["critical_systems", "Järjestelmät pysäyttävät toiminnan, jos ne eivät toimi"], ["supplier_access", "Alihankkijoita, pilvipalveluja tai etäkäyttöä"], ["low", "Vähäinen digitaalinen riippuvuus"]]),
         q("cyberConcerns", "Mistä kybertilanteista olet huolissasi?", "Voit valita useamman.", true, [["breach", "Tietomurto tai tietovuoto"], ["ransomware", "Kiristyshaittaohjelma"], ["interruption", "Liiketoiminnan keskeytys"], ["liability", "Asiakkaalle aiheutuva vahinko"], ["response", "Asiantuntija-apu, ilmoitukset ja palautus"]]),
@@ -1849,7 +2119,7 @@ const detailFlows = {
     },
     bizVehicle: {
       title: "Yrityksen ajoneuvovakuutukset",
-      sourceNote: "Perustuu yritysten liikennevakuutus-, kasko-, ryhmäliikenne-, autoliikekasko- ja korjaamokaskomateriaaleihin.",
+      sourceNote: "Perustuu yritysten liikennevakuutus-, kasko-, ryhmäliikenne-, autoliikekasko- ja korjaamokaskoratkaisuihin.",
       questions: [
         q("fleetType", "Millaista kalustoa yrityksellä on?", "Valitse pääasiallinen ryhmä.", false, [["cars_vans", "Henkilö- ja pakettiautoja"], ["heavy", "Kuorma-autot, bussit tai raskas kalusto"], ["machinery", "Työkoneet tai erikoiskalusto"], ["motor_trade", "Autokauppa, huolto tai korjaamo"], ["mixed", "Sekalainen kalusto"]]),
         q("fleetUse", "Mihin ajoneuvoja käytetään?", "Käyttötarkoitus vaikuttaa turvan laajuuteen.", false, [["sales_service", "Myynti, asiakaskäynnit tai huolto"], ["deliveries", "Jakelu tai tavarankuljetus"], ["transport_business", "Kuljetusliiketoiminta"], ["construction", "Työmaa- ja asennuskäyttö"], ["employee_benefit", "Työsuhdeautot"]]),
@@ -1859,7 +2129,7 @@ const detailFlows = {
     },
     bizPeople: {
       title: "Henkilö- ja työkykyratkaisut",
-      sourceNote: "Perustuu työtapaturma-, yrittäjien tapaturma-, sairauskulu- ja työkykymateriaaleihin.",
+      sourceNote: "Perustuu työtapaturma-, yrittäjien tapaturma-, sairauskulu- ja työkykyratkaisuihin.",
       questions: [
         q("peopleSize", "Kenelle turvaa haetaan?", "Henkilömäärä ohjaa työkykyvakuutuksen vaihtoehtoja.", false, [["solo", "Yrittäjä ilman työntekijöitä"], ["micro", "2-9 henkilöä"], ["small", "10-49 henkilöä"], ["medium", "50+ henkilöä"]]),
         q("peopleNeeds", "Mitä halutaan turvata?", "Voit valita useamman.", true, [["statutory", "Työtapaturma- ja ammattitautivakuutus työntekijöille"], ["entrepreneur_accident", "Yrittäjän tapaturma tai vapaaehtoinen työajan vakuutus"], ["medical", "Sairauskulut ja nopea hoitoon pääsy"], ["workability", "Työkyvyn tuki ja poissaolojen hallinta"], ["leisure", "Vapaa-ajan tapaturmat"], ["key_people", "Avainhenkilöt tai johtoryhmä"]]),
@@ -1869,7 +2139,7 @@ const detailFlows = {
     },
     bizTravel: {
       title: "Yrityksen matkavakuutukset",
-      sourceNote: "Perustuu matkustaja-, komennus-, matkatavara-, matkavastuu- ja matkaoikeusturvamateriaaleihin.",
+      sourceNote: "Perustuu matkustaja-, komennus-, matkatavara-, matkavastuu- ja matkaoikeusturvaratkaisuihin.",
       questions: [
         q("bizTripType", "Millaisia työmatkoja tehdään?", "Matkan kesto ja kohde vaikuttavat vakuutuksen rakenteeseen.", false, [["domestic", "Pääosin kotimaan työmatkoja"], ["short_abroad", "Lyhyitä ulkomaan työmatkoja"], ["frequent", "Säännöllistä kansainvälistä matkustamista"], ["posted", "Komennuksia tai pitkäaikaisia ulkomaantöitä"]]),
         q("travelerGroup", "Ketkä matkustavat?", "Voit valita useamman.", true, [["entrepreneur", "Yrittäjä"], ["employees", "Työntekijät"], ["management", "Johto tai avainhenkilöt"], ["families", "Komennuksilla mukana perheenjäseniä"]]),
@@ -1879,7 +2149,7 @@ const detailFlows = {
     },
     bizCargo: {
       title: "Kuljetusvakuutukset",
-      sourceNote: "Perustuu tavarankuljetus-, tiekuljetusvastuu-, autokuljetus- ja logistiikkaoperaattorimateriaaleihin.",
+      sourceNote: "Perustuu tavarankuljetus-, tiekuljetusvastuu-, autokuljetus- ja logistiikkaoperaattoriratkaisuihin.",
       questions: [
         q("cargoRole", "Mikä on yrityksen rooli kuljetuksessa?", "Rooli ratkaisee, tarvitaanko tavaran vakuutus vai kuljetusvastuu.", false, [["own_goods", "Kuljetamme omaa tavaraa"], ["carrier", "Kuljetamme asiakkaan tavaraa"], ["forwarder", "Huolinta tai logistiikkaoperaattori"], ["exhibition", "Messu- tai näyttelykuljetukset"]]),
         q("cargoFrequency", "Kuinka usein kuljetuksia on?", "Toistuvuus vaikuttaa jatkuvan ja kertakuljetuksen välillä.", false, [["one_off", "Yksittäisiä kuljetuksia"], ["monthly", "Kuukausittain"], ["weekly", "Viikoittain"], ["daily", "Päivittäin"]]),
@@ -1889,7 +2159,7 @@ const detailFlows = {
     },
     bizLegal: {
       title: "Yrityksen oikeusturvavakuutus",
-      sourceNote: "Perustuu OK1 oikeudenkäyntikuluvakuutukseen ja OK2 immateriaalioikeusmateriaaliin.",
+      sourceNote: "Perustuu OK1 oikeudenkäyntikuluvakuutukseen ja OK2 immateriaalioikeuksien turvaan.",
       questions: [
         q("legalDisputes", "Minkä tyyppisiä riitoja halutaan varalta huomioida?", "Voit valita useamman.", true, [["contract", "Sopimus- tai toimitusriidat"], ["customer", "Asiakas- tai reklamaatioriitat"], ["employment", "Työsuhderiidat"], ["ip", "Immateriaalioikeudet"], ["real_estate", "Vuokra- tai kiinteistöriidat"]]),
         q("legalMarket", "Missä sopimuksia tehdään?", "Toiminta-alue vaikuttaa ehtojen ja vakuutusmäärän tarkistukseen.", false, [["finland", "Suomi"], ["eu", "EU"], ["global", "Kansainvälinen"], ["unknown", "Ei tiedossa"]]),
@@ -1898,7 +2168,7 @@ const detailFlows = {
     },
     bizRealEstate: {
       title: "Kiinteistövakuutus",
-      sourceNote: "Perustuu kiinteistövakuutuksen, huoneistoturvan, vuokratuottokeskeytyksen ja kiinteistön vastuukysymysten materiaaleihin.",
+      sourceNote: "Perustuu kiinteistövakuutuksen, huoneistoturvan, vuokratuottokeskeytyksen ja kiinteistön vastuukysymysten tuotetietoihin.",
       questions: [
         q("realEstateType", "Minkä tyyppinen kohde on?", "Kohteen käyttötarkoitus vaikuttaa riskiprofiiliin.", false, [["residential", "Asuin- tai vuokratalo"], ["commercial", "Liike- tai toimistokiinteistö"], ["industrial", "Teollisuus- tai tuotantokiinteistö"], ["mixed", "Sekakäyttöinen kohde"]]),
         q("realEstateRole", "Mikä on yrityksen rooli?", "Omistajan ja vuokralaisen tarpeet eroavat toisistaan.", false, [["owner", "Omistaja"], ["landlord", "Vuokranantaja"], ["tenant", "Vuokralainen"], ["manager", "Isännöinti tai hallinnointi"]]),
@@ -1908,7 +2178,7 @@ const detailFlows = {
     },
     bizPatient: {
       title: "Potilasvakuutus",
-      sourceNote: "Perustuu potilasvakuutuksen tuoteselosteeseen ja vakuutusehtoihin.",
+      sourceNote: "Perustuu potilasvakuutuksen tuotetietoihin ja toiminnan vastuukysymysten tarkistukseen.",
       questions: [
         q("patientActivity", "Mitä toimintaa yritys harjoittaa?", "Potilasvakuutuksen tarve liittyy terveyden- ja sairaanhoidon toimintaan.", false, [["healthcare", "Terveyden- tai sairaanhoito"], ["therapy", "Terapia, kuntoutus tai hoivapalvelu"], ["beauty", "Esteettinen tai hyvinvointipalvelu"], ["support", "Alihankinta tai tukipalvelu sote-toimijalle"]]),
         q("patientStaff", "Ketkä palvelua tuottavat?", "Ammattihenkilöt ja alihankkijat pitää tunnistaa.", false, [["licensed", "Laillistetut ammattihenkilöt"], ["mixed", "Sekä ammattihenkilöitä että muuta henkilöstöä"], ["subcontractors", "Alihankkijoita"], ["unknown", "Ei vielä selvää"]]),
@@ -1917,12 +2187,241 @@ const detailFlows = {
     },
     bizConstruction: {
       title: "Rakennus- ja asennustyövakuutus",
-      sourceNote: "Perustuu rakennus- ja asennustyön määräaikaiseen, jatkuvaan ratkaisuun sekä työmaiden suojeluohjeisiin.",
+      sourceNote: "Perustuu rakennus- ja asennustyön määräaikaiseen ja jatkuvaan ratkaisuun sekä työmaiden riskitarkistukseen.",
       questions: [
         q("constructionType", "Millaisia töitä tehdään?", "Työn luonne vaikuttaa määräaikaisen ja jatkuvan ratkaisun välillä.", false, [["single_project", "Yksittäinen rakennus- tai asennushanke"], ["continuous", "Jatkuvaa urakointi- tai asennustoimintaa"], ["repair", "Korjaus- ja kunnossapitotyöt"], ["subcontractor", "Aliurakointi"]]),
         q("constructionAssets", "Mitä työmaalla pitää suojata?", "Voit valita useamman.", true, [["work_object", "Työn kohde"], ["materials", "Rakennustarvikkeet ja materiaalit"], ["tools", "Työkalut ja koneet"], ["temporary", "Väliaikaiset rakenteet"], ["existing", "Työn kohteena oleva olemassa oleva omaisuus"]]),
         q("constructionConcerns", "Mistä vahingoista olet huolissasi?", "Voit valita useamman.", true, [["fire", "Tulityöt ja paloriski"], ["water", "Vuoto- tai säävahingot"], ["theft", "Varkaus tai ilkivalta"], ["liability", "Sivullisvahingot"], ["delay", "Viivästys tai suorituskyvyttömyys"]]),
         q("constructionDuration", "Kuinka pitkiä hankkeet ovat?", "Kesto vaikuttaa vakuutuskauteen ja jatkuvan ratkaisun tarpeeseen.", false, [["short", "Alle 1 kuukausi"], ["medium", "1-6 kuukautta"], ["long", "Yli 6 kuukautta"], ["varies", "Vaihtelee jatkuvasti"]])
+      ]
+    }
+  }
+};
+
+const priceNote = "Hinta-arvio saatavilla laskuri-integraation kautta";
+const defaultNotice = "Turvan sisältö vaihtelee vakuutustuotteittain. Lopullinen sisältö, hinta ja soveltuvuus varmistetaan LähiTapiolan laskurissa tai asiantuntijan kanssa.";
+const option = (key, title, level, means, fit, covers, limits) => ({
+  key,
+  title,
+  level,
+  means,
+  fit,
+  covers,
+  limits,
+  priceNote
+});
+
+const coverageModels = {
+  personal: {
+    home: {
+      label: "Turvatasot: Suppea, Perus, Laaja, LaajaPlus",
+      title: "Kotivakuutuksen turvatasojen vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Siirry kotivakuutuksen hinta-arvioon, kun laskuri-integraatio on käytössä",
+      options: [
+        option("suppea", "Suppea", "Rajattu turva", "Varautuminen ensisijaisesti vakavimpiin palo- ja luonnonilmiövahinkoihin.", "Kohteeseen, jossa halutaan varautua vain pahimpiin vahinkoihin, kuten ulkorakennukseen tai vähäriskiseen mökkikohteeseen.", "Tyypillisesti palo, myrsky, raesade ja salamanisku tuotekohtaisten ehtojen mukaan.", "Ei yleensä sovi, jos haluat rikkoutumis-, vuoto-, varkaus- tai laajaa irtaimistoturvaa."),
+        option("perus", "Perus", "Perustason kotiturva", "Laajaa rajatumpi kotivakuutus ilman rikkoutumissuojaa.", "Tilanteeseen, jossa halutaan varautua keskeisiin koti- ja irtaimistovahinkoihin, mutta ei painoteta äkillistä rikkoutumista.", "Esimerkiksi palo-, myrsky-, rae-, vuoto-, varkaus- ja ilkivaltavahinkoja ehtojen mukaan.", "Ei tyypillisesti kata tavaroiden äkillisiä rikkoutumisvahinkoja samalla tavalla kuin Laaja."),
+        option("laaja", "Laaja", "Laajin perusturvataso", "Kattavin kotivakuutuksen päätaso, joka huomioi myös rikkoutumisvahinkoja.", "Useimmille vakituisen kodin irtaimiston tai rakennuksen vakuuttajille, kun iso vahinko olisi vaikea maksaa itse.", "Äkillisiä ja ennalta arvaamattomia vahinkoja sekä rikkoutumisvahinkoja tuotekohtaisten ehtojen mukaan.", "Ei tarkoita, että kaikki vahingot korvataan; rajoitukset, omavastuut ja ikävähennykset pitää tarkistaa."),
+        option("laajaPlus", "LaajaPlus", "Lisätaso Laajan yhteyteen", "Laajan kotivakuutuksen lisäturva koti-irtaimistolle.", "Kun irtaimiston arvo, elektroniikka, kiinteät sisustukset tai tilapäisasuminen korostuvat.", "Parempia irtaimiston ikävähennyksiä, tiedostojen palautusturvaa ja laajempaa kiinteiden sisustusten turvaa tuotetietojen mukaan.", "Saatavilla vain Laajan kotivakuutuksen yhteydessä ja tuotekohtaisten ehtojen mukaan.")
+      ]
+    },
+    vehicle: {
+      label: "Ajoneuvon laajuus: Liikennevakuutus, Suppea Vakuutus, Laaja Vakuutus",
+      title: "Ajoneuvovakuutuksen laajuuksien vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Siirry ajoneuvovakuutuksen hinta-arvioon, kun laskuri-integraatio on käytössä",
+      options: [
+        option("liikenne", "Liikennevakuutus", "Lakisääteinen vähimmäinen", "Pakollinen vakuutus liikenteessä käytettävälle ajoneuvolle.", "Kun halutaan vain lakisääteinen turva eikä oman ajoneuvon vahinkoja haluta vakuuttaa.", "Henkilövahinkoja ja syyttömän osapuolen omaisuusvahinkoja lain mukaan.", "Ei kata oman ajoneuvon vaurioita, varkautta, lasia tai kolarointia."),
+        option("suppea", "Suppea Vakuutus", "Suppeampi vapaaehtoinen kasko", "Liikennevakuutusta täydentävä rajatumpi vapaaehtoinen ajoneuvovakuutus.", "Vanhemmalle tai pienemmän arvon ajoneuvolle, kun halutaan suojaa tyypillisiin riskeihin ilman laajaa kolarointiturvaa.", "Esimerkiksi palo-, varkaus-, ilkivalta-, eläin- ja luonnonilmiöriskejä sekä lisäturvia valinnan mukaan.", "Ei kata yhtä laajasti oman ajoneuvon kolarointi- tai pysäköintivahinkoja kuin Laaja Vakuutus."),
+        option("laaja", "Laaja Vakuutus", "Laajempi kasko", "Liikennevakuutus ja kattavampi vapaaehtoinen ajoneuvoturva.", "Uudemmalle, rahoitetulle, leasingissä olevalle tai taloudellisesti merkittävälle ajoneuvolle.", "Kolarointi-, pysäköinti-, lasi-, varkaus-, palo-, ilkivalta- ja luonnonilmiöriskejä valittujen turvien mukaan.", "Omavastuut, lisäturvat ja ajoneuvokohtaiset rajaukset pitää tarkistaa laskurissa.")
+      ]
+    },
+    travel: {
+      label: "Sopimusmuoto: jatkuva vai matkakohtainen",
+      title: "Matkavakuutuksen sopimusmuotojen vertailu",
+      notice: "Matkavakuutuksen sisältö, voimassaolo ja hinta riippuvat matkan kestosta, kohteesta, matkustajista ja valituista turvista. Lopullinen sisältö varmistetaan laskurissa tai asiantuntijan kanssa.",
+      calculatorAction: "Siirry matkavakuutuksen hinta-arvioon, kun laskuri-integraatio on käytössä",
+      options: [
+        option("matkakohtainen", "Matkakohtainen eli määräaikainen", "Yksittäisen matkan ratkaisu", "Vakuutus otetaan tietylle matkalle ja sen kestolle.", "Kun matkustat harvoin, yleensä kerran vuodessa tai yksittäiselle matkalle.", "Matkustajan hoitoturvaa, peruuntumista, keskeytymistä, myöhästymistä ja matkatavaroita valintojen mukaan.", "Ei ole jatkuvasti voimassa seuraavia matkoja varten; uusi matka vaatii uuden vakuutuksen."),
+        option("jatkuva", "Jatkuva matkavakuutus", "Usein matkustavan ratkaisu", "Vuoden ympäri voimassa oleva matkavakuutus matkoille tuotekohtaisen voimassaolon mukaan.", "Kun matkustat useamman kerran vuodessa, kotimaassa tai ulkomailla.", "Matkustajan ja matkatavaroiden turvia, kotimaan matkoja yli 50 km päähän ja ulkomaanmatkoja ehtojen mukaan.", "Normaali voimassaolo on rajattu matkan kestoon; pitkät matkat vaativat erillisen tarkistuksen."),
+        option("jatkuvaPidennys", "Jatkuva + pitkän matkan pidennys", "Pitkän matkan jatkoselvitys", "Jatkuvan matkavakuutuksen voimassaoloa voidaan tarvita pidennettynä pitkälle matkalle.", "Yli kolmen kuukauden matkalle tai ulkomailla pidempään oleskelevalle.", "Jatkuvan matkavakuutuksen turvat pidennettynä, jos pidennys myönnetään.", "Pidennys, kohdemaa, terveystiedot ja matkan tarkoitus pitää varmistaa erikseen.")
+      ]
+    },
+    health: {
+      label: "Turvan osat: sairaus, tapaturma, urheilu ja toimeentulo",
+      title: "Terveys- ja tapaturmavakuutuksen rakenneosien vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä terveysvakuutuksen hinta-arvio asiantuntijalta tai laskuri-integraation kautta",
+      options: [
+        option("sairausLaaja", "Sairauden hoitoturva", "Laajempi sairauskulujen turva", "Sairauksien tutkimus- ja hoitokuluja valitun vakuutuksen mukaan.", "Kun nopea pääsy hoitoon ja laajempi yksityisen hoidon käyttö korostuvat.", "Lääkäri-, tutkimus- ja hoitokuluja sekä valittuja hoitopolkuja ehtojen mukaan.", "Terveysselvitys, rajoitusehdot, omavastuu ja ikärajat vaikuttavat."),
+        option("sairausSuppea", "Suppea sairauden hoitoturva", "Rajattu sairauskulujen turva", "Rajatummin määritelty sairauden hoitokulujen turva.", "Kun halutaan edullisempi ja rajatumpi vaihtoehto sairauskuluille.", "Perustason sairauden hoitokuluja valitun turvan mukaan.", "Ei kata yhtä laajasti kuin sairauden laajempi hoitoturva."),
+        option("tapaturma", "Tapaturman hoitoturva", "Tapaturmapainotteinen turva", "Tapaturmista aiheutuvien hoitokulujen turva.", "Kun huoli liittyy erityisesti kaatumisiin, vapaa-aikaan tai arjen tapaturmiin.", "Tapaturman tutkimus- ja hoitokuluja ehtojen mukaan.", "Ei korvaa sairauksia samalla tavalla kuin sairauden hoitoturva."),
+        option("urheilu", "Urheiluturva", "Aktiivisen harrastajan lisäselvitys", "Urheilun tai aktiivisen harrastamisen vaikutuksen tarkistus.", "Kun harrastat lajia, jossa tavallinen tapaturmaturva ei välttämättä riitä.", "Urheilussa sattuvia tapaturmia vain, jos laji ja harrastustaso kuuluvat turvaan.", "Lajirajoitukset ja kilpailutoiminta pitää tarkistaa aina erikseen."),
+        option("paivaraha", "Päiväraha ja haittaturvat", "Toimeentulon ja pysyvän haitan tuki", "Täydentävä turva työkyvyttömyyden, pysyvän haitan tai kuoleman varalle.", "Kun tulot, yrittäjyys tai perheen talous riippuvat omasta työkyvystä.", "Päivärahaa tai kertakorvausta valittujen turvien mukaan.", "Korvausmäärät, omavastuuajat ja työkyvyttömyyden määritelmät pitää varmistaa.")
+      ]
+    },
+    life: {
+      label: "Rakenne: kuolemanvara, vakava sairaus, aleneva tai kiinteä määrä",
+      title: "Henkivakuutuksen rakenteiden vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä henkivakuutuksen hinta-arvio asiantuntijalta tai laskuri-integraation kautta",
+      options: [
+        option("kuolemanvara", "Kuolemanvaraturva", "Läheisten taloudellinen turva", "Kertakorvaus edunsaajille kuolemantapauksessa.", "Kun puoliso, lapset, laina tai arjen menot riippuvat tuloistasi.", "Sovittu vakuutusmäärä edunsaajille ehtojen mukaan.", "Ei ratkaise automaattisesti oikeaa vakuutusmäärää tai edunsaajaa."),
+        option("vakavaSairaus", "Vakavan sairauden kertakorvaus", "Oman talouden lisätuki", "Kertakorvaus tiettyjen vakavien sairauksien tilanteessa.", "Kun haluat taloudellista liikkumavaraa sairastumisen alkuvaiheeseen.", "Sovittu kertakorvaus vakuutusehtojen mukaisissa tilanteissa.", "Korvattavat sairaudet ja rajoitukset pitää tarkistaa ehdoista."),
+        option("aleneva", "Alenevasummainen turva", "Velan mukaan pienenevä tarve", "Vakuutusmäärä pienenee esimerkiksi lainan pienentyessä.", "Kun päätarve on asuntolainan tai muun velan turvaaminen.", "Vakuutusmäärä seuraa sovittua alenevaa rakennetta.", "Ei välttämättä huomioi perheen muita menoja, jos tarve ei liity vain velkaan."),
+        option("kiintea", "Kiinteä kertakorvaus", "Selkeä sovittu määrä", "Vakuutusmäärä pysyy sovitulla tasolla.", "Kun haluat turvata läheisille tietyn euromääräisen puskurin.", "Sovittu kertakorvaus ehtojen mukaan.", "Vakuutusmäärän riittävyys pitää suhteuttaa tuloihin, velkoihin ja säästöihin.")
+      ]
+    },
+    pet: {
+      label: "Rakenne: eläinlääkärikulut, Plus, henki, käyttö ja vastuu",
+      title: "Koira- ja kissavakuutuksen rakenneosien vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä lemmikkivakuutuksen hinta-arvio laskuri-integraation kautta",
+      options: [
+        option("elainlaakari", "Eläinlääkärikuluvakuutus", "Keskeinen hoitokuluturva", "Turvaa sairauden tai tapaturman eläinlääkärikuluja.", "Useimmille koiran tai kissan omistajille.", "Tutkimus- ja hoitokuluja vakuutusmäärän, omavastuun ja ehtojen mukaan.", "Ei välttämättä kata kaikkia sairauksia, ennaltaehkäisyä tai aiempia vaivoja."),
+        option("hoitoturvaPlus", "Hoitoturva Plus", "Laajentava lisäturva", "Täydentää eläinlääkärikuluturvaa valituilla hoito- ja kuntoutusmenoilla.", "Kun haluat laajemman hoitopolun esimerkiksi fysioterapiaan liittyen.", "Lisähoitoja tuotekohtaisten ehtojen mukaan.", "Saatavuus voi riippua eläimen iästä ja terveydestä."),
+        option("henki", "Eläimen henkivakuutus", "Eläimen arvon turva", "Korvaa eläimen menetykseen liittyvää taloudellista arvoa ehtojen mukaan.", "Kun eläimen hankintahinta, jalostusarvo tai käyttöarvo on merkittävä.", "Sovittu vakuutusmäärä ehtojen mukaisessa kuolema- tai menetystilanteessa.", "Ei korvaa hoitokuluja ilman erillistä eläinlääkärikuluturvaa."),
+        option("kaytto", "Käyttöominaisuusturva", "Käyttötarkoituksen turva", "Turvaa eläimen käyttötarkoitukseen liittyvää menetystä.", "Työ-, harrastus-, kilpailu- tai jalostuskäytössä olevalle eläimelle.", "Käyttöominaisuuden menetykseen liittyviä tilanteita ehtojen mukaan.", "Ei ole tarpeen tavalliselle kotilemmikille ilman erityistä käyttötarkoitusta."),
+        option("koiranVastuu", "Koiran vastuuvakuutus", "Koiran aiheuttamien vahinkojen varalle", "Turvaa koiran ulkopuolisille aiheuttamia vahinkoja.", "Koiranomistajalle, jos vastuutilanteet mietityttävät.", "Henkilö- tai esinevahinkoja ehtojen mukaan.", "Koskee koiraa, ei kissaa.")
+      ]
+    }
+  },
+  business: {
+    bizProperty: {
+      label: "Rakenne: esine-, huoneisto-, kiinteistö- ja projektiturvat",
+      title: "Yritysomaisuuden vakuutusrakenteiden vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä yritysomaisuuden hinta-arvio asiantuntijalta",
+      options: [
+        option("esine", "ES1 Esinevakuutus", "Yrityksen irtaimen omaisuuden perusrakenne", "Koneiden, laitteiden, työkalujen ja vaihto-omaisuuden suoja.", "Yritykselle, jolla on toiminnan kannalta tärkeää irtainta omaisuutta.", "Omaisuusvahinkoja sovittujen turvien ja ehtojen mukaan.", "Ei yksin ratkaise keskeytys-, vastuu- tai kiinteistöriskiä."),
+        option("huoneisto", "Huoneistoturva", "Vuokratilan ja sisustusten näkökulma", "Vuokratilan muutostöiden ja kiinteiden sisustusten suoja.", "Vuokratilassa toimivalle yritykselle.", "Vuokratilan omaisuuteen ja sisustuksiin liittyviä vahinkoja ehtojen mukaan.", "Ei korvaa rakennuksen omistajan kaikkia vastuita."),
+        option("kiinteisto", "Kiinteistövakuutus", "Rakennuksen ja kiinteistön suoja", "Yrityksen omistaman rakennuksen tai kiinteistön vakuuttaminen.", "Rakennuksen tai kiinteistön omistajalle.", "Rakennusvahinkoja ja kiinteistöriskejä sovitun turvan mukaan.", "Vuokratuotto ja vastuut pitää tarkistaa erikseen."),
+        option("rakennustyo", "Rakennus- ja asennustyövakuutus", "Projektikohtainen tai jatkuva työmaaturva", "Rakennus-, asennus- tai korjaustyön kohteiden suoja.", "Urakoitsijalle tai projektikohteeseen.", "Työn kohteita, materiaaleja ja työmaariskiä ehtojen mukaan.", "Urakkasopimuksen vakuutusvaatimukset pitää varmistaa.")
+      ]
+    },
+    bizLiability: {
+      label: "Rakenne: toiminnan, tuotteen, varallisuuden, IT:n ja hallinnon vastuut",
+      title: "Yrityksen vastuuvakuutusten vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä vastuuvakuutuksen hinta-arvio asiantuntijalta",
+      options: [
+        option("operations", "Toiminnan vastuuvakuutus", "Henkilö- ja esinevahinkojen päävastuu", "Turvaa yrityksen toiminnasta aiheutuvaa korvausvastuuta.", "Useimmille yrityksille, joilla on asiakkaita, tiloja, töitä tai palveluita.", "Henkilö- ja esinevahinkoja ehtojen mukaan.", "Ei kata kaikkia puhtaita varallisuusvahinkoja tai erityisvastuita."),
+        option("products", "Tuotevastuuvakuutus", "Tuotteisiin liittyvä vastuu", "Valmistettujen, myytyjen tai maahantuotujen tuotteiden aiheuttamat vahingot.", "Kaupalle, valmistajalle, maahantuojalle ja verkkokaupalle.", "Tuotteen virheellisyydestä aiheutuvia henkilö- tai esinevahinkoja.", "Takaisinveto ja sopimusvastuut vaativat erillisen tarkistuksen."),
+        option("professional", "Varallisuus- tai konsultin vastuu", "Asiantuntijatyön taloudellinen riski", "Ammatillisen virheen tai suunnittelun aiheuttama taloudellinen vahinko.", "Konsulteille, suunnittelijoille, tilitoimistoille ja neuvontatyölle.", "Puhtaita varallisuusvahinkoja tai suunnitteluvastuita vakuutuslajin mukaan.", "Toimialarajaukset ja sopimusvaatimukset ovat keskeisiä."),
+        option("it", "IT-toiminnan vastuuvakuutus", "IT-palvelun vastuu", "IT-palveluissa toiselle aiheutettu vahinko.", "Ohjelmisto-, data-, pilvi- tai IT-konsultointiyritykselle.", "Henkilö-, esine- ja varallisuusvahinkoja ehtojen mukaan.", "Ei korvaa yrityksen omaa kyberkeskeytystä ilman kyber- tai keskeytysturvaa."),
+        option("management", "Hallinnon vastuuvakuutus", "Johdon henkilökohtainen vastuu", "Ylimmän johdon varallisuusvastuun turva.", "Osakeyhtiölle, yhdistykselle, säätiölle tai hallitustyötä tekevälle yhteisölle.", "Johdon aiheuttamia varallisuusvahinkoja ehtojen mukaan.", "Ei korvaa operatiivisen toiminnan kaikkia vahinkoja.")
+      ]
+    },
+    bizInterruption: {
+      label: "Rakenne: KE1, KE2, KE3 ja KE4",
+      title: "Keskeytysvakuutuksen rakenneosien vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä keskeytysvakuutuksen hinta-arvio asiantuntijalta",
+      options: [
+        option("ke1", "KE1 Omaisuuskeskeytys", "Omaisuusvahingon aiheuttama keskeytys", "Turvaa liiketoiminnan katkosta korvattavan esinevahingon jälkeen.", "Yritykselle, jonka tuotanto, myynti tai palvelu riippuu tilasta, koneesta tai varastosta.", "Käyttökatetta, kiinteitä kuluja ja lisäkuluja sovitun rakenteen mukaan.", "Vakuutusmäärä, vastuuaika ja omavastuu pitää laskea kirjanpidosta."),
+        option("ke2", "KE2 Henkilökeskeytys", "Avainhenkilön poissaolo", "Turvaa liiketoiminnan katkosta yrittäjän tai nimetyn henkilön työkyvyttömyyden vuoksi.", "Pienyritykselle, asiantuntijayritykselle tai avainhenkilöriippuvaiseen toimintaan.", "Saamatta jäänyttä katetta ehtojen mukaan.", "Terveysselvitys ja henkilön merkitys liiketoiminnalle pitää varmistaa."),
+        option("ke3", "KE3 Vuokratuottokeskeytys", "Vuokratuoton menetys", "Turvaa vuokratulon keskeytymistä korvattavan esinevahingon jälkeen.", "Vuokranantajalle tai kiinteistön omistajalle.", "Vuokratuoton menetystä sovitun vastuuajan mukaan.", "Ei korvaa kaikkia vuokralaisriskejä ilman muita turvia."),
+        option("ke4", "KE4 Riippuvuuskeskeytys", "Toimittaja- tai asiakasriippuvuus", "Turvaa keskeytystä, joka johtuu tärkeän riippuvuuskohteen vahingosta.", "Yritykselle, joka on riippuvainen yhdestä toimittajasta, asiakkaasta tai alihankkijasta.", "Liiketoiminnan häiriötä ehtojen mukaan.", "Riippuvuuskohteet pitää nimetä ja vakuutusmäärä mitoittaa oikein.")
+      ]
+    },
+    bizCyber: {
+      label: "Rakenne: Kybervakuutus ja Kybervakuutus Pro",
+      title: "Kybervakuutuksen vaihtoehtojen vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä kybervakuutuksen hinta-arvio asiantuntijalta",
+      options: [
+        option("standard", "Kybervakuutus", "Digitaalisen riskin perusteltu kokonaisuus", "Kustannus-, keskeytys- ja vastuuvakuutuksen yhdistelmä kybervahinkoihin.", "Pk-yritykselle, jolla on dataa, järjestelmäriippuvuutta tai asiakasrekistereitä.", "Selvitys-, palautus-, ilmoitus-, keskeytys- ja vastuukustannuksia ehtojen mukaan.", "Perustietoturvan taso, alihankkijat ja järjestelmäriippuvuus pitää selvittää."),
+        option("pro", "Kybervakuutus Pro", "Laajemman digiriippuvuuden jatkoselvitys", "Laajempi tai asiantuntijamaisempi kyberratkaisu suurempaan vahinkopotentiaaliin.", "Yritykselle, jonka toiminta pysähtyy järjestelmäkatkosta tai jolla on merkittävä datariski.", "Laajempia kybervahinkojen kustannus-, keskeytys- ja vastuuriskejä sovitun ratkaisun mukaan.", "Edellyttää tarkempaa riskikartoitusta ja tietoturvakäytäntöjen arviointia.")
+      ]
+    },
+    bizVehicle: {
+      label: "Rakenne: liikenne, kasko, ryhmä/fleet ja korjaamoratkaisut",
+      title: "Yrityksen ajoneuvoratkaisujen vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä yritysajoneuvojen hinta-arvio asiantuntijalta",
+      options: [
+        option("trafficKasko", "Liikennevakuutus + kasko", "Yksittäisen yritysajoneuvon perusratkaisu", "Lakisääteinen liikennevakuutus ja vapaaehtoinen kasko.", "Yrityksen henkilö-, paketti- tai käyttöajoneuvolle.", "Liikennevahinkoja ja oman ajoneuvon kaskoriskejä valitun laajuuden mukaan.", "Käyttötarkoitus, kuljettajat ja rahoitus vaikuttavat."),
+        option("fleet", "Ryhmä- tai fleet-ratkaisu", "Usean ajoneuvon hallinta", "Useamman ajoneuvon vakuutusten keskitetty tarkistus.", "Yritykselle, jolla on useita ajoneuvoja tai kalustoa.", "Kaluston vakuutukset ja mahdolliset yhtenäiset käytännöt.", "Ajoneuvolajit, käyttö ja vahinkohistoria pitää käydä läpi."),
+        option("motorTrade", "Autoliikekasko tai korjaamokasko", "Autoalan erityisratkaisu", "Autokaupan, huollon tai korjaamon erityistarpeisiin.", "Autoalan yritykselle, jolla on asiakkaiden tai myytävien ajoneuvojen riskejä.", "Autoalan toimintaan liittyviä ajoneuvoriskejä ehtojen mukaan.", "Ei sovi tavalliseksi yritysauton kaskoksi ilman autoalan toimintaa.")
+      ]
+    },
+    bizPeople: {
+      label: "Rakenne: lakisääteinen, yrittäjä, työkyky ja avainhenkilöt",
+      title: "Henkilö- ja työkykyratkaisujen vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä henkilöratkaisujen hinta-arvio asiantuntijalta",
+      options: [
+        option("statutory", "Työtapaturma- ja ammattitautivakuutus", "Lakisääteinen työntekijäturva", "Työntekijöiden työtapaturmien ja ammattitautien vakuuttaminen.", "Yritykselle, jolla on työntekijöitä.", "Työtapaturmia ja ammattitauteja lain mukaan.", "Ei yksin kata vapaa-aikaa, yrittäjää tai sairauskuluetuja."),
+        option("entrepreneur", "Yrittäjän tapaturmavakuutus", "Yrittäjän oma turva", "Yrittäjän tapaturmariskin turvaaminen.", "Yksinyrittäjälle tai yrittäjälle työntekijöiden rinnalla.", "Yrittäjän tapaturmia valitun turvan mukaan.", "YEL/TyEL-tilanne ja vapaa-ajan tarve pitää varmistaa."),
+        option("workability", "Työkyky- ja sairauskuluratkaisut", "Nopea hoito ja työkyvyn tuki", "Henkilöstön tai avainhenkilöiden sairauskulu- ja työkykyratkaisu.", "Kun poissaolot, nopea hoito tai henkilöstöetu korostuvat.", "Sairauskuluja, työkyvyn tukea ja hoitoonohjausta valitun ratkaisun mukaan.", "Verotus ja vakuutettavat ryhmät pitää tarkistaa."),
+        option("keyPeople", "Avainhenkilöturva", "Toiminnan jatkuvuuden tuki", "Avainhenkilöiden tai johdon työkykyyn liittyvä ratkaisu.", "Yritykselle, jossa muutama henkilö on liiketoiminnan kannalta kriittinen.", "Avainhenkilöiden hoito- ja työkykyriskejä valitun ratkaisun mukaan.", "Vaatii vakuutettavien ryhmien ja verokohtelun tarkistuksen.")
+      ]
+    },
+    bizTravel: {
+      label: "Rakenne: työmatka, komennus, tavarat, vastuu ja oikeusturva",
+      title: "Yrityksen matkavakuutuksen rakenteiden vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä yrityksen matkavakuutuksen hinta-arvio asiantuntijalta",
+      options: [
+        option("traveler", "Matkustajavakuutus", "Työmatkan hoitoturva", "Työmatkalla sattuvan sairauden tai tapaturman turva.", "Yritykselle, jossa yrittäjä tai henkilöstö matkustaa työasioissa.", "Sairaus- ja tapaturmakuluja matkalla ehtojen mukaan.", "Matkan kesto, kohdemaa ja vakuutettavat henkilöt pitää tarkistaa."),
+        option("posted", "Komennusvakuutus", "Pitkä ulkomaantyö", "Komennukselle tai pitkäaikaiselle ulkomaantyölle suunnattu turva.", "Kun työntekijä tai yrittäjä työskentelee pidempään ulkomailla.", "Komennuksen erityistarpeita valitun ratkaisun mukaan.", "Perheenjäsenet, kohdemaa ja kesto pitää määritellä."),
+        option("luggage", "Matkatavara- ja matkavastuu", "Työvälineet ja vastuu matkalla", "Matkatavaroiden, työvälineiden ja matkavastuun tarkistus.", "Kun mukana kulkee työvälineitä tai asiakirjoja.", "Tavara- ja vastuuvahinkoja ehtojen mukaan.", "Kalliit työvälineet ja erityistavarat pitää ilmoittaa erikseen."),
+        option("legal", "Matkaoikeusturva", "Riita- ja oikeudenkäyntikulut matkalla", "Matkalla syntyvien oikeudellisten kulujen varalle.", "Jos työmatkoihin liittyy sopimus- tai oikeudellisia riskejä.", "Asianajo- ja oikeudenkäyntikuluja ehtojen mukaan.", "Ei korvaa kaikkia riitoja tai sopimusvastuita.")
+      ]
+    },
+    bizCargo: {
+      label: "Rakenne: oma tavara, asiakkaan tavara ja logistiikkavastuu",
+      title: "Kuljetusvakuutusten rakenteiden vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä kuljetusvakuutuksen hinta-arvio asiantuntijalta",
+      options: [
+        option("ownGoods", "Tavarankuljetusvakuutus", "Oman tavaran vakuuttaminen", "Yrityksen oman tavaran kuljetusriskin vakuuttaminen.", "Kun yritys kuljettaa tai lähettää omaa tavaraa.", "Tavaralle kuljetuksen aikana aiheutuvia vahinkoja ehtojen mukaan.", "Kuljetusehdot, arvo ja kuljetusmaat vaikuttavat."),
+        option("carrier", "Tiekuljetusvastuu tai autokuljetusvastuu", "Asiakkaan tavaraan liittyvä vastuu", "Rahdinkuljettajan vastuuta asiakkaan tavarasta.", "Kuljetusliikkeelle tai asiakkaan tavaraa kuljettavalle.", "Lain tai sopimuksen mukaista kuljetusvastuuta ehtojen mukaan.", "Ei välttämättä kata tavaran täyttä arvoa ilman tavarankuljetusvakuutusta."),
+        option("forwarder", "Logistiikkaoperaattorin vastuu", "Huolinnan ja logistiikan vastuu", "Logistiikkaoperaattorin vastuukokonaisuus.", "Huolitsijalle tai logistiikkapalvelun tarjoajalle.", "Logistiikkatoimintaan liittyviä vastuita ehtojen mukaan.", "Sopimusehdot ja vastuun siirtyminen ovat ratkaisevia."),
+        option("exhibition", "Näyttely- tai kertakuljetus", "Yksittäinen erityiskuljetus", "Yksittäinen messu-, näyttely- tai projektikuljetus.", "Harvoin tapahtuvalle kuljetukselle tai erityistavaralle.", "Tavaraa valitun kuljetuksen aikana ehtojen mukaan.", "Ei sovi jatkuviin kuljetuksiin ilman jatkuvaa ratkaisua.")
+      ]
+    },
+    bizLegal: {
+      label: "Rakenne: OK1 ja OK2",
+      title: "Yrityksen oikeusturvan vaihtoehtojen vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä oikeusturvavakuutuksen hinta-arvio asiantuntijalta",
+      options: [
+        option("ok1", "OK1 Oikeudenkäyntikuluvakuutus", "Yritystoiminnan riitojen pääratkaisu", "Asianajo- ja oikeudenkäyntikulujen turva yritystoiminnan riidoissa.", "Useimmille yrityksille, joilla on sopimuksia, asiakkaita tai toimittajia.", "Riita- ja hakemusasioiden kuluja ehtojen mukaan.", "Ei kata kaikkia rikos-, sopimus- tai kansainvälisiä tilanteita."),
+        option("ok2", "OK2 Immateriaalioikeudet", "IP-riitojen lisäselvitys", "Immateriaalioikeuksiin liittyvien riitojen oikeusturva.", "Yritykselle, jonka toiminnassa brändi, ohjelmisto, malli, patentti tai tekijänoikeus on olennainen.", "IP-riitojen kuluja ehtojen mukaan.", "Tarve, toimialue ja oikeudet pitää kartoittaa erikseen.")
+      ]
+    },
+    bizRealEstate: {
+      label: "Rakenne: kiinteistö, vastuu ja vuokratuotto",
+      title: "Kiinteistövakuutuksen rakenteiden vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä kiinteistövakuutuksen hinta-arvio asiantuntijalta",
+      options: [
+        option("building", "Kiinteistövakuutus", "Rakennuksen ja kiinteistön turva", "Rakennuksen omaisuusvahinkojen vakuuttaminen.", "Kiinteistön omistajalle tai vuokranantajalle.", "Rakennusvahinkoja valittujen turvien mukaan.", "Käyttötarkoitus, ikä, kunto ja suojeluohjeet vaikuttavat."),
+        option("liability", "Kiinteistön vastuuvakuutus", "Omistajan vastuu", "Kiinteistön omistamiseen ja hallintaan liittyvä vastuuriski.", "Kun kiinteistössä on vuokralaisia, kävijöitä tai ulkopuolisia.", "Henkilö- ja esinevahinkoja ehtojen mukaan.", "Ei korvaa rakennuksen omaisuusvahinkoa ilman kiinteistövakuutusta."),
+        option("rentalIncome", "Vuokratuottokeskeytys", "Vuokratulon turva", "Vuokratuoton menetys korvattavan esinevahingon jälkeen.", "Vuokranantajalle tai sijoituskiinteistön omistajalle.", "Vuokratulon menetystä sovitun vastuuajan mukaan.", "Ei kata kaikkia vuokralaisen maksukyky- tai sopimusriskejä.")
+      ]
+    },
+    bizPatient: {
+      label: "Rakenne: potilasvakuutus ja toiminnan vastuun tarkistus",
+      title: "Potilasvakuutuksen ja vastuun vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä potilasvakuutuksen hinta-arvio asiantuntijalta",
+      options: [
+        option("patient", "Potilasvakuutus", "Potilasvahinkojen lakisääteinen näkökulma", "Terveyden- ja sairaanhoitotoiminnan potilasvahinkoriskien vakuuttaminen.", "Sote-, hoiva-, terapia- tai terveyspalvelutoimijalle, jos toiminta kuuluu potilasvakuutuksen piiriin.", "Potilasvahinkoja lain ja ehtojen mukaan.", "Toiminnan kuuluminen potilasvakuutuksen piiriin pitää varmistaa."),
+        option("operations", "Toiminnan vastuuvakuutus", "Muu toiminnan vastuu", "Terveyspalveluun liittyvät muut henkilö- ja esinevahingot.", "Kun toiminnassa on tiloja, asiakkaita, laitteita tai palvelutilanteita.", "Toiminnan aiheuttamia vastuita ehtojen mukaan.", "Ei korvaa potilasvahinkoja, jos ne kuuluvat potilasvakuutuksen piiriin.")
+      ]
+    },
+    bizConstruction: {
+      label: "Rakenne: määräaikainen, jatkuva, vastuu ja suorituskyky",
+      title: "Rakennus- ja asennustyövakuutuksen rakenteiden vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä rakennus- ja asennustyövakuutuksen hinta-arvio asiantuntijalta",
+      options: [
+        option("singleProject", "Määräaikainen rakennus- ja asennustyövakuutus", "Yksittäinen hanke", "Yhden rakennus- tai asennushankkeen vakuuttaminen.", "Kun kyseessä on rajattu projekti, jolla on selkeä alku ja loppu.", "Työn kohdetta, materiaaleja ja työmaan riskejä ehtojen mukaan.", "Hankkeen arvo, kesto ja sopimusvelvoitteet pitää määritellä."),
+        option("continuous", "Jatkuva rakennus- ja asennustyövakuutus", "Jatkuva urakointi", "Toistuvan urakointi- tai asennustoiminnan vakuuttaminen.", "Yritykselle, joka tekee jatkuvasti rakennus-, asennus- tai korjaustöitä.", "Useita hankkeita sovitun vakuutusrakenteen mukaan.", "Yksittäisten suurten hankkeiden rajat pitää tarkistaa."),
+        option("liability", "Toiminnan vastuun tarkistus", "Sivullis- ja työkohdevastuu", "Rakennus- ja asennustyöhön liittyvä vastuuriski.", "Kun työ voi aiheuttaa vahinkoa tilaajalle, sivulliselle tai työn kohteelle.", "Vastuita ehtojen mukaan.", "Ei korvaa työn kohdetta samalla tavalla kuin rakennus- ja asennustyövakuutus."),
+        option("performance", "Suorituskyvyttömyysvakuutus", "Urakan erityinen sopimusriski", "Sopimuksen mukaisen suorituskyvyn erityistarkistus.", "Kun sopimus tai tilaaja edellyttää lisäturvaa suorituskyvyttömyyden varalle.", "Sovittuja sopimusriskejä ehtojen mukaan.", "Tarve on sopimuskohtainen ja vaatii asiantuntijan arvion.")
       ]
     }
   }
@@ -2038,17 +2537,18 @@ function buildDetailResult(profileId, flowKey, answers = {}) {
 
   const builder = builders[flowKey];
   if (!builder) {
-    return result(
+    const fallback = result(
       "Tarkennettu ehdotus",
       "Tarve kannattaa käydä läpi asiantuntijan kanssa.",
       [{ label: "Tulos", value: "Syventävää logiikkaa ei ole vielä mallinnettu tälle vakuutukselle." }],
       ["suositus perustuu lyhyen kartoituksen vastauksiin"],
       [],
-      "Avaa tuoteseloste ja varmista vakuutusmäärät, rajaukset ja omavastuut asiantuntijan kanssa."
+      "Jatka hinta-arvioon ja varmista vakuutusmäärät, rajaukset ja omavastuut asiantuntijan kanssa."
     );
+    return attachCoverageComparison(profileId, flowKey, answers, fallback);
   }
 
-  return builder(profileId, flowKey, answers);
+  return attachCoverageComparison(profileId, flowKey, answers, builder(profileId, flowKey, answers));
 }
 
 function labelFor(profileId, flowKey, questionId, value) {
@@ -2583,6 +3083,144 @@ function buildBizConstructionResult(profileId, flowKey, a) {
   );
 }
 
+function attachCoverageComparison(profileId, flowKey, answers, output) {
+  const model = coverageModels[profileId]?.[flowKey];
+  if (!model) return output;
+
+  const recommendation = chooseCoverageKeys(flowKey, answers);
+  const recommendedKeys = recommendation.keys.filter((key) => model.options.some((option) => option.key === key));
+  const fallbackKeys = recommendedKeys.length ? recommendedKeys : [model.options[0]?.key].filter(Boolean);
+  const recommended = model.options.filter((option) => fallbackKeys.includes(option.key));
+  const alternatives = model.options.filter((option) => !fallbackKeys.includes(option.key)).slice(0, 2);
+
+  output.comparison = {
+    ...model,
+    recommendedKeys: fallbackKeys,
+    recommended,
+    alternatives,
+    basis: recommendation.basis,
+    nextStep: recommendation.nextStep || model.calculatorAction
+  };
+  return output;
+}
+
+function chooseCoverageKeys(flowKey, a) {
+  const concerns = toArray(a.vehicleConcerns || a.travelConcerns || a.healthNeeds || a.petNeeds || []);
+  switch (flowKey) {
+    case "home": {
+      if (a.plusNeed === "yes") return picked(["laajaPlus"], "LaajaPlus voisi sopia, koska halusit vahvemman irtaimistoturvan Laajan kotivakuutuksen yhteyteen.");
+      if (["suppea", "perus", "laaja"].includes(a.coverLevel)) return picked([a.coverLevel], `${labelLevel(a.coverLevel)} vastaa valitsemaasi turvatasoa, mutta sisältö kannattaa vielä verrata muihin tasoihin.`);
+      if (["house_owner", "owner_occupier", "tenant"].includes(a.role)) return picked(["laaja"], "Laaja voisi sopia, koska kodin irtaimisto, rakennus tai vastuutilanteet voivat aiheuttaa taloudellisesti merkittäviä vahinkoja.");
+      return picked(["perus"], "Perus voi olla vaihtoehto, jos haluat rajatummin keskeisiä kotiin liittyviä vahinkoja.");
+    }
+    case "vehicle": {
+      if (has(concerns, "none")) return picked(["liikenne"], "Liikennevakuutus on lakisääteinen lähtökohta, mutta oman ajoneuvon vahinkoja ei tällöin yleensä suojata.");
+      if (a.finance === "yes" || has(concerns, "collision") || has(concerns, "parking") || has(concerns, "replacement")) {
+        return picked(["laaja"], "Laaja Vakuutus voisi sopia, koska vastauksissa korostuivat oman ajoneuvon vauriot, rahoitus tai sijaisajoneuvon tarve.");
+      }
+      return picked(["suppea"], "Suppea Vakuutus voi sopia, jos haluat liikennevakuutuksen lisäksi suojaa valittuihin riskeihin ilman laajinta kaskoa.");
+    }
+    case "travel": {
+      if (a.tripPattern === "single") return picked(["matkakohtainen"], "Matkakohtainen vakuutus voisi sopia, koska kyse on yksittäisestä tai harvoin tehtävästä matkasta.");
+      if (a.tripPattern === "long") return picked(["jatkuvaPidennys"], "Pitkä yli kolmen kuukauden matka vaatii jatkuvan vakuutuksen voimassaolon ja mahdollisen pidennyksen tarkistuksen.");
+      return picked(["jatkuva"], "Jatkuva matkavakuutus vaikuttaa sopivalta, kun matkoja on useita vuodessa tai haluat turvan olevan valmiina myös kotimaan matkoille.");
+    }
+    case "health": {
+      const keys = [];
+      if (has(a.healthNeeds, "illness_full")) keys.push("sairausLaaja");
+      if (has(a.healthNeeds, "illness_basic")) keys.push("sairausSuppea");
+      if (has(a.healthNeeds, "sports")) keys.push("urheilu");
+      if (has(a.healthNeeds, "accident")) keys.push("tapaturma");
+      if (has(a.healthNeeds, "income") || has(a.healthNeeds, "permanent")) keys.push("paivaraha");
+      return picked(keys.length ? keys.slice(0, 3) : ["tapaturma"], "Terveysturvan rakenne kannattaa valita sen mukaan, painottuuko vastauksissa sairaus, tapaturma, urheilu vai toimeentulon turva.");
+    }
+    case "life": {
+      if (has(a.lifeGoal, "serious_illness")) return picked(["vakavaSairaus", "kuolemanvara"], "Vakavan sairauden kertakorvaus ja kuolemanvaraturva nousivat esiin, koska haluat turvaa sairastumisen ja läheisten talouden varalle.");
+      if (has(a.lifeGoal, "declining")) return picked(["aleneva"], "Alenevasummainen turva voi sopia, jos päätarve liittyy velan pienenemiseen ajan myötä.");
+      if (has(a.lifeGoal, "fixed")) return picked(["kiintea"], "Kiinteä kertakorvaus voi sopia, jos haluat läheisille selkeän sovitun euromäärän.");
+      return picked(["kuolemanvara"], "Kuolemanvaraturva vaikuttaa olennaiselta, jos joku on taloudellisesti riippuvainen tuloistasi tai velat pitää turvata.");
+    }
+    case "pet": {
+      const keys = [];
+      if (has(a.petNeeds, "vet") || !toArray(a.petNeeds).length) keys.push("elainlaakari");
+      if (has(a.petNeeds, "plus")) keys.push("hoitoturvaPlus");
+      if (has(a.petNeeds, "life")) keys.push("henki");
+      if (has(a.petNeeds, "use")) keys.push("kaytto");
+      if ((a.petType === "dog" || a.petType === "both") && has(a.petNeeds, "liability")) keys.push("koiranVastuu");
+      return picked(keys.length ? keys.slice(0, 3) : ["elainlaakari"], "Lemmikkivakuutuksen rakenne kannattaa valita eläinlääkärikulujen, eläimen iän ja mahdollisten lisäturvien perusteella.");
+    }
+    case "bizProperty": {
+      const keys = [];
+      if (has(a.propertyAssets, "building")) keys.push("kiinteisto");
+      if (has(a.propertyAssets, "construction")) keys.push("rakennustyo");
+      if (has(a.propertyAssets, "tenant_improvements")) keys.push("huoneisto");
+      if (has(a.propertyAssets, "premises") || has(a.propertyAssets, "equipment") || has(a.propertyAssets, "inventory")) keys.push("esine");
+      return picked(keys.length ? keys : ["esine"], "Yritysomaisuuden rakenne määräytyy sen mukaan, vakuutetaanko irtainta omaisuutta, vuokratilan muutostöitä, rakennusta vai projektikohdetta.");
+    }
+    case "bizLiability": {
+      const key = a.liabilityActivity === "healthcare" ? "operations" : (a.liabilityActivity || "operations");
+      return picked([key], "Vastuuvakuutuksen tyyppi kannattaa valita sen mukaan, syntyykö riski toiminnasta, tuotteista, asiantuntijatyöstä, IT-palveluista vai johdon vastuusta.");
+    }
+    case "bizInterruption": {
+      const keys = [];
+      if (has(a.interruptionCause, "property")) keys.push("ke1");
+      if (has(a.interruptionCause, "person")) keys.push("ke2");
+      if (has(a.interruptionCause, "rent")) keys.push("ke3");
+      if (has(a.interruptionCause, "supplier")) keys.push("ke4");
+      return picked(keys.length ? keys : ["ke1"], "Keskeytysvakuutus kannattaa rakentaa keskeytyksen todennäköisen syyn mukaan.");
+    }
+    case "bizCyber":
+      return picked([a.cyberLevel === "pro" || has(a.cyberExposure, "critical_systems") || has(a.cyberConcerns, "ransomware") ? "pro" : "standard"], "Kyberturvan taso määräytyy digitaalisen riippuvuuden, datariskin ja keskeytysvaikutuksen perusteella.");
+    case "bizVehicle":
+      if (a.fleetType === "motor_trade") return picked(["motorTrade"], "Autoalan toiminta tarvitsee tavallisen yritysauton sijaan autoliikkeen tai korjaamon erityisratkaisun.");
+      if (["many", "large"].includes(a.fleetSize)) return picked(["fleet"], "Useampi ajoneuvo kannattaa tarkistaa ryhmä- tai fleet-ratkaisuna.");
+      return picked(["trafficKasko"], "Yritysajoneuvon lähtökohta on liikennevakuutus ja käyttötarkoitukseen sopiva kasko.");
+    case "bizPeople": {
+      const keys = [];
+      if (["micro", "small", "medium"].includes(a.peopleSize) || has(a.peopleNeeds, "statutory")) keys.push("statutory");
+      if (a.peopleSize === "solo" || has(a.peopleNeeds, "entrepreneur_accident")) keys.push("entrepreneur");
+      if (has(a.peopleNeeds, "medical") || has(a.peopleNeeds, "workability")) keys.push("workability");
+      if (has(a.peopleNeeds, "key_people")) keys.push("keyPeople");
+      return picked(keys.length ? keys.slice(0, 3) : ["entrepreneur"], "Henkilöratkaisuissa erotetaan työntekijöiden lakisääteinen turva, yrittäjän oma turva ja vapaaehtoiset työkykyratkaisut.");
+    }
+    case "bizTravel": {
+      const keys = ["traveler"];
+      if (a.bizTripType === "posted") keys.push("posted");
+      if (has(a.bizTravelConcerns, "luggage") || has(a.bizTravelConcerns, "liability")) keys.push("luggage");
+      if (has(a.bizTravelConcerns, "legal")) keys.push("legal");
+      return picked(keys.slice(0, 3), "Yrityksen matkaturva rakentuu matkustajaturvasta ja tarvittaessa komennus-, tavara-, vastuu- ja oikeusturvasta.");
+    }
+    case "bizCargo":
+      return picked([{ own_goods: "ownGoods", carrier: "carrier", forwarder: "forwarder", exhibition: "exhibition" }[a.cargoRole] || "ownGoods"], "Kuljetusvakuutuksen oikea rakenne riippuu siitä, kuljettaako yritys omaa tavaraa vai vastaako asiakkaan tavarasta.");
+    case "bizLegal":
+      return picked(has(a.legalDisputes, "ip") ? ["ok1", "ok2"] : ["ok1"], "Yrityksen oikeusturvan rakenne määräytyy riitatyyppien ja mahdollisten immateriaalioikeusriskien perusteella.");
+    case "bizRealEstate": {
+      const keys = ["building"];
+      if (has(a.realEstateConcerns, "liability")) keys.push("liability");
+      if (has(a.realEstateConcerns, "rental_income")) keys.push("rentalIncome");
+      return picked(keys, "Kiinteistöturva kannattaa rakentaa rakennuksen, omistajan vastuun ja vuokratuoton menetyksen ympärille.");
+    }
+    case "bizPatient":
+      return picked(["patient", "operations"], "Sote- ja terveyspalveluissa potilasvakuutuksen tarve pitää erottaa muusta toiminnan vastuusta.");
+    case "bizConstruction": {
+      const keys = [a.constructionType === "single_project" ? "singleProject" : "continuous"];
+      if (has(a.constructionConcerns, "liability")) keys.push("liability");
+      if (has(a.constructionConcerns, "delay")) keys.push("performance");
+      return picked(keys, "Rakennus- ja asennustyössä sopiva rakenne riippuu siitä, onko kyse yksittäisestä hankkeesta vai jatkuvasta urakoinnista.");
+    }
+    default:
+      return picked([], "Suositus perustuu annettuihin vastauksiin ja vakuutuksen tuotemateriaalien päälinjoihin.");
+  }
+}
+
+function picked(keys, basis, nextStep) {
+  return { keys: Array.isArray(keys) ? keys : [keys], basis, nextStep };
+}
+
+function labelLevel(key) {
+  return { suppea: "Suppea", perus: "Perus", laaja: "Laaja", laajaPlus: "LaajaPlus" }[key] || key;
+}
+
 function result(primaryTag, title, rows, reasons, notes, nextStep) {
   return {
     primaryTag,
@@ -2634,6 +3272,7 @@ function freshState() {
     detailIndex: 0,
     detailAnswers: {},
     detailResults: {},
+    priceEstimateInterest: false,
     contact: {}
   };
 }
@@ -2658,7 +3297,7 @@ function init() {
   bindEvents();
   renderShellTexts();
   renderIntro();
-  renderLibrary();
+  renderCalculatorPanel();
   renderSummaryList();
 }
 
@@ -2694,7 +3333,7 @@ function setMode(nextMode) {
   $("modeBusiness").classList.toggle("active", mode === "business");
   renderShellTexts();
   renderIntro();
-  renderLibrary();
+  renderCalculatorPanel();
   renderSummaryList();
   showView("intro");
   track("assessment_mode_changed", { mode });
@@ -2706,7 +3345,6 @@ function renderShellTexts() {
   $("heroLead").textContent = p.heroLead;
   $("modeLabel").textContent = p.label;
   $("appTitle").textContent = `${p.label}: vakuutuskartoitus`;
-  $("libraryIntro").textContent = p.materialsIntro;
 }
 
 function openAssessment() {
@@ -2889,6 +3527,7 @@ function renderRecommendationCard(item, bucketKey) {
   const reasons = item.reasons.length ? item.reasons : ["tämä vakuutus ei noussut vastauksissa vahvasti esiin"];
   const canDetail = Boolean(meta.detailFlow && flow(meta.detailFlow));
   const existing = item.existing ? `<span class="status-pill possible">Nykyinen turva: tarkista riittävyys</span>` : "";
+  const comparisonLabel = meta.detailFlow && coverageModels[mode]?.[meta.detailFlow]?.label;
 
   return `
     <article class="rec-card">
@@ -2899,13 +3538,13 @@ function renderRecommendationCard(item, bucketKey) {
         <div class="chip-row">
           <span class="status-pill ${bucketKey === "primary" ? "primary" : bucketKey === "possible" ? "possible" : ""}">${item.score} pistettä</span>
           ${existing}
+          ${comparisonLabel ? `<span class="status-pill possible">${escapeHtml(comparisonLabel)}</span>` : ""}
         </div>
         <div class="reason-list">${reasons.slice(0, 3).map((reason) => `<div class="reason">${escapeHtml(capitalize(reason))}.</div>`).join("")}</div>
         <details class="source-details">
           <summary>Perustuu näihin vastauksiin</summary>
           <p>${escapeHtml(reasons.join("; "))}</p>
         </details>
-        ${renderMaterialLinks(meta.materials)}
       </div>
       <div class="rec-actions">
         ${canDetail ? `<button class="btn btn-primary btn-small" type="button" data-detail="${escapeHtml(meta.detailFlow)}">Tarkenna tätä vakuutusta</button>` : ""}
@@ -3009,10 +3648,139 @@ function renderDetailResult(detailKey, result) {
       </div>
       ${result.notes.length ? `<div class="notice"><strong>Huomioi jatkossa:</strong><br>${result.notes.map(escapeHtml).join("<br>")}</div>` : ""}
       <div class="notice"><strong>Seuraava tarkistus:</strong><br>${escapeHtml(result.nextStep)}</div>
-      ${renderMaterialLinks(meta.materials)}
+      ${renderCoverageComparison(result.comparison, detailKey)}
+      ${renderProductMaterials(meta.materials)}
     </div>
   `;
+  bindCalculatorActions($("detailResult"));
+  renderCalculatorPanel();
   renderSummaryList();
+}
+
+function renderCoverageComparison(comparison, detailKey = "") {
+  if (!comparison) return "";
+  const recommendedLabels = comparison.recommended.map((option) => option.title).join(", ");
+  const alternatives = comparison.alternatives.map((option) => option.title).join(", ");
+  const tableRows = [
+    ["Kattavuuden yleistaso", (option) => option.level],
+    ["Mitä taso tarkoittaa", (option) => option.means],
+    ["Kenelle sopii", (option) => option.fit],
+    ["Tärkeimmät hyödyt", (option) => option.covers],
+    ["Mahdolliset rajoitukset", (option) => option.limits],
+    ["Sopivuus vastausten perusteella", (option) => comparison.recommendedKeys.includes(option.key) ? "Vaikuttaa sopivalta" : "Vertailtava vaihtoehto"],
+    ["Hinta-arvio", (option) => option.priceNote]
+  ];
+
+  return `
+    <section class="coverage-compare" aria-label="${escapeHtml(comparison.title)}">
+      <div class="coverage-head">
+        <div>
+          <p class="eyebrow compact">Turvan vertailu</p>
+          <h4>${escapeHtml(comparison.title)}</h4>
+          <p class="muted">${escapeHtml(comparison.notice)}</p>
+        </div>
+      </div>
+      <div class="best-fit">
+        <strong>Sopivin vaihtoehto vastaustesi perusteella: ${escapeHtml(recommendedLabels)}</strong>
+        <span>${escapeHtml(comparison.basis)}</span>
+        ${alternatives ? `<span>Voit vertailla myös: ${escapeHtml(alternatives)}.</span>` : ""}
+      </div>
+      <div class="calculator-summary-card">
+        <h5>Yhteenveto</h5>
+        <div class="calculator-product">
+          <strong>${escapeHtml(recommendedLabels)}</strong>
+          <span>${escapeHtml(comparison.title)}</span>
+        </div>
+        <div class="calculator-highlight">
+          <span>Hinta-arvio muodostetaan LähiTapiolan laskurissa</span>
+          <strong>Ei vielä lopullinen tarjous</strong>
+        </div>
+        <div class="calculator-total">
+          <span>Arvioitava kokonaisuus</span>
+          <strong>${escapeHtml(recommendedLabels)}</strong>
+        </div>
+        <div class="calculator-actions">
+          <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(detailKey)}">Pyydä tarkempi hinta-arvio</button>
+          <button class="btn btn-secondary" type="button" data-calculator-more>Lisää toinen vakuutus</button>
+        </div>
+      </div>
+      <div class="coverage-table-wrap">
+        <table class="coverage-table">
+          <thead>
+            <tr>
+              <th>Mitä vakuutus korvaa tai painottaa?</th>
+              ${comparison.options.map((option) => `
+                <th class="${comparison.recommendedKeys.includes(option.key) ? "selected" : ""}">
+                  <span class="radio-dot" aria-hidden="true"></span>
+                  <strong>${escapeHtml(option.title)}</strong>
+                </th>
+              `).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRows.map(([label, getValue]) => `
+              <tr>
+                <th scope="row">${escapeHtml(label)}</th>
+                ${comparison.options.map((option) => `<td class="${comparison.recommendedKeys.includes(option.key) ? "selected" : ""}">${escapeHtml(getValue(option))}</td>`).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+      <div class="calculator-slot">
+        <strong>Seuraava vaihe</strong>
+        <span>${escapeHtml(comparison.calculatorAction)}</span>
+      </div>
+    </section>
+  `;
+}
+
+function bindCalculatorActions(root) {
+  root.querySelectorAll("[data-calculator-contact]").forEach((button) => {
+    button.addEventListener("click", () => requestPriceEstimate(button.dataset.calculatorContact || ""));
+  });
+  root.querySelectorAll("[data-calculator-more]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (st().recommendation) openRecommendations();
+      else startQuick();
+    });
+  });
+  root.querySelectorAll("[data-calculator-start]").forEach((button) => {
+    button.addEventListener("click", () => startQuick());
+  });
+}
+
+function requestPriceEstimate(detailKey = "") {
+  const context = calculatorContext();
+  const typeKey = detailKey ? typeKeyFromDetail(detailKey) : context.typeKey;
+  st().priceEstimateInterest = true;
+  if (typeKey) st().selectedContact[typeKey] = true;
+  openContact();
+}
+
+function typeKeyFromDetail(detailKey) {
+  return Object.keys(types()).find((key) => types()[key].detailFlow === detailKey) || "";
+}
+
+function renderProductMaterials(materials = []) {
+  if (!materials.length) return "";
+  return `
+    <section class="materials-panel" aria-label="Tuotetiedot ja ehdot">
+      <details open>
+        <summary>
+          <span>Tuotetiedot ja ehdot</span>
+          <small>Avaa tarkemmat materiaalit ennen lopullista valintaa</small>
+        </summary>
+        <div class="material-links">
+          ${materials.map((item) => `
+            <a class="material-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">
+              ${escapeHtml(item.label)}
+            </a>
+          `).join("")}
+        </div>
+      </details>
+    </section>
+  `;
 }
 
 function primeContactSelection() {
@@ -3135,11 +3903,23 @@ function buildCrmSummary(contact) {
       const typeKey = Object.keys(types()).find((key) => types()[key].detailFlow === detailKey);
       lines.push(`${typeKey ? types()[typeKey].title : detailKey}: ${result.title}`);
       result.rows.forEach((row) => lines.push(`  - ${row.label}: ${row.value}`));
+      if (result.comparison) {
+        lines.push(`  - Ehdotettu turvataso/rakenne: ${result.comparison.recommended.map((option) => option.title).join(", ")}`);
+        lines.push(`  - Tarkastellut vaihtoehdot: ${result.comparison.options.map((option) => option.title).join(", ")}`);
+        lines.push(`  - Perustelu: ${result.comparison.basis}`);
+        lines.push("  - Hinta-arvio: edellyttää laskuri-integraatiota tai asiantuntijan arviota.");
+      }
       if (result.notes.length) result.notes.forEach((note) => lines.push(`  - Huomio: ${note}`));
       lines.push(`  - Seuraava tarkistus: ${result.nextStep}`);
     });
   } else {
     lines.push("- Syventävää tarkennusta ei tehty.");
+  }
+  if (st().priceEstimateInterest) {
+    lines.push("");
+    lines.push("Hinta-arvio");
+    lines.push("- Asiakas kiinnostunut hinta-arviosta.");
+    lines.push("- Hinta-arvio edellyttää laskuri-integraatiota tai asiantuntijan arviota.");
   }
   if (contact.freeText) {
     lines.push("");
@@ -3195,19 +3975,93 @@ function renderSummaryList() {
   $("summaryList").innerHTML = parts.join("");
 }
 
-function renderLibrary() {
-  $("pdfLibrary").innerHTML = Object.values(types()).map((item) => `
-    <div class="library-item">
-      <div class="library-title">${escapeHtml(item.title)}</div>
-      <div class="muted small">${escapeHtml(item.desc)}</div>
-      ${renderMaterialLinks(item.materials, "library-links")}
+function renderCalculatorPanel() {
+  const panel = $("calculatorPanel");
+  if (!panel) return;
+
+  const context = calculatorContext();
+  if (!context.title) {
+    panel.innerHTML = `
+      <p class="eyebrow compact">Hinta-arvion laskuri</p>
+      <h3>Yhteenveto</h3>
+      <p class="muted small">Kun vastaat kartoitukseen, tähän muodostuu vakuutuskohtainen hinta-arvion esinäkymä.</p>
+      <button class="btn btn-primary full-width" type="button" data-calculator-start>Aloita kartoitus</button>
+      <ul class="calculator-benefits">
+        <li>Selkeä turvan laajuus ennen hinta-arviota</li>
+        <li>Valitut vakuutukset mukaan yhteydenottoon</li>
+        <li>CRM-yhteenveto asiantuntijalle</li>
+      </ul>
+    `;
+    bindCalculatorActions(panel);
+    return;
+  }
+
+  panel.innerHTML = `
+    <p class="eyebrow compact">Hinta-arvion laskuri</p>
+    <h3>Yhteenveto</h3>
+    <div class="calculator-side-card">
+      <div class="calculator-product">
+        <strong>${escapeHtml(context.title)}</strong>
+        <span>${escapeHtml(context.subtitle)}</span>
+      </div>
+      <div class="calculator-highlight">
+        <span>Hinta-arvio muodostetaan LähiTapiolan laskurissa</span>
+        <strong>${escapeHtml(context.recommended)}</strong>
+      </div>
+      <div class="calculator-total">
+        <span>Seuraava vaihe</span>
+        <strong>${escapeHtml(context.nextStep)}</strong>
+      </div>
+      <div class="calculator-actions stacked">
+        <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey)}">Pyydä tarkempi hinta-arvio</button>
+        <button class="btn btn-secondary" type="button" data-calculator-more>Lisää toinen vakuutus</button>
+      </div>
     </div>
-  `).join("");
+    <ul class="calculator-benefits">
+      <li>Suositus perustuu antamiisi vastauksiin</li>
+      <li>Lopullinen hinta ja soveltuvuus varmistetaan laskurissa tai asiantuntijan kanssa</li>
+    </ul>
+  `;
+  bindCalculatorActions(panel);
 }
 
-function renderMaterialLinks(materials = [], className = "pdf-links") {
-  if (!materials.length) return "";
-  return `<div class="${className}">${materials.map((item) => `<a class="pdf-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.label)}</a>`).join("")}</div>`;
+function calculatorContext() {
+  const detailEntries = Object.entries(st().detailResults);
+  const activeDetail = st().activeDetail && st().detailResults[st().activeDetail] ? st().activeDetail : "";
+  const detailKey = activeDetail || (detailEntries.length ? detailEntries[detailEntries.length - 1][0] : "");
+
+  if (detailKey) {
+    const result = st().detailResults[detailKey];
+    const typeKey = typeKeyFromDetail(detailKey);
+    const meta = typeKey ? types()[typeKey] : null;
+    const recommended = result.comparison?.recommended?.map((option) => option.title).join(", ") || result.primaryTag;
+    return {
+      title: meta?.title || result.title,
+      subtitle: result.title,
+      recommended,
+      nextStep: "Hinta-arvio",
+      detailKey,
+      typeKey
+    };
+  }
+
+  const recommendation = st().recommendation;
+  if (recommendation) {
+    const item = recommendation.primary[0] || recommendation.possible[0] || recommendation.items[0];
+    if (!item) return {};
+    const meta = types()[item.key];
+    const comparisonLabel = meta.detailFlow && coverageModels[mode]?.[meta.detailFlow]?.label;
+    return {
+      title: meta.title,
+      subtitle: item.reasons.slice(0, 2).join("; ") || meta.desc,
+      recommended: comparisonLabel || "Tarkenna vakuutus ennen lopullista hinta-arviota",
+      nextStep: meta.detailFlow ? "Tarkennus tai hinta-arvio" : "Asiantuntijan hinta-arvio",
+      detailKey: meta.detailFlow || "",
+      typeKey: item.key
+    };
+  }
+
+  return {};
 }
 
 function showView(next) {
@@ -3224,6 +4078,7 @@ function showView(next) {
   views.forEach((id) => $(id).classList.toggle("hidden", id !== activeView));
   updateSteps(next);
   renderSummaryList();
+  renderCalculatorPanel();
 }
 
 function updateSteps(viewName) {
