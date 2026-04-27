@@ -27,12 +27,12 @@ export const profiles = {
     id: "business",
     label: "Yritysasiakas",
     heroTitle: "Kartoita yrityksen vakuutustarpeet",
-    heroLead: "Vastaa yrityksen tilanteesta kevyesti, näe tärkeimmät vakuutuslajit ja tarkenna vain ne osa-alueet, jotka ovat liiketoiminnalle olennaisia.",
+    heroLead: "Vastaa muutamaan helppoon kysymykseen, näe yrityksen kriittiset vakuutustarpeet ja tarkenna vain ne osa-alueet, joista haluat hinta-arvion.",
     introTitle: "Aloita yrityksen perustilanteesta",
     introText: "Yrityspuolen ensimmäinen vaihe ei mene tuotteisiin liian syvälle. Se tunnistaa, liittyykö tilanteeseen omaisuutta, vastuita, henkilöstöä, keskeytysriskiä, ajoneuvoja, matkoja, kuljetuksia tai digitaalista riskiä.",
-    shortText: "Kysymme yrityksen koosta, toimialasta, omaisuudesta, ihmisistä, liikkumisesta, digitaalisuudesta ja kassavaikutuksesta.",
+    shortText: "Kysymme vain perustilanteesta: ihmisistä, toimitiloista, ajoneuvoista, asiakastyöstä, keskeytysvaikutuksesta, digitaalisuudesta ja nykyisistä vakuutuksista.",
     detailText: "Syventävä vaihe tarkentaa esimerkiksi vakuutettavaa omaisuutta, vastuun lähdettä, keskeytyksen syytä, kyberturvaa tai henkilöstöratkaisua.",
-    layer1Chips: ["Yrityksen koko", "Toimiala", "Omaisuus", "Ihmiset", "Liikkuminen", "Digitaalisuus", "Kassa"],
+    layer1Chips: ["Yrityksen koko", "Ihmiset", "Toimitilat", "Ajoneuvot", "Asiakastyö", "Digitaalisuus", "Kassa"],
     layer2Chips: ["Omaisuus", "Vastuu", "Keskeytys", "Kyber", "Henkilöstö", "Ajoneuvot", "Matka", "Kuljetus"],
     materialsIntro: "Hinta-arvio muodostetaan laskuri-integraatiossa tai asiantuntijan kanssa."
   }
@@ -448,8 +448,8 @@ export const quickQuestions = {
   business: [
     {
       id: "companySize",
-      title: "Minkä kokoinen yritys on?",
-      desc: "Kysymys auttaa hahmottamaan henkilöstöön ja yrittäjään liittyviä perustarpeita.",
+      title: "Mikä kuvaa yrityksen tilannetta?",
+      desc: "Tämä tunnistaa, painottuuko yrittäjän oma turva vai työntekijöihin liittyvät tarkistukset.",
       options: [
         { value: "solo", label: "Yrittäjä ilman työntekijöitä", scores: { bizPeople: score(4, "yrittäjän oma henkilö- ja työkykyturva voi olla keskeinen") } },
         { value: "micro", label: "2-9 henkilöä", scores: { bizPeople: score(7, "yrityksessä on työntekijöitä, jolloin työtapaturma- ja henkilöstöriskit pitää kartoittaa") } },
@@ -459,8 +459,8 @@ export const quickQuestions = {
     },
     {
       id: "industry",
-      title: "Mikä kuvaa parhaiten yrityksen toimintaa?",
-      desc: "Valitse lähin vaihtoehto. Tarkemmat tuotekohtaiset kysymykset tulevat vasta syventävässä vaiheessa.",
+      title: "Millaista toimintaa yritys tekee?",
+      desc: "Valitse lähin vaihtoehto. Tässä ei vielä mennä tuotetietoihin, vaan tunnistetaan toiminnan luonne.",
       options: [
         { value: "expert_it", label: "Asiantuntija-, konsultointi- tai IT-palvelut", scores: { bizLiability: score(5, "asiantuntija- tai IT-palvelu voi synnyttää vastuu- ja sopimusriskejä"), bizCyber: score(5, "toiminta on usein riippuvainen järjestelmistä tai asiakasdatasta"), bizLegal: score(3, "sopimukset ja immateriaalioikeudet voivat olla ajankohtaisia") } },
         { value: "retail", label: "Kauppa, verkkokauppa tai maahantuonti", scores: { bizProperty: score(5, "toimitila, varasto tai myytävät tuotteet voivat olla keskeisiä"), bizLiability: score(4, "tuotteisiin ja asiakkaisiin voi liittyä vastuukysymyksiä"), bizCargo: score(3, "tavaran kuljetukset voivat olla ajankohtaisia") } },
@@ -475,8 +475,8 @@ export const quickQuestions = {
     },
     {
       id: "assets",
-      title: "Mitä yrityksellä on käytössä tai omistuksessa?",
-      desc: "Voit valita useamman.",
+      title: "Mitä yrityksellä on suojattavana?",
+      desc: "Valitse vain olennaiset asiat. Tarkemmat arvot ja rajat selvitetään myöhemmin.",
       multi: true,
       options: [
         { value: "premises", label: "Toimitila tai liiketila", scores: { bizProperty: score(6, "yrityksellä on vakuutettavaa toimitilaomaisuutta") } },
@@ -489,7 +489,7 @@ export const quickQuestions = {
     },
     {
       id: "people",
-      title: "Keitä yrityksen toiminta koskee?",
+      title: "Keihin yrityksen toiminta nojaa?",
       desc: "Voit valita useamman.",
       multi: true,
       options: [
@@ -502,7 +502,7 @@ export const quickQuestions = {
     },
     {
       id: "mobility",
-      title: "Liittyykö toimintaan ajoneuvoja, matkoja tai kuljetuksia?",
+      title: "Liittyykö toimintaan liikkumista tai kuljetuksia?",
       desc: "Voit valita useamman.",
       multi: true,
       options: [
@@ -517,7 +517,7 @@ export const quickQuestions = {
     },
     {
       id: "riskConcerns",
-      title: "Mikä olisi yritykselle taloudellisesti hankalinta?",
+      title: "Mikä vahinko tuntuisi yrityksen arjessa pahimmalta?",
       desc: "Voit valita useamman.",
       multi: true,
       options: [
@@ -532,8 +532,8 @@ export const quickQuestions = {
     },
     {
       id: "digital",
-      title: "Kuinka riippuvainen yritys on digitaalisista järjestelmistä tai datasta?",
-      desc: "Tämä tunnistaa kyberriskin yleistasolla.",
+      title: "Kuinka paljon yritys on riippuvainen järjestelmistä tai datasta?",
+      desc: "Tämä tunnistaa kyberriskin yleistasolla ilman teknistä kartoitusta.",
       options: [
         { value: "high", label: "Erittäin riippuvainen", scores: { bizCyber: score(7, "yritys on erittäin riippuvainen digitaalisista järjestelmistä tai datasta"), bizInterruption: score(2, "järjestelmäkatko voi keskeyttää toimintaa") } },
         { value: "medium", label: "Jonkin verran riippuvainen", scores: { bizCyber: score(4, "yritys on jonkin verran riippuvainen digitaalisista järjestelmistä tai datasta") } },
@@ -553,8 +553,8 @@ export const quickQuestions = {
     },
     {
       id: "currentCovers",
-      title: "Mitä yritysvakuutuksia yrityksellä on jo?",
-      desc: "Valinta auttaa merkitsemään, mitä kannattaa päivittää eikä vain hankkia uutena.",
+      title: "Mitä vakuutuksia yrityksellä on jo?",
+      desc: "Jos vakuutus on jo olemassa, tulos ohjaa tarkistamaan riittävyyden eikä vain hankkimaan uutta.",
       multi: true,
       options: [
         { value: "bizProperty", label: "Omaisuus- tai esinevakuutus", existing: ["bizProperty"] },

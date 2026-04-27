@@ -6,6 +6,7 @@ import { track } from "./analytics.js";
 const $ = (id) => document.getElementById(id);
 const views = ["introView", "questionView", "resultsView", "detailView", "detailResultView", "contactView", "summaryView"];
 const steps = ["step1", "step2", "step3", "step4"];
+const businessMandatoryKeys = new Set(["bizPeople", "bizVehicle", "bizPatient"]);
 
 let mode = "personal";
 const states = {
@@ -19,10 +20,12 @@ function freshState() {
     quickAnswers: {},
     recommendation: null,
     selectedContact: {},
+    selectedPrice: {},
     activeDetail: null,
     detailIndex: 0,
     detailAnswers: {},
     detailResults: {},
+    selectedCoverage: {},
     priceEstimateInterest: false,
     contact: {}
   };
@@ -69,7 +72,8 @@ function bindEvents() {
   $("detailAgain").addEventListener("click", () => restartDetail());
   $("backToResults").addEventListener("click", () => openRecommendations());
   $("contactFromDetail").addEventListener("click", () => {
-    if (st().activeDetail) st().selectedContact[st().activeDetail] = true;
+    const typeKey = st().activeDetail ? typeKeyFromDetail(st().activeDetail) : "";
+    if (typeKey) st().selectedContact[typeKey] = true;
     openContact();
   });
   $("contactBack").addEventListener("click", () => openRecommendations());
@@ -221,30 +225,19 @@ function openRecommendations() {
 function renderRecommendations() {
   const recommendation = st().recommendation || calculateScores(mode, st().quickAnswers);
   st().recommendation = recommendation;
-  const buckets = [
-    {
-      key: "primary",
-      title: "Ensisijaisesti tarkasteltavat",
-      desc: "Näissä vastauksesi muodostivat selkeän tarpeen tai riskin.",
-      items: recommendation.primary
-    },
-    {
-      key: "possible",
-      title: "Mahdollisesti hyödylliset",
-      desc: "Nämä voivat olla hyödyllisiä, mutta vaativat kevyen jatkotarkistuksen.",
-      items: recommendation.possible
-    },
-    {
-      key: "notNow",
-      title: "Ei juuri nyt tärkeimmät",
-      desc: "Nämä eivät nousseet nykytilanteessa vahvasti esiin.",
-      items: recommendation.notNow
-    }
-  ];
+  $("resultsTitle").textContent = mode === "business" ? "Yrityksesi vakuutustarpeet" : "Suositellut vakuutuslajit";
+  $("resultsIntro").textContent = mode === "business"
+    ? "Yrityksen tulokset on jaettu lakisääteisiin tarkistuksiin, toiminnan kannalta kriittisiin tarpeisiin ja tilannekohtaisesti hyödyllisiin vakuutuksiin."
+    : "Vakuutukset on jaettu sen mukaan, kuinka vahvasti ne nousivat esiin vastauksistasi.";
+  $("recommendationInsights").innerHTML = renderRecommendationInsights(recommendation);
 
+  const buckets = recommendationBuckets(recommendation);
   $("recommendationBuckets").innerHTML = buckets.map(renderBucket).join("");
   $("recommendationBuckets").querySelectorAll("[data-detail]").forEach((button) => {
     button.addEventListener("click", () => openDetail(button.dataset.detail));
+  });
+  $("recommendationBuckets").querySelectorAll("[data-price]").forEach((button) => {
+    button.addEventListener("click", () => selectForPriceEstimate(button.dataset.price));
   });
   $("recommendationBuckets").querySelectorAll("[data-contact]").forEach((button) => {
     const key = button.dataset.contact;
@@ -253,6 +246,113 @@ function renderRecommendations() {
       openContact();
     });
   });
+}
+
+function recommendationBuckets(recommendation) {
+  if (mode !== "business") {
+    return [
+      {
+        key: "primary",
+        title: "Ensisijaisesti tarkasteltavat",
+        desc: "Näissä vastauksesi muodostivat selkeän tarpeen tai riskin.",
+        items: recommendation.primary
+      },
+      {
+        key: "possible",
+        title: "Mahdollisesti hyödylliset",
+        desc: "Nämä voivat olla hyödyllisiä, mutta vaativat kevyen jatkotarkistuksen.",
+        items: recommendation.possible
+      },
+      {
+        key: "notNow",
+        title: "Ei juuri nyt tärkeimmät",
+        desc: "Nämä eivät nousseet nykytilanteessa vahvasti esiin.",
+        items: recommendation.notNow
+      }
+    ];
+  }
+
+  const relevant = recommendation.items.filter((item) => item.score >= 3);
+  const mandatory = relevant.filter((item) => businessMandatoryKeys.has(item.key));
+  const mandatoryKeys = new Set(mandatory.map((item) => item.key));
+  const critical = recommendation.primary.filter((item) => !mandatoryKeys.has(item.key));
+  const useful = recommendation.possible.filter((item) => !mandatoryKeys.has(item.key));
+
+  return [
+    {
+      key: "mandatory",
+      title: "Lakisääteiset tai pakollisesti tarkistettavat",
+      desc: "Nämä voivat liittyä työntekijöihin, ajoneuvoihin, toimialaan tai muuhun velvoittavaan tarkistukseen.",
+      items: mandatory
+    },
+    {
+      key: "primary",
+      title: "Toiminnan kannalta kriittiset",
+      desc: "Näissä vahinko voisi vaikuttaa suoraan toimintaan, kassaan, asiakkaisiin tai jatkuvuuteen.",
+      items: critical
+    },
+    {
+      key: "possible",
+      title: "Tilannekohtaisesti hyödylliset",
+      desc: "Nämä eivät nousseet aivan kärkeen, mutta voivat täydentää yrityksen vakuutuskokonaisuutta.",
+      items: useful
+    },
+    {
+      key: "notNow",
+      title: "Ei juuri nyt tärkeimmät",
+      desc: "Nämä eivät nousseet nykytilanteessa vahvasti esiin.",
+      items: recommendation.notNow
+    }
+  ];
+}
+
+function renderRecommendationInsights(recommendation) {
+  const relevant = recommendation.items.filter((item) => item.score >= 3);
+  if (!relevant.length) {
+    return `
+      <section class="needs-summary">
+        <div>
+          <p class="eyebrow compact">Tunnistetut tarpeet</p>
+          <h4>Vahvoja osumia ei vielä noussut</h4>
+          <p class="muted">Voit silti tarkistaa yksittäisiä vakuutuksia tai pyytää asiantuntijaa arvioimaan tilanteen.</p>
+        </div>
+      </section>
+    `;
+  }
+
+  const top = relevant.slice(0, 5);
+  const reasonText = [...new Set(top.flatMap((item) => item.reasons.slice(0, 2)))].slice(0, 4);
+  const summaryTitle = mode === "business"
+    ? "Yrityksesi kriittiset vakuutustarpeet"
+    : "Tärkeimmät tunnistetut tarpeet";
+  const summaryText = mode === "business"
+    ? `Vastaustesi perusteella yrityksen vakuutustarpeet painottuvat erityisesti: ${top.map((item) => types()[item.key].title).join(", ")}.`
+    : `Vastaustesi perusteella kannattaa tarkastella erityisesti: ${top.map((item) => types()[item.key].title).join(", ")}.`;
+
+  return `
+    <section class="needs-summary">
+      <div>
+        <p class="eyebrow compact">Tunnistetut tarpeet</p>
+        <h4>${escapeHtml(summaryTitle)}</h4>
+        <p>${escapeHtml(summaryText)}</p>
+        ${reasonText.length ? `<div class="need-reasons">${reasonText.map((reason) => `<span>${escapeHtml(capitalize(reason))}</span>`).join("")}</div>` : ""}
+      </div>
+      <div class="needs-next">
+        <strong>Seuraavaksi</strong>
+        <span>Tarkenna vain olennaiset vakuutukset, valitse haluamasi turvarakenne ja kokoa hinta-arvion aiheet yhteydenottoon.</span>
+      </div>
+    </section>
+  `;
+}
+
+function selectForPriceEstimate(typeKey) {
+  if (!typeKey || !types()[typeKey]) return;
+  st().selectedContact[typeKey] = true;
+  st().selectedPrice[typeKey] = true;
+  st().priceEstimateInterest = true;
+  renderRecommendations();
+  renderCalculatorPanel();
+  track("price_estimate_selected", { mode, typeKey });
 }
 
 function renderBucket(bucket) {
@@ -264,7 +364,7 @@ function renderBucket(bucket) {
           <h4>${escapeHtml(bucket.title)}</h4>
           <p>${escapeHtml(bucket.desc)}</p>
         </div>
-        <span class="status-pill ${bucket.key === "primary" ? "primary" : bucket.key === "possible" ? "possible" : ""}">${visibleItems.length}</span>
+        <span class="status-pill ${bucket.key === "primary" || bucket.key === "mandatory" ? "primary" : bucket.key === "possible" ? "possible" : ""}">${visibleItems.length}</span>
       </div>
       <div class="recommendation-list">
         ${visibleItems.length ? visibleItems.map((item) => renderRecommendationCard(item, bucket.key)).join("") : `<p class="muted">Ei osumia tähän koriin.</p>`}
@@ -279,6 +379,9 @@ function renderRecommendationCard(item, bucketKey) {
   const canDetail = Boolean(meta.detailFlow && flow(meta.detailFlow));
   const existing = item.existing ? `<span class="status-pill possible">Nykyinen turva: tarkista riittävyys</span>` : "";
   const comparisonLabel = meta.detailFlow && coverageModels[mode]?.[meta.detailFlow]?.label;
+  const selectedForPrice = Boolean(st().selectedPrice[item.key]);
+  const impact = riskImpactForScore(item.score);
+  const mandatory = mode === "business" && businessMandatoryKeys.has(item.key) && item.score >= 3;
 
   return `
     <article class="rec-card">
@@ -287,7 +390,8 @@ function renderRecommendationCard(item, bucketKey) {
         <h4>${escapeHtml(meta.title)}</h4>
         <p class="muted">${escapeHtml(meta.desc)}</p>
         <div class="chip-row">
-          <span class="status-pill ${bucketKey === "primary" ? "primary" : bucketKey === "possible" ? "possible" : ""}">${item.score} pistettä</span>
+          <span class="status-pill ${bucketKey === "primary" || bucketKey === "mandatory" ? "primary" : bucketKey === "possible" ? "possible" : ""}">${escapeHtml(impact)}</span>
+          ${mandatory ? `<span class="status-pill primary">Pakollinen tarkistus</span>` : ""}
           ${existing}
           ${comparisonLabel ? `<span class="status-pill possible">${escapeHtml(comparisonLabel)}</span>` : ""}
         </div>
@@ -299,10 +403,18 @@ function renderRecommendationCard(item, bucketKey) {
       </div>
       <div class="rec-actions">
         ${canDetail ? `<button class="btn btn-primary btn-small" type="button" data-detail="${escapeHtml(meta.detailFlow)}">Tarkenna tätä vakuutusta</button>` : ""}
-        <button class="btn btn-secondary btn-small" type="button" data-contact="${escapeHtml(item.key)}">Valitse yhteydenottoon</button>
+        <button class="btn ${selectedForPrice ? "btn-soft" : "btn-secondary"} btn-small" type="button" data-price="${escapeHtml(item.key)}">${selectedForPrice ? "Valittu hinta-arvioon" : "Valitse hinta-arvioon"}</button>
+        <button class="btn btn-secondary btn-small" type="button" data-contact="${escapeHtml(item.key)}">Pyydä asiantuntijan arvio</button>
       </div>
     </article>
   `;
+}
+
+function riskImpactForScore(score) {
+  if (score >= 10) return "Vaikutus: merkittävä";
+  if (score >= 7) return "Vaikutus: korkea";
+  if (score >= 3) return "Vaikutus: keskitaso";
+  return "Vaikutus: matala";
 }
 
 function refineTopRecommendation() {
@@ -369,7 +481,9 @@ function detailNext() {
 
   const result = buildDetailResult(mode, detailKey, answers);
   st().detailResults[detailKey] = result;
-  st().selectedContact[detailKey] = true;
+  st().selectedCoverage[detailKey] = result.comparison?.recommendedKeys?.[0] || result.comparison?.options?.[0]?.key || "";
+  const typeKey = typeKeyFromDetail(detailKey);
+  if (typeKey) st().selectedContact[typeKey] = true;
   renderDetailResult(detailKey, result);
   showView("detailResult");
   track("detail_completed", { mode, detailKey });
@@ -401,6 +515,7 @@ function renderDetailResult(detailKey, result) {
       <div class="notice"><strong>Seuraava tarkistus:</strong><br>${escapeHtml(result.nextStep)}</div>
       ${renderCoverageComparison(result.comparison, detailKey)}
       ${renderProductMaterials(meta.materials)}
+      <p class="legal-note">Kartoitus ei ole lopullinen tarjous tai vakuutuspäätös. Lopullinen sisältö, hinta ja soveltuvuus varmistetaan LähiTapiolan laskurissa tai asiantuntijan kanssa.</p>
     </div>
   `;
   bindCalculatorActions($("detailResult"));
@@ -412,13 +527,17 @@ function renderCoverageComparison(comparison, detailKey = "") {
   if (!comparison) return "";
   const recommendedLabels = comparison.recommended.map((option) => option.title).join(", ");
   const alternatives = comparison.alternatives.map((option) => option.title).join(", ");
+  const selectedKey = selectedCoverageKey(detailKey, comparison);
+  const selectedOption = selectedCoverageOption(detailKey, comparison);
+  const selectedLabel = selectedOption?.title || recommendedLabels;
+  const selectionMatchesRecommendation = comparison.recommendedKeys.includes(selectedKey);
   const tableRows = [
     ["Kattavuuden yleistaso", (option) => option.level],
     ["Mitä taso tarkoittaa", (option) => option.means],
     ["Kenelle sopii", (option) => option.fit],
     ["Tärkeimmät hyödyt", (option) => option.covers],
     ["Mahdolliset rajoitukset", (option) => option.limits],
-    ["Sopivuus vastausten perusteella", (option) => comparison.recommendedKeys.includes(option.key) ? "Vaikuttaa sopivalta" : "Vertailtava vaihtoehto"],
+    ["Sopivuus vastausten perusteella", (option) => option.key === selectedKey ? "Valitsemasi vaihtoehto" : comparison.recommendedKeys.includes(option.key) ? "Koneen ehdotus" : "Vertailtava vaihtoehto"],
     ["Hinta-arvio", (option) => option.priceNote]
   ];
 
@@ -435,11 +554,16 @@ function renderCoverageComparison(comparison, detailKey = "") {
         <strong>Sopivin vaihtoehto vastaustesi perusteella: ${escapeHtml(recommendedLabels)}</strong>
         <span>${escapeHtml(comparison.basis)}</span>
         ${alternatives ? `<span>Voit vertailla myös: ${escapeHtml(alternatives)}.</span>` : ""}
+        <span>Voit valita alta itse sen vaihtoehdon, jonka haluat ottaa hinta-arvion pohjaksi.</span>
+      </div>
+      <div class="selected-fit">
+        <strong>Valitsemasi vaihtoehto: ${escapeHtml(selectedLabel)}</strong>
+        <span>${selectionMatchesRecommendation ? "Valinta vastaa koneen ehdotusta." : "Valitsit eri vaihtoehdon kuin koneen ensisijainen ehdotus. Tämä huomioidaan hinta-arviossa ja yhteydenoton yhteenvedossa."}</span>
       </div>
       <div class="calculator-summary-card">
         <h5>Yhteenveto</h5>
         <div class="calculator-product">
-          <strong>${escapeHtml(recommendedLabels)}</strong>
+          <strong>${escapeHtml(selectedLabel)}</strong>
           <span>${escapeHtml(comparison.title)}</span>
         </div>
         <div class="calculator-highlight">
@@ -448,7 +572,7 @@ function renderCoverageComparison(comparison, detailKey = "") {
         </div>
         <div class="calculator-total">
           <span>Arvioitava kokonaisuus</span>
-          <strong>${escapeHtml(recommendedLabels)}</strong>
+          <strong>${escapeHtml(selectedLabel)}</strong>
         </div>
         <div class="calculator-actions">
           <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(detailKey)}">Pyydä tarkempi hinta-arvio</button>
@@ -461,9 +585,13 @@ function renderCoverageComparison(comparison, detailKey = "") {
             <tr>
               <th>Mitä vakuutus korvaa tai painottaa?</th>
               ${comparison.options.map((option) => `
-                <th class="${comparison.recommendedKeys.includes(option.key) ? "selected" : ""}">
-                  <span class="radio-dot" aria-hidden="true"></span>
-                  <strong>${escapeHtml(option.title)}</strong>
+                <th class="${option.key === selectedKey ? "selected" : ""} ${comparison.recommendedKeys.includes(option.key) ? "recommended-column" : ""}">
+                  <button class="coverage-choice" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${option.key === selectedKey ? "true" : "false"}">
+                    <span class="radio-dot" aria-hidden="true"></span>
+                    <strong>${escapeHtml(option.title)}</strong>
+                    ${option.key === selectedKey ? `<span class="selected-badge">Valittu hinta-arvioon</span>` : ""}
+                    ${comparison.recommendedKeys.includes(option.key) ? `<span class="recommend-badge">Koneen ehdotus</span>` : ""}
+                  </button>
                 </th>
               `).join("")}
             </tr>
@@ -472,11 +600,14 @@ function renderCoverageComparison(comparison, detailKey = "") {
             ${tableRows.map(([label, getValue]) => `
               <tr>
                 <th scope="row">${escapeHtml(label)}</th>
-                ${comparison.options.map((option) => `<td class="${comparison.recommendedKeys.includes(option.key) ? "selected" : ""}">${escapeHtml(getValue(option))}</td>`).join("")}
+                ${comparison.options.map((option) => `<td class="${option.key === selectedKey ? "selected" : ""}">${escapeHtml(getValue(option))}</td>`).join("")}
               </tr>
             `).join("")}
           </tbody>
         </table>
+      </div>
+      <div class="coverage-mobile-list" aria-label="Turvan vaihtoehdot">
+        ${comparison.options.map((option) => renderMobileCoverageOption(option, detailKey, selectedKey, comparison.recommendedKeys.includes(option.key))).join("")}
       </div>
       <div class="calculator-slot">
         <strong>Seuraava vaihe</strong>
@@ -486,7 +617,25 @@ function renderCoverageComparison(comparison, detailKey = "") {
   `;
 }
 
+function renderMobileCoverageOption(option, detailKey, selectedKey, recommended) {
+  return `
+    <button class="coverage-mobile-card ${option.key === selectedKey ? "selected" : ""}" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${option.key === selectedKey ? "true" : "false"}">
+      <span class="radio-dot" aria-hidden="true"></span>
+      <strong>${escapeHtml(option.title)}</strong>
+      <span>${escapeHtml(option.level)}</span>
+      <small>${escapeHtml(option.fit)}</small>
+      <span class="coverage-card-badges">
+        ${option.key === selectedKey ? `<em>Valittu hinta-arvioon</em>` : ""}
+        ${recommended ? `<em>Koneen ehdotus</em>` : ""}
+      </span>
+    </button>
+  `;
+}
+
 function bindCalculatorActions(root) {
+  root.querySelectorAll("[data-coverage-choice]").forEach((button) => {
+    button.addEventListener("click", () => selectCoverageOption(button.dataset.detailKey || "", button.dataset.coverageChoice || ""));
+  });
   root.querySelectorAll("[data-calculator-contact]").forEach((button) => {
     button.addEventListener("click", () => requestPriceEstimate(button.dataset.calculatorContact || ""));
   });
@@ -505,12 +654,35 @@ function requestPriceEstimate(detailKey = "") {
   const context = calculatorContext();
   const typeKey = detailKey ? typeKeyFromDetail(detailKey) : context.typeKey;
   st().priceEstimateInterest = true;
-  if (typeKey) st().selectedContact[typeKey] = true;
+  if (typeKey) {
+    st().selectedContact[typeKey] = true;
+    st().selectedPrice[typeKey] = true;
+  }
   openContact();
 }
 
 function typeKeyFromDetail(detailKey) {
   return Object.keys(types()).find((key) => types()[key].detailFlow === detailKey) || "";
+}
+
+function selectedCoverageKey(detailKey, comparison) {
+  const saved = st().selectedCoverage[detailKey];
+  if (saved && comparison.options.some((option) => option.key === saved)) return saved;
+  return comparison.recommendedKeys[0] || comparison.options[0]?.key || "";
+}
+
+function selectedCoverageOption(detailKey, comparison) {
+  const key = selectedCoverageKey(detailKey, comparison);
+  return comparison.options.find((option) => option.key === key) || comparison.options[0];
+}
+
+function selectCoverageOption(detailKey, coverageKey) {
+  if (!detailKey || !coverageKey) return;
+  const result = st().detailResults[detailKey];
+  if (!result?.comparison?.options?.some((option) => option.key === coverageKey)) return;
+  st().selectedCoverage[detailKey] = coverageKey;
+  renderDetailResult(detailKey, result);
+  track("coverage_option_selected", { mode, detailKey, coverageKey });
 }
 
 function renderProductMaterials(materials = []) {
@@ -525,6 +697,7 @@ function renderProductMaterials(materials = []) {
         <div class="material-links">
           ${materials.map((item) => `
             <a class="material-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">
+              <small>${escapeHtml(materialTypeLabel(item.label))}</small>
               ${escapeHtml(item.label)}
             </a>
           `).join("")}
@@ -532,6 +705,15 @@ function renderProductMaterials(materials = []) {
       </details>
     </section>
   `;
+}
+
+function materialTypeLabel(label = "") {
+  const text = label.toLocaleLowerCase("fi-FI");
+  if (text.includes("avaintieto")) return "Avaintieto";
+  if (text.includes("tuoteseloste")) return "Tuoteseloste";
+  if (text.includes("ehto")) return "Ehdot";
+  if (text.includes("materiaalilista")) return "Materiaalit";
+  return "Tarkenne";
 }
 
 function primeContactSelection() {
@@ -561,16 +743,20 @@ function renderContact() {
     const meta = types()[key];
     const checked = st().selectedContact[key] ? "checked" : "";
     const detailBadge = st().detailResults[meta.detailFlow] ? "Tarkennettu" : "";
+    const priceBadge = st().selectedPrice[key] ? "Hinta-arvio" : "";
+    const badges = [meta.area, detailBadge, priceBadge].filter(Boolean).join(" · ");
     return `
       <label class="check-card">
         <input type="checkbox" data-contact-choice="${escapeHtml(key)}" ${checked}>
-        <span><strong>${escapeHtml(meta.title)}</strong><br><span class="muted small">${escapeHtml(meta.area)}${detailBadge ? ` · ${detailBadge}` : ""}</span></span>
+        <span><strong>${escapeHtml(meta.title)}</strong><br><span class="muted small">${escapeHtml(badges)}</span></span>
       </label>
     `;
   }).join("");
   $("contactChoices").querySelectorAll("[data-contact-choice]").forEach((input) => {
     input.addEventListener("change", () => {
       st().selectedContact[input.dataset.contactChoice] = input.checked;
+      if (!input.checked) st().selectedPrice[input.dataset.contactChoice] = false;
+      renderCalculatorPanel();
     });
   });
   restoreContactFields();
@@ -578,15 +764,15 @@ function renderContact() {
 
 function restoreContactFields() {
   const contact = st().contact;
-  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactTime", "freeText"]) {
-    if ($(id)) $(id).value = contact[id] || "";
+  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactTime", "contactNextStep", "contactUrgency", "freeText"]) {
+    if ($(id) && Object.prototype.hasOwnProperty.call(contact, id)) $(id).value = contact[id] || "";
   }
   $("privacyConsent").checked = Boolean(contact.privacyConsent);
 }
 
 function readContactFields() {
   const contact = {};
-  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactTime", "freeText"]) {
+  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactTime", "contactNextStep", "contactUrgency", "freeText"]) {
     contact[id] = $(id).value.trim();
   }
   contact.privacyConsent = $("privacyConsent").checked;
@@ -632,8 +818,10 @@ function buildCrmSummary(contact) {
   if (contact.contactPhone) lines.push(`- Puhelin: ${contact.contactPhone}`);
   lines.push(`- Toivottu yhteydenottotapa: ${contact.contactChannel || "Ei valittu"}`);
   if (contact.contactTime) lines.push(`- Paras aika: ${contact.contactTime}`);
+  lines.push(`- Asiakkaan seuraava toive: ${contact.contactNextStep || "Ei valittu"}`);
+  lines.push(`- Kiireellisyys: ${contact.contactUrgency || "Ei valittu"}`);
   lines.push("");
-  lines.push("Asiakkaan valitsemat keskusteluaiheet");
+  lines.push("Asiakkaan valitsemat aiheet hinta-arvioon tai yhteydenottoon");
   if (selected.length) selected.forEach((key) => lines.push(`- ${types()[key].title}`));
   else lines.push("- Ei valittuja vakuutuksia");
   lines.push("");
@@ -642,9 +830,9 @@ function buildCrmSummary(contact) {
     lines.push(`- ${item.question}: ${item.answer}`);
   });
   lines.push("");
-  lines.push("Suositukset");
-  recommendation.items.filter((item) => item.score >= 3).forEach((item) => {
-    lines.push(`- ${types()[item.key].title}: ${item.score} p. ${item.reasons.join("; ") || "Ei erillistä perustelua."}${item.existing ? " Nykyinen turva merkitty, tarkista riittävyys." : ""}`);
+  lines.push(mode === "business" ? "Yrityksen tärkeimmät tunnistetut tarpeet" : "Tärkeimmät tunnistetut tarpeet");
+  recommendation.items.filter((item) => item.score >= 3).slice(0, 8).forEach((item) => {
+    lines.push(`- ${types()[item.key].title}: ${riskImpactForScore(item.score)}. ${item.reasons.join("; ") || "Ei erillistä perustelua."}${item.existing ? " Nykyinen turva merkitty, tarkista riittävyys." : ""}`);
   });
   lines.push("");
   lines.push("Syventävät tarkennukset");
@@ -655,7 +843,10 @@ function buildCrmSummary(contact) {
       lines.push(`${typeKey ? types()[typeKey].title : detailKey}: ${result.title}`);
       result.rows.forEach((row) => lines.push(`  - ${row.label}: ${row.value}`));
       if (result.comparison) {
-        lines.push(`  - Ehdotettu turvataso/rakenne: ${result.comparison.recommended.map((option) => option.title).join(", ")}`);
+        const selectedOption = selectedCoverageOption(detailKey, result.comparison);
+        const recommendedTitles = result.comparison.recommended.map((option) => option.title).join(", ");
+        lines.push(`  - Koneen ehdottama turvataso/rakenne: ${recommendedTitles}`);
+        lines.push(`  - Asiakkaan valitsema turvataso/rakenne: ${selectedOption?.title || recommendedTitles}`);
         lines.push(`  - Tarkastellut vaihtoehdot: ${result.comparison.options.map((option) => option.title).join(", ")}`);
         lines.push(`  - Perustelu: ${result.comparison.basis}`);
         lines.push("  - Hinta-arvio: edellyttää laskuri-integraatiota tai asiantuntijan arviota.");
@@ -670,6 +861,8 @@ function buildCrmSummary(contact) {
     lines.push("");
     lines.push("Hinta-arvio");
     lines.push("- Asiakas kiinnostunut hinta-arviosta.");
+    selectedPriceItems().forEach((item) => lines.push(`- Hinta-arvioon valittu: ${item.title} / ${item.detail}`));
+    lines.push(`- Asiakkaan ilmoittama jatkotoive: ${contact.contactNextStep || "Ei valittu"}.`);
     lines.push("- Hinta-arvio edellyttää laskuri-integraatiota tai asiantuntijan arviota.");
   }
   if (contact.freeText) {
@@ -731,7 +924,8 @@ function renderCalculatorPanel() {
   if (!panel) return;
 
   const context = calculatorContext();
-  if (!context.title) {
+  const priceItems = selectedPriceItems();
+  if (!context.title && !priceItems.length) {
     panel.innerHTML = `
       <p class="eyebrow compact">Hinta-arvion laskuri</p>
       <h3>Yhteenveto</h3>
@@ -750,30 +944,57 @@ function renderCalculatorPanel() {
   panel.innerHTML = `
     <p class="eyebrow compact">Hinta-arvion laskuri</p>
     <h3>Yhteenveto</h3>
-    <div class="calculator-side-card">
-      <div class="calculator-product">
-        <strong>${escapeHtml(context.title)}</strong>
-        <span>${escapeHtml(context.subtitle)}</span>
+    ${context.title ? `
+      <div class="calculator-side-card">
+        <div class="calculator-product">
+          <strong>${escapeHtml(context.title)}</strong>
+          <span>${escapeHtml(context.subtitle)}</span>
+        </div>
+        <div class="calculator-highlight">
+          <span>Hinta-arvio muodostetaan LähiTapiolan laskurissa</span>
+          <strong>${escapeHtml(context.recommended)}</strong>
+        </div>
+        <div class="calculator-total">
+          <span>Seuraava vaihe</span>
+          <strong>${escapeHtml(context.nextStep)}</strong>
+        </div>
+        <div class="calculator-actions stacked">
+          <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey)}">Pyydä tarkempi hinta-arvio</button>
+          <button class="btn btn-secondary" type="button" data-calculator-more>Lisää toinen vakuutus</button>
+        </div>
       </div>
-      <div class="calculator-highlight">
-        <span>Hinta-arvio muodostetaan LähiTapiolan laskurissa</span>
-        <strong>${escapeHtml(context.recommended)}</strong>
+    ` : ""}
+    ${priceItems.length ? `
+      <div class="calculator-basket">
+        <strong>Valittu hinta-arvioon</strong>
+        ${priceItems.map((item) => `
+          <div class="basket-line">
+            <span>${escapeHtml(item.title)}</span>
+            <small>${escapeHtml(item.detail)}</small>
+          </div>
+        `).join("")}
       </div>
-      <div class="calculator-total">
-        <span>Seuraava vaihe</span>
-        <strong>${escapeHtml(context.nextStep)}</strong>
-      </div>
-      <div class="calculator-actions stacked">
-        <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey)}">Pyydä tarkempi hinta-arvio</button>
-        <button class="btn btn-secondary" type="button" data-calculator-more>Lisää toinen vakuutus</button>
-      </div>
-    </div>
+    ` : ""}
     <ul class="calculator-benefits">
       <li>Suositus perustuu antamiisi vastauksiin</li>
       <li>Lopullinen hinta ja soveltuvuus varmistetaan laskurissa tai asiantuntijan kanssa</li>
     </ul>
   `;
   bindCalculatorActions(panel);
+}
+
+function selectedPriceItems() {
+  return Object.keys(st().selectedPrice)
+    .filter((key) => st().selectedPrice[key] && types()[key])
+    .map((key) => {
+      const meta = types()[key];
+      const result = meta.detailFlow ? st().detailResults[meta.detailFlow] : null;
+      const selectedOption = result?.comparison ? selectedCoverageOption(meta.detailFlow, result.comparison) : null;
+      return {
+        title: meta.title,
+        detail: selectedOption ? selectedOption.title : meta.area
+      };
+    });
 }
 
 function calculatorContext() {
@@ -785,7 +1006,8 @@ function calculatorContext() {
     const result = st().detailResults[detailKey];
     const typeKey = typeKeyFromDetail(detailKey);
     const meta = typeKey ? types()[typeKey] : null;
-    const recommended = result.comparison?.recommended?.map((option) => option.title).join(", ") || result.primaryTag;
+    const selectedOption = result.comparison ? selectedCoverageOption(detailKey, result.comparison) : null;
+    const recommended = selectedOption?.title || result.comparison?.recommended?.map((option) => option.title).join(", ") || result.primaryTag;
     return {
       title: meta?.title || result.title,
       subtitle: result.title,
