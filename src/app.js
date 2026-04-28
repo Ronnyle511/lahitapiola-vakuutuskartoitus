@@ -642,7 +642,10 @@ function renderCoverageComparison(comparison, detailKey = "") {
           <button class="btn btn-secondary" type="button" data-calculator-more>Lisää toinen vakuutus</button>
         </div>
       </div>
-      <div class="coverage-table-wrap">
+      <details class="coverage-details">
+        <summary>Näytä tarkempi vertailu</summary>
+        <p>${escapeHtml(comparison.notice)}</p>
+        <div class="coverage-table-wrap">
         <table class="coverage-table">
           <thead>
             <tr>
@@ -668,7 +671,8 @@ function renderCoverageComparison(comparison, detailKey = "") {
             `).join("")}
           </tbody>
         </table>
-      </div>
+        </div>
+      </details>
       <div class="coverage-mobile-list" aria-label="Turvan vaihtoehdot">
         ${comparison.options.map((option) => renderMobileCoverageOption(option, detailKey, selectedKey, comparison.recommendedKeys.includes(option.key))).join("")}
       </div>
@@ -1108,10 +1112,13 @@ function renderChatPanel() {
 
   const context = chatContext();
   const messages = st().chatMessages;
+  const chatOpen = messages.length ? "open" : "";
   panel.innerHTML = `
     <p class="eyebrow compact">Kysymysapu</p>
     <h3>Chat-avustaja</h3>
     <p class="muted small">Demo: avustaja käyttää kartoituksen vastauksia taustana, mutta ei anna lopullista vakuutuspäätöstä, korvauslupausta tai hintaa.</p>
+    <details class="chat-drawer" ${chatOpen}>
+      <summary>Kysy suosituksista</summary>
     <div class="chat-suggestions">
       ${context.suggestions.map((item) => `<button class="btn btn-secondary btn-small" type="button" data-chat-prompt="${escapeHtml(item)}">${escapeHtml(item)}</button>`).join("")}
     </div>
@@ -1127,6 +1134,7 @@ function renderChatPanel() {
       <input id="chatInput" type="text" placeholder="Kirjoita kysymys vakuutuksista">
       <button class="btn btn-primary btn-small" type="button" data-chat-send>Lähetä</button>
     </div>
+    </details>
     <p class="legal-note">Varsinaisessa toteutuksessa LähiTapiolan chatille välitettäisiin vain kartoituksen taustatiedot ja suostumuksella tarvittavat yhteystiedot.</p>
   `;
   bindChatActions(panel);
