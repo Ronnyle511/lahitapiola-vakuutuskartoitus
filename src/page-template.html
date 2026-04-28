@@ -11,7 +11,6 @@
     <div class="site-topline" aria-label="Asiakasryhmät">
       <span>Henkilöasiakkaat</span>
       <span>Yritysasiakkaat</span>
-      <span>Maatila-asiakkaat</span>
       <span>Asiakkaalle</span>
     </div>
     <div class="site-nav">
@@ -144,13 +143,11 @@
             <div class="contact-list" id="contactChoices"></div>
             <div class="form-grid">
               <label class="field">Nimi <input id="contactName" autocomplete="name" required></label>
-              <label class="field">Yritys tai talous <input id="contactOrg"></label>
+              <label class="field" id="contactOrgField">Yrityksen nimi <input id="contactOrg"></label>
               <label class="field">Sähköposti <input id="contactEmail" type="email" autocomplete="email" required></label>
               <label class="field">Puhelin <input id="contactPhone" autocomplete="tel"></label>
               <label class="field">Toivottu yhteydenottotapa <select id="contactChannel"><option>Puhelu</option><option>Sähköposti</option><option>Verkkotapaaminen</option></select></label>
-              <label class="field">Paras aika <input id="contactTime" placeholder="Esim. arkisin klo 9-12"></label>
-              <label class="field">Mitä haluat seuraavaksi? <select id="contactNextStep"><option>Haluan hinta-arvion</option><option>Haluan asiantuntijan yhteydenoton</option><option>Haluan molemmat</option><option>Haluan ensin vertailla vaihtoehtoja</option></select></label>
-              <label class="field">Kiireellisyys <select id="contactUrgency"><option>Ei kiireellinen</option><option>Tällä viikolla</option><option>Mahdollisimman pian</option></select></label>
+              <label class="field">Mitä haluat seuraavaksi? <select id="contactNextStep"><option>Haluan hinta-arvion</option><option>Haluan asiantuntijan arvion</option><option>Haluan keskustella suosituksista</option><option>Haluan vertailla kattavuuksia tarkemmin</option><option>Haluan, että minuun otetaan yhteyttä</option></select></label>
               <label class="field full">Jos mikään suositelluista vakuutuksista ei auttanut, kerro tilanteestasi vapaasanaisesti.
                 <textarea id="freeText" placeholder="Kuvaa tilannettasi omin sanoin"></textarea>
               </label>
@@ -178,6 +175,9 @@
       <aside class="support-grid">
         <section class="support-card calculator-panel" id="laskuri" aria-label="Hinta-arvion laskuri">
           <div id="calculatorPanel"></div>
+        </section>
+        <section class="support-card chat-panel" id="chatAssistant" aria-label="Chat-avustaja">
+          <div id="chatPanel"></div>
         </section>
       </aside>
     </section>

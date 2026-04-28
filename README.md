@@ -5,14 +5,15 @@ Verkkosivulle upotettava vakuutuskartoitus henkilö- ja yritysasiakkaille.
 ## Mitä tämä tekee
 
 - Asiakas valitsee henkilöasiakas- tai yritysasiakaskartoituksen.
-- Lyhyt kartoitus tunnistaa relevantit vakuutuslajit.
-- Suosituksissa näytetään perustelut, turvan vertailu ja hinta-arvion laskuripaikka.
+- Lyhyt kyllä/ei-kartoitus tunnistaa relevantit vakuutuslajit ilman tuotekohtaista syventymistä.
+- Suosituksissa näytetään perustelut, opastava vakuutuskortti, turvan vertailu ja hinta-arvion laskuripaikka.
 - Yrityspuolella tulokset jaetaan lakisääteisiin tarkistuksiin, kriittisiin tarpeisiin ja tilannekohtaisiin hyötyihin.
 - Asiakas voi valita turvavaihtoehdon itse, vaikka kone ehdottaisi toista vaihtoehtoa.
-- Hinta-arvion sivupaneeli kokoaa valitut vakuutukset samaan näkymään.
+- Hinta-arvion sivupaneeli kokoaa valitut vakuutukset samaan näkymään ja näyttää, miten LähiTapiolan laskuri-integraatio toimisi demona.
+- Chat-avustajan demo hyödyntää kartoituksen vastauksia taustakontekstina ja auttaa ymmärtämään suosituksia.
 - Asiakas voi tarkentaa valittua vakuutusta syventävällä päätöspolulla.
 - Yksittäisen vakuutuksen tarkennetussa näkymässä asiakas voi avata tuoteselosteet, avaintietoasiakirjat ja ehdot.
-- Yhteydenottopyyntö kokoaa valitut aiheet ja tuottaa kopioitavan yhteenvedon asiakaspalvelulle.
+- Kevyt yhteydenottopyyntö kokoaa valitut aiheet ja tuottaa kopioitavan yhteenvedon asiakaspalvelulle.
 
 ## Rakenne
 

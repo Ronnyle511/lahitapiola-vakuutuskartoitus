@@ -714,6 +714,45 @@ details.source-details summary {
   font-weight: 700;
 }
 
+.learn-panel {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--blue-050);
+}
+
+.learn-panel summary {
+  cursor: pointer;
+  color: var(--blue-950);
+  font-weight: 800;
+}
+
+.learn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.learn-grid div {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.learn-grid strong {
+  display: block;
+  color: var(--blue-950);
+}
+
+.learn-grid p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .result-hero {
   padding: 22px;
   border: 1px solid #b8d0e3;
@@ -902,18 +941,34 @@ details.source-details summary {
 
 .basket-line {
   display: grid;
-  gap: 2px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 10px;
   padding-top: 10px;
   border-top: 1px solid var(--line);
 }
 
 .basket-line span {
+  grid-column: 1;
   color: var(--ink);
   font-weight: 800;
 }
 
 .basket-line small {
+  grid-column: 1;
   color: var(--muted);
+}
+
+.link-button {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  border: 0;
+  color: var(--blue-700);
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: underline;
 }
 
 .coverage-table-wrap {
@@ -972,6 +1027,7 @@ details.source-details summary {
 .coverage-table td {
   color: #294f6b;
   font-size: 13px;
+  cursor: pointer;
 }
 
 .coverage-table .selected {
@@ -1030,6 +1086,20 @@ details.source-details summary {
   border-radius: 999px;
   color: #ffffff;
   background: var(--blue-700);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.choose-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 24px;
+  padding: 3px 8px;
+  border: 1px solid #9fc4dc;
+  border-radius: 999px;
+  color: var(--blue-700);
+  background: #ffffff;
   font-size: 12px;
   font-weight: 800;
 }
@@ -1126,6 +1196,13 @@ details.source-details summary {
   background: var(--blue-050);
 }
 
+.calculator-slot.compact {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 8px;
+}
+
 .calculator-slot span {
   flex: 1;
   color: var(--muted);
@@ -1213,6 +1290,59 @@ details.source-details summary {
 
 .calculator-panel h3 {
   margin-bottom: 12px;
+}
+
+.chat-panel h3 {
+  margin-bottom: 10px;
+}
+
+.chat-suggestions {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.chat-thread {
+  display: grid;
+  gap: 10px;
+  max-height: 300px;
+  margin-top: 14px;
+  overflow-y: auto;
+}
+
+.chat-message,
+.chat-empty {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.chat-message strong {
+  color: var(--blue-950);
+}
+
+.chat-message.user {
+  background: var(--blue-100);
+}
+
+.chat-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chat-input-row input {
+  min-height: 40px;
+  padding: 9px 11px;
+  border: 1px solid #b8c9d8;
+  border-radius: 999px;
+  color: var(--ink);
 }
 
 .calculator-benefits {
@@ -1427,6 +1557,7 @@ details.source-details summary {
   .intro-grid,
   .result-grid,
   .form-grid,
+  .learn-grid,
   .needs-summary {
     grid-template-columns: 1fr;
   }
@@ -1478,6 +1609,10 @@ details.source-details summary {
 
   .calculator-actions .btn {
     width: 100%;
+  }
+
+  .chat-input-row {
+    grid-template-columns: 1fr;
   }
 
   .segmented,
