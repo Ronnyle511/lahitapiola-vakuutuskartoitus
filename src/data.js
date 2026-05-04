@@ -544,6 +544,274 @@ export const quickQuestions = {
   ]
 };
 
+export const baseQuestions = {
+  personal: [
+    {
+      id: "ageGroup",
+      title: "Ikäryhmä",
+      options: [
+        { value: "under18", label: "Alle 18 vuotta", scores: { health: score(2, "ikäryhmä voi vaikuttaa henkilövakuutusten tarkistukseen") } },
+        { value: "18_25", label: "18-25 vuotta", scores: { health: score(1, "elämäntilanne voi vaikuttaa henkilövakuutusten tarkistukseen") } },
+        { value: "26_35", label: "26-35 vuotta" },
+        { value: "36_45", label: "36-45 vuotta", scores: { health: score(1, "henkilövakuutusten kokonaisuus voi olla hyvä tarkistaa") } },
+        { value: "46_55", label: "46-55 vuotta", scores: { health: score(1, "henkilövakuutusten kokonaisuus voi olla hyvä tarkistaa") } },
+        { value: "56_65", label: "56-65 vuotta", scores: { health: score(1, "henkilövakuutusten kokonaisuus voi olla hyvä tarkistaa") } },
+        { value: "over65", label: "Yli 65 vuotta" }
+      ]
+    },
+    {
+      id: "livingType",
+      title: "Asumismuoto",
+      otherLabel: "Kuvaile asumismuoto lyhyesti",
+      options: [
+        { value: "rent", label: "Vuokralla", scores: { home: score(5, "vuokralla asuminen nostaa esiin kodin irtaimiston sekä vastuun ja oikeusturvan") } },
+        { value: "ownerApartment", label: "Omistusasunto, kerros- tai rivitalo", scores: { home: score(6, "omistusasunnossa irtaimisto ja kiinteät sisustukset kannattaa tarkistaa") } },
+        { value: "house", label: "Omakotitalo", scores: { home: score(7, "omakotitalossa rakennus ja irtaimisto kannattaa tarkistaa") } },
+        { value: "semiDetached", label: "Paritalo", scores: { home: score(6, "paritalossa kodin ja rakennuksen vastuunjako kannattaa tarkistaa") } },
+        { value: "withFamily", label: "Vanhempien / puolison / muun henkilön kanssa", scores: { home: score(3, "asumisen vakuutustarve kannattaa tarkistaa talouden kokonaisuuden kautta") } },
+        { value: "holiday", label: "Vapaa-ajan asunto", scores: { apartment: score(7, "vapaa-ajan asunto kannattaa tarkistaa omana vakuutusalueena"), home: score(2, "vapaa-ajan asunnon irtaimisto ja rakennus voivat liittyä kotivakuutukseen") } },
+        { value: "other", label: "Muu, mikä?", scores: { home: score(2, "asumismuoto kannattaa tarkistaa asiantuntijan kanssa") } }
+      ]
+    },
+    {
+      id: "lifeSituation",
+      title: "Työ- tai elämäntilanne",
+      otherLabel: "Kuvaile tilanne lyhyesti",
+      options: [
+        { value: "student", label: "Opiskelija", scores: { health: score(2, "opiskelijan henkilövakuutukset voivat olla hyvä tarkistaa") } },
+        { value: "employed", label: "Työssäkäyvä", scores: { health: score(1, "työssäkäyvän henkilövakuutukset voivat olla hyvä tarkistaa") } },
+        { value: "entrepreneur", label: "Yrittäjä", scores: { health: score(3, "yrittäjän henkilövakuutukset ja toimeentulon turva kannattaa tarkistaa") } },
+        { value: "unemployed", label: "Työtön" },
+        { value: "retired", label: "Eläkkeellä" },
+        { value: "parentalLeave", label: "Vanhempainvapaalla", scores: { health: score(2, "perheen henkilövakuutukset voivat olla ajankohtaisia") } },
+        { value: "service", label: "Varusmies- tai siviilipalveluksessa" },
+        { value: "other", label: "Muu, mikä?", scores: { health: score(1, "työ- tai elämäntilanne kannattaa huomioida henkilövakuutuksissa") } }
+      ]
+    }
+  ],
+  business: [
+    {
+      id: "industry",
+      title: "Toimiala",
+      otherLabel: "Kuvaile toimiala lyhyesti",
+      options: [
+        { value: "construction", label: "Rakentaminen ja remontointi", scores: { bizProperty: score(4, "rakentamisessa omaisuus ja työmaat kannattaa tarkistaa"), bizLiability: score(4, "rakentamisessa vastuu ja oikeusturva korostuvat") } },
+        { value: "logistics", label: "Kuljetus ja logistiikka", scores: { bizVehicle: score(5, "kuljetus ja logistiikka nostaa esiin ajoneuvot ja kuljetusvastuut") } },
+        { value: "food", label: "Ravintola, kahvila tai elintarvikeala", scores: { bizProperty: score(4, "toimitila, laitteet ja varasto voivat olla toiminnalle tärkeitä"), bizLiability: score(3, "asiakas- ja tuotevastuut kannattaa tarkistaa") } },
+        { value: "retail", label: "Kauppa ja vähittäismyynti", scores: { bizProperty: score(4, "varasto ja myytävät tuotteet kannattaa tarkistaa"), bizLiability: score(3, "tuotevastuu ja asiakkaisiin liittyvät riskit kannattaa tarkistaa") } },
+        { value: "consulting", label: "Konsultointi tai asiantuntijapalvelut", scores: { bizLiability: score(5, "asiantuntijatyössä vastuu ja oikeusturva voivat olla keskeisiä") } },
+        { value: "it", label: "IT, ohjelmistoala tai digipalvelut", scores: { bizCyber: score(5, "digipalveluissa kyber- ja tietoriskit korostuvat"), bizLiability: score(3, "IT-palveluissa vastuu asiakkaalle kannattaa tarkistaa") } },
+        { value: "realEstate", label: "Kiinteistö- tai vuokraustoiminta", scores: { bizProperty: score(5, "kiinteistö- ja vuokraustoiminnassa omaisuus ja toimitilat korostuvat"), bizInterruption: score(3, "vuokratuoton tai toiminnan keskeytys kannattaa tarkistaa") } },
+        { value: "agriculture", label: "Maa- tai metsätalous", scores: { bizProperty: score(4, "maa- tai metsätaloudessa omaisuus ja toiminnan jatkuvuus kannattaa tarkistaa") } },
+        { value: "healthcare", label: "Terveydenhuolto, hyvinvointi tai hoivapalvelut", scores: { bizLiability: score(5, "terveys- ja hoivapalveluissa vastuut pitää tarkistaa"), bizPeople: score(3, "henkilö- ja työkykyratkaisut voivat olla ajankohtaisia") } },
+        { value: "manufacturing", label: "Teollisuus tai valmistava toiminta", scores: { bizProperty: score(5, "koneet, laitteet ja tuotanto-omaisuus korostuvat"), bizInterruption: score(4, "tuotannon häiriö voi keskeyttää toimintaa") } },
+        { value: "other", label: "Muu, mikä?", scores: { bizLiability: score(2, "toimiala kannattaa tarkistaa asiantuntijan kanssa") } }
+      ]
+    },
+    {
+      id: "employeeCount",
+      title: "Työntekijöiden määrä",
+      options: [
+        { value: "solo", label: "Ei työntekijöitä / yksinyrittäjä", scores: { bizPeople: score(3, "yrittäjän oma työkyky ja henkilöturva kannattaa tarkistaa") } },
+        { value: "1_4", label: "1-4 työntekijää", scores: { bizPeople: score(6, "työntekijät nostavat esiin henkilöstöön liittyvät vakuutusratkaisut") } },
+        { value: "5_9", label: "5-9 työntekijää", scores: { bizPeople: score(7, "työntekijämäärä nostaa henkilöriskit vahvasti esiin") } },
+        { value: "10_19", label: "10-19 työntekijää", scores: { bizPeople: score(8, "henkilöstön vakuutusratkaisut kannattaa tarkistaa") } },
+        { value: "20_49", label: "20-49 työntekijää", scores: { bizPeople: score(8, "henkilöstön ja työkyvyn ratkaisut kannattaa tarkistaa") } },
+        { value: "50_plus", label: "50+ työntekijää", scores: { bizPeople: score(9, "henkilöstö- ja työkykyratkaisut ovat keskeinen tarkistusalue") } }
+      ]
+    }
+  ]
+};
+
+insuranceTypes.personal.home.title = "Koti ja irtaimisto";
+insuranceTypes.personal.home.area = "Koti ja asuminen";
+insuranceTypes.personal.home.desc = "Kodin, irtaimiston, asumisen vastuiden ja mahdollisen rakennuksen vakuutustarpeen tarkistus.";
+insuranceTypes.personal.vehicle.title = "Ajoneuvot";
+insuranceTypes.personal.vehicle.area = "Autoilu ja ajoneuvot";
+insuranceTypes.personal.travel.title = "Matkustaminen";
+insuranceTypes.personal.health.title = "Henkilövakuutukset";
+insuranceTypes.personal.health.area = "Terveys, tapaturma ja läheisten turva";
+insuranceTypes.personal.health.desc = "Tapaturma-, sairauskulu-, henkivakuutus- ja toimeentulon turvan alustava tarkistus.";
+insuranceTypes.personal.pet.title = "Lemmikit";
+insuranceTypes.personal.apartment.title = "Vapaa-ajan asunto";
+insuranceTypes.personal.apartment.area = "Mökki ja vapaa-aika";
+insuranceTypes.personal.apartment.desc = "Vapaa-ajan asunnon, irtaimiston ja rakennuksen vakuutustarpeen tarkistus.";
+insuranceTypes.personal.liability = {
+  title: "Vastuu ja oikeusturva",
+  area: "Arjen vastuut",
+  desc: "Vastuuvahinkojen ja oikeudellisten kulujen alustava tarkistus.",
+  materials: [
+    m("Kotivakuutuksen materiaalit", MATERIAL_PAGES.personal, "page"),
+    m("Yleiset sopimusehdot", GENERAL_TERMS_PERSONAL)
+  ]
+};
+
+insuranceTypes.business.bizProperty.title = "Omaisuus ja toimitilat";
+insuranceTypes.business.bizProperty.area = "Yrityksen omaisuus";
+insuranceTypes.business.bizLiability.title = "Vastuu ja oikeusturva";
+insuranceTypes.business.bizLiability.area = "Yrityksen vastuut";
+insuranceTypes.business.bizPeople.title = "Henkilö- ja työkykyratkaisut";
+insuranceTypes.business.bizVehicle.title = "Ajoneuvot ja kuljetus";
+insuranceTypes.business.bizVehicle.area = "Liikkuminen ja kuljetukset";
+insuranceTypes.business.bizCyber.title = "Kyber ja tietoriskit";
+insuranceTypes.business.bizInterruption.title = "Keskeytys ja jatkuvuus";
+
+quickQuestions.personal = [
+  {
+    id: "children",
+    title: "Onko taloudessa lapsia?",
+    desc: "Tämä voi nostaa esiin perheen henkilövakuutusten tarkistuksen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { health: score(6, "taloudessa on lapsia, joten perheen henkilövakuutukset kannattaa tarkistaa") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { health: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "vehicle",
+    title: "Onko sinulla auto tai muu ajoneuvo?",
+    desc: "Ajoneuvo nostaa esiin liikennevakuutuksen ja mahdollisen kaskon.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { vehicle: score(8, "ajoneuvo nostaa esiin liikennevakuutuksen ja vapaaehtoisen kaskon tarkistuksen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { vehicle: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "pets",
+    title: "Onko sinulla lemmikkejä?",
+    desc: "Lemmikit voivat nostaa esiin eläinlääkärikulujen ja lisäturvien tarkistuksen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { pet: score(8, "lemmikit nostavat esiin eläinlääkärikulujen ja lisäturvien tarkistuksen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { pet: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "travel",
+    title: "Matkustatko säännöllisesti?",
+    desc: "Matkustaminen nostaa esiin jatkuvan tai matkakohtaisen matkavakuutuksen tarkistuksen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { travel: score(8, "säännöllinen matkustaminen nostaa esiin matkavakuutuksen tarkistuksen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { travel: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "holidayHome",
+    title: "Onko sinulla vapaa-ajan asunto?",
+    desc: "Vapaa-ajan asunto kannattaa tarkistaa erillisenä asumisen kokonaisuutena.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { apartment: score(8, "vapaa-ajan asunto kannattaa tarkistaa erillisenä vakuutusalueena"), home: score(2, "vapaa-ajan asunnon irtaimisto voi liittyä kodin vakuutuskokonaisuuteen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { apartment: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "valuables",
+    title: "Omistatko arvokasta elektroniikkaa, harrastusvälineitä tai muuta irtaimistoa?",
+    desc: "Arvokas irtaimisto voi vaikuttaa kodin vakuutustarpeeseen ja turvan laajuuteen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { home: score(6, "arvokas irtaimisto nostaa esiin kodin ja tavaroiden turvan tarkistuksen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { home: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "personalInsurance",
+    title: "Haluatko kartoittaa henkilövakuutuksia, kuten tapaturma-, sairauskulu- tai henkivakuutusta?",
+    desc: "Henkilövakuutukset liittyvät terveyteen, tapaturmiin, toimeentuloon ja läheisten turvaan.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { health: score(8, "haluat kartoittaa henkilövakuutuksia") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { health: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "liability",
+    title: "Haluatko tarkistaa arjen vastuu- ja oikeusturva-asiat?",
+    desc: "Vastuu ja oikeusturva voivat olla osa kodin vakuutuskokonaisuutta.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { liability: score(5, "haluat tarkistaa vastuu- ja oikeusturva-asiat") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { liability: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  }
+];
+
+quickQuestions.business = [
+  {
+    id: "premises",
+    title: "Onko yrityksellä toimitiloja?",
+    desc: "Toimitilat voivat nostaa esiin omaisuuden ja toimitilojen vakuutustarpeen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizProperty: score(7, "yrityksellä on toimitiloja") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizProperty: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "vehicles",
+    title: "Onko yrityksellä ajoneuvoja?",
+    desc: "Ajoneuvot nostavat esiin yrityksen ajoneuvot ja mahdolliset kuljetukset.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizVehicle: score(8, "yrityksellä on ajoneuvoja") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizVehicle: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "assets",
+    title: "Onko yrityksellä koneita, laitteita tai varastoa?",
+    desc: "Koneet, laitteet ja varasto voivat olla toiminnan kannalta tärkeitä.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizProperty: score(8, "yrityksellä on koneita, laitteita tai varastoa") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizProperty: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "customerSites",
+    title: "Tehdäänkö työtä asiakkaan tiloissa tai työmailla?",
+    desc: "Asiakkaan tiloissa työskentely voi nostaa esiin vastuu- ja oikeusturvakysymyksiä.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizLiability: score(8, "työtä tehdään asiakkaan tiloissa tai työmailla") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizLiability: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "data",
+    title: "Käsitteleekö yritys asiakas-, henkilö- tai maksutietoja?",
+    desc: "Tietojen käsittely voi nostaa esiin kyber- ja tietoriskit.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizCyber: score(8, "yritys käsittelee asiakas-, henkilö- tai maksutietoja") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizCyber: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "keyPeople",
+    title: "Onko yrityksellä avainhenkilöitä, joiden poissaolo vaikuttaisi toimintaan merkittävästi?",
+    desc: "Avainhenkilöriski voi liittyä henkilöratkaisuihin ja toiminnan jatkuvuuteen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizPeople: score(6, "avainhenkilön poissaolo voisi vaikuttaa yrityksen toimintaan"), bizInterruption: score(4, "avainhenkilöriski voi vaikuttaa toiminnan jatkuvuuteen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizPeople: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta"), bizInterruption: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "interruption",
+    title: "Voisiko vahinko tai häiriö keskeyttää toiminnan merkittävästi?",
+    desc: "Keskeytysriski liittyy yrityksen jatkuvuuteen ja kassavirtaan.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizInterruption: score(8, "vahinko tai häiriö voisi keskeyttää toiminnan merkittävästi") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizInterruption: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  }
+];
+
 const q = (id, title, desc, multi, options) => ({ id, title, desc, multi, options: options.map(([value, label, hint]) => ({ value, label, hint })) });
 
 export const detailFlows = {

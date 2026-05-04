@@ -659,8 +659,7 @@ h4 {
 
 .rec-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
+  gap: 14px;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -700,6 +699,30 @@ h4 {
   gap: 8px;
   align-items: stretch;
   min-width: 168px;
+}
+
+.refine-card {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--blue-050);
+}
+
+.refine-card p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.refine-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 details.source-details {
@@ -1319,14 +1342,50 @@ details.source-details summary {
   margin-bottom: 12px;
 }
 
-.chat-panel h3 {
-  margin-bottom: 10px;
-}
-
 .chat-suggestions {
   display: grid;
   gap: 8px;
   margin-top: 14px;
+}
+
+.chat-popup {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 80;
+  width: min(420px, calc(100vw - 28px));
+}
+
+.chat-window {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--blue-050);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.chat-window.expanded {
+  width: min(760px, calc(100vw - 28px));
+}
+
+.chat-window-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--blue-950);
+}
+
+.chat-window-head div {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-window #chatPanel {
+  padding: 16px;
 }
 
 .chat-drawer {
@@ -1494,6 +1553,10 @@ details.source-details summary {
   margin-top: 4px;
 }
 
+.contact-readonly {
+  cursor: default;
+}
+
 .form-error {
   margin: 14px 0 0;
   padding: 12px;
@@ -1624,6 +1687,16 @@ details.source-details summary {
     min-width: 0;
   }
 
+  .refine-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .refine-actions,
+  .refine-actions .btn {
+    width: 100%;
+  }
+
   .calculator-slot {
     align-items: stretch;
     flex-direction: column;
@@ -1650,6 +1723,18 @@ details.source-details summary {
 
   .chat-input-row {
     grid-template-columns: 1fr;
+  }
+
+  .chat-popup,
+  .chat-window.expanded {
+    right: 14px;
+    bottom: 14px;
+    width: calc(100vw - 28px);
+  }
+
+  .chat-window-head {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .segmented,

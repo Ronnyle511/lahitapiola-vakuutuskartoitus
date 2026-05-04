@@ -666,8 +666,7 @@ h4 {
 
 .rec-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
+  gap: 14px;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -707,6 +706,30 @@ h4 {
   gap: 8px;
   align-items: stretch;
   min-width: 168px;
+}
+
+.refine-card {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--blue-050);
+}
+
+.refine-card p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.refine-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 details.source-details {
@@ -1326,14 +1349,50 @@ details.source-details summary {
   margin-bottom: 12px;
 }
 
-.chat-panel h3 {
-  margin-bottom: 10px;
-}
-
 .chat-suggestions {
   display: grid;
   gap: 8px;
   margin-top: 14px;
+}
+
+.chat-popup {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 80;
+  width: min(420px, calc(100vw - 28px));
+}
+
+.chat-window {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--blue-050);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.chat-window.expanded {
+  width: min(760px, calc(100vw - 28px));
+}
+
+.chat-window-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--blue-950);
+}
+
+.chat-window-head div {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-window #chatPanel {
+  padding: 16px;
 }
 
 .chat-drawer {
@@ -1501,6 +1560,10 @@ details.source-details summary {
   margin-top: 4px;
 }
 
+.contact-readonly {
+  cursor: default;
+}
+
 .form-error {
   margin: 14px 0 0;
   padding: 12px;
@@ -1631,6 +1694,16 @@ details.source-details summary {
     min-width: 0;
   }
 
+  .refine-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .refine-actions,
+  .refine-actions .btn {
+    width: 100%;
+  }
+
   .calculator-slot {
     align-items: stretch;
     flex-direction: column;
@@ -1657,6 +1730,18 @@ details.source-details summary {
 
   .chat-input-row {
     grid-template-columns: 1fr;
+  }
+
+  .chat-popup,
+  .chat-window.expanded {
+    right: 14px;
+    bottom: 14px;
+    width: calc(100vw - 28px);
+  }
+
+  .chat-window-head {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .segmented,
@@ -1733,13 +1818,14 @@ details.source-details summary {
             <div class="top-actions">
               <button class="btn btn-secondary btn-small" id="showRecommendations" type="button">Suositukset</button>
               <button class="btn btn-secondary btn-small" id="openContact" type="button">Yhteydenotto</button>
+              <button class="btn btn-secondary btn-small" id="clearAllTop" type="button">Tyhjennä kaikki</button>
             </div>
           </div>
 
           <ol class="stepper" aria-label="Vaihepolku">
-            <li class="step active" id="step1"><span>1</span><div><strong>Lyhyt kysely</strong><p>Perustilanne ja olennaiset riskit.</p></div></li>
-            <li class="step" id="step2"><span>2</span><div><strong>Suositukset</strong><p>Vakuutuslajit ja perustelut.</p></div></li>
-            <li class="step" id="step3"><span>3</span><div><strong>Tarkennus</strong><p>Turva, lisäturvat ja omavastuu.</p></div></li>
+            <li class="step active" id="step1"><span>1</span><div><strong>Lyhyt kartoitus</strong><p>Perustiedot ja olennaiset riskit.</p></div></li>
+            <li class="step" id="step2"><span>2</span><div><strong>Suositukset</strong><p>Vakuutusalueet ja perustelut.</p></div></li>
+            <li class="step" id="step3"><span>3</span><div><strong>Tarkentava kartoitus</strong><p>Turva, lisäturvat ja omavastuu.</p></div></li>
             <li class="step" id="step4"><span>4</span><div><strong>Yhteydenotto</strong><p>Kooste asiakaspalvelulle.</p></div></li>
           </ol>
 
@@ -1748,10 +1834,21 @@ details.source-details summary {
             <p class="muted" id="introText"></p>
             <div class="intro-grid">
               <div class="intro-box"><h4>Lyhyt kartoitus</h4><p id="shortText"></p><div class="chip-row" id="shortChips"></div></div>
-              <div class="intro-box"><h4>Tarkempi suositus</h4><p id="detailText"></p><div class="chip-row" id="detailChips"></div></div>
+              <div class="intro-box"><h4>Tarkentava kartoitus</h4><p id="detailText"></p><div class="chip-row" id="detailChips"></div></div>
             </div>
             <div class="actions">
-              <button class="btn btn-primary" id="startQuick" type="button">Aloita lyhyt kysely</button>
+              <button class="btn btn-primary" id="startQuick" type="button">Aloita lyhyt kartoitus</button>
+            </div>
+          </div>
+
+          <div id="baseInfoView" class="hidden" aria-live="polite">
+            <h3>Perustiedot</h3>
+            <p class="muted" id="baseInfoIntro"></p>
+            <div class="form-grid base-info-grid" id="baseInfoFields"></div>
+            <p class="form-error hidden" id="baseError"></p>
+            <div class="actions">
+              <button class="btn btn-secondary" id="baseBack" type="button">Takaisin</button>
+              <button class="btn btn-primary" id="baseNext" type="button">Jatka lyhyeen kartoitukseen</button>
             </div>
           </div>
 
@@ -1768,11 +1865,10 @@ details.source-details summary {
           </div>
 
           <div id="resultsView" class="hidden">
-            <h3 id="resultsTitle">Suositellut vakuutuslajit</h3>
-            <p class="muted" id="resultsIntro">Vakuutukset on jaettu sen mukaan, kuinka vahvasti ne nousivat esiin vastauksistasi.</p>
+            <h3 id="resultsTitle">Alustavat suositukset</h3>
+            <p class="muted" id="resultsIntro"></p>
             <div class="top-actions spaced">
-              <button class="btn btn-primary" id="refineTop" type="button">Tarkenna tärkeintä suositusta</button>
-              <button class="btn btn-secondary" id="restartAssessment" type="button">Tee kartoitus uudelleen</button>
+              <button class="btn btn-secondary" id="restartAssessment" type="button">Tyhjennä kaikki</button>
               <button class="btn btn-soft" id="contactFromResults" type="button">Pyydä yhteydenottoa</button>
             </div>
             <div id="recommendationInsights"></div>
@@ -1805,7 +1901,7 @@ details.source-details summary {
 
           <div id="contactView" class="hidden">
             <h3>Yhteydenottopyyntö</h3>
-            <p class="muted">Valitse aiheet, joista haluat keskustella. Suositellut ja tarkennetut vakuutukset esivalitaan.</p>
+            <p class="muted">Suositellut vakuutusalueet ja kartoituksen vastaukset kulkevat mukana yhteydenottopyynnössä.</p>
             <div class="contact-list" id="contactChoices"></div>
             <div class="form-grid">
               <label class="field">Nimi <input id="contactName" autocomplete="name" required></label>
@@ -1813,8 +1909,8 @@ details.source-details summary {
               <label class="field">Sähköposti <input id="contactEmail" type="email" autocomplete="email" required></label>
               <label class="field">Puhelin <input id="contactPhone" autocomplete="tel"></label>
               <label class="field">Toivottu yhteydenottotapa <select id="contactChannel"><option>Puhelu</option><option>Sähköposti</option><option>Verkkotapaaminen</option></select></label>
-              <label class="field">Mitä haluat seuraavaksi? <select id="contactNextStep"><option>Haluan hinta-arvion</option><option>Haluan asiantuntijan arvion</option><option>Haluan keskustella suosituksista</option><option>Haluan vertailla kattavuuksia tarkemmin</option><option>Haluan, että minuun otetaan yhteyttä</option></select></label>
-              <label class="field full">Jos mikään suositelluista vakuutuksista ei auttanut, kerro tilanteestasi vapaasanaisesti.
+              <label class="field">Paras aika ottaa yhteyttä <select id="contactTime"><option>Arkisin aamupäivällä</option><option>Arkisin iltapäivällä</option><option>Arkisin alkuillasta</option><option>Sähköpostilla milloin vain</option></select></label>
+              <label class="field full">Lisätiedot tai kysymykset
                 <textarea id="freeText" placeholder="Kuvaa tilannettasi omin sanoin"></textarea>
               </label>
               <label class="consent full"><input id="privacyConsent" type="checkbox"> Hyväksyn, että antamiani tietoja käytetään yhteydenottopyynnön käsittelyyn. <a href="https://www.lahitapiola.fi/henkilo/tietosuoja/" target="_blank" rel="noopener noreferrer">Tietosuoja</a></label>
@@ -1828,11 +1924,11 @@ details.source-details summary {
 
           <div id="summaryView" class="hidden">
             <h3>Yhteenveto yhteydenottoon</h3>
-            <p class="muted">Tämän tekstin voi kopioida asiakaspalvelun taustatiedoksi.</p>
+            <p class="muted">Yhteenveto on muodostettu yhteydenoton taustatiedoksi.</p>
             <textarea id="crmSummary" class="summary-box" readonly></textarea>
             <div class="actions">
               <button class="btn btn-secondary" id="backToContact" type="button">Muokkaa yhteydenottoa</button>
-              <button class="btn btn-primary" id="copySummary" type="button">Kopioi yhteenveto</button>
+              <button class="btn btn-primary" id="restartFromSummary" type="button">Aloita alusta</button>
             </div>
           </div>
         </div>
@@ -1842,12 +1938,22 @@ details.source-details summary {
         <section class="support-card calculator-panel" id="laskuri" aria-label="Hinta-arvion laskuri">
           <div id="calculatorPanel"></div>
         </section>
-        <section class="support-card chat-panel" id="chatAssistant" aria-label="Chat-avustaja">
-          <div id="chatPanel"></div>
-        </section>
       </aside>
     </section>
   </main>
+
+  <div class="chat-popup hidden" id="chatPopup" role="dialog" aria-label="Chat-avustaja">
+    <div class="chat-window">
+      <div class="chat-window-head">
+        <strong>Chat-avustaja</strong>
+        <div>
+          <button class="btn btn-secondary btn-small" id="chatExpand" type="button">Suurenna</button>
+          <button class="btn btn-secondary btn-small" id="chatClose" type="button" aria-label="Sulje chat">×</button>
+        </div>
+      </div>
+      <div id="chatPanel"></div>
+    </div>
+  </div>
 
   <script>
 
@@ -2398,6 +2504,274 @@ const quickQuestions = {
   ]
 };
 
+const baseQuestions = {
+  personal: [
+    {
+      id: "ageGroup",
+      title: "Ikäryhmä",
+      options: [
+        { value: "under18", label: "Alle 18 vuotta", scores: { health: score(2, "ikäryhmä voi vaikuttaa henkilövakuutusten tarkistukseen") } },
+        { value: "18_25", label: "18-25 vuotta", scores: { health: score(1, "elämäntilanne voi vaikuttaa henkilövakuutusten tarkistukseen") } },
+        { value: "26_35", label: "26-35 vuotta" },
+        { value: "36_45", label: "36-45 vuotta", scores: { health: score(1, "henkilövakuutusten kokonaisuus voi olla hyvä tarkistaa") } },
+        { value: "46_55", label: "46-55 vuotta", scores: { health: score(1, "henkilövakuutusten kokonaisuus voi olla hyvä tarkistaa") } },
+        { value: "56_65", label: "56-65 vuotta", scores: { health: score(1, "henkilövakuutusten kokonaisuus voi olla hyvä tarkistaa") } },
+        { value: "over65", label: "Yli 65 vuotta" }
+      ]
+    },
+    {
+      id: "livingType",
+      title: "Asumismuoto",
+      otherLabel: "Kuvaile asumismuoto lyhyesti",
+      options: [
+        { value: "rent", label: "Vuokralla", scores: { home: score(5, "vuokralla asuminen nostaa esiin kodin irtaimiston sekä vastuun ja oikeusturvan") } },
+        { value: "ownerApartment", label: "Omistusasunto, kerros- tai rivitalo", scores: { home: score(6, "omistusasunnossa irtaimisto ja kiinteät sisustukset kannattaa tarkistaa") } },
+        { value: "house", label: "Omakotitalo", scores: { home: score(7, "omakotitalossa rakennus ja irtaimisto kannattaa tarkistaa") } },
+        { value: "semiDetached", label: "Paritalo", scores: { home: score(6, "paritalossa kodin ja rakennuksen vastuunjako kannattaa tarkistaa") } },
+        { value: "withFamily", label: "Vanhempien / puolison / muun henkilön kanssa", scores: { home: score(3, "asumisen vakuutustarve kannattaa tarkistaa talouden kokonaisuuden kautta") } },
+        { value: "holiday", label: "Vapaa-ajan asunto", scores: { apartment: score(7, "vapaa-ajan asunto kannattaa tarkistaa omana vakuutusalueena"), home: score(2, "vapaa-ajan asunnon irtaimisto ja rakennus voivat liittyä kotivakuutukseen") } },
+        { value: "other", label: "Muu, mikä?", scores: { home: score(2, "asumismuoto kannattaa tarkistaa asiantuntijan kanssa") } }
+      ]
+    },
+    {
+      id: "lifeSituation",
+      title: "Työ- tai elämäntilanne",
+      otherLabel: "Kuvaile tilanne lyhyesti",
+      options: [
+        { value: "student", label: "Opiskelija", scores: { health: score(2, "opiskelijan henkilövakuutukset voivat olla hyvä tarkistaa") } },
+        { value: "employed", label: "Työssäkäyvä", scores: { health: score(1, "työssäkäyvän henkilövakuutukset voivat olla hyvä tarkistaa") } },
+        { value: "entrepreneur", label: "Yrittäjä", scores: { health: score(3, "yrittäjän henkilövakuutukset ja toimeentulon turva kannattaa tarkistaa") } },
+        { value: "unemployed", label: "Työtön" },
+        { value: "retired", label: "Eläkkeellä" },
+        { value: "parentalLeave", label: "Vanhempainvapaalla", scores: { health: score(2, "perheen henkilövakuutukset voivat olla ajankohtaisia") } },
+        { value: "service", label: "Varusmies- tai siviilipalveluksessa" },
+        { value: "other", label: "Muu, mikä?", scores: { health: score(1, "työ- tai elämäntilanne kannattaa huomioida henkilövakuutuksissa") } }
+      ]
+    }
+  ],
+  business: [
+    {
+      id: "industry",
+      title: "Toimiala",
+      otherLabel: "Kuvaile toimiala lyhyesti",
+      options: [
+        { value: "construction", label: "Rakentaminen ja remontointi", scores: { bizProperty: score(4, "rakentamisessa omaisuus ja työmaat kannattaa tarkistaa"), bizLiability: score(4, "rakentamisessa vastuu ja oikeusturva korostuvat") } },
+        { value: "logistics", label: "Kuljetus ja logistiikka", scores: { bizVehicle: score(5, "kuljetus ja logistiikka nostaa esiin ajoneuvot ja kuljetusvastuut") } },
+        { value: "food", label: "Ravintola, kahvila tai elintarvikeala", scores: { bizProperty: score(4, "toimitila, laitteet ja varasto voivat olla toiminnalle tärkeitä"), bizLiability: score(3, "asiakas- ja tuotevastuut kannattaa tarkistaa") } },
+        { value: "retail", label: "Kauppa ja vähittäismyynti", scores: { bizProperty: score(4, "varasto ja myytävät tuotteet kannattaa tarkistaa"), bizLiability: score(3, "tuotevastuu ja asiakkaisiin liittyvät riskit kannattaa tarkistaa") } },
+        { value: "consulting", label: "Konsultointi tai asiantuntijapalvelut", scores: { bizLiability: score(5, "asiantuntijatyössä vastuu ja oikeusturva voivat olla keskeisiä") } },
+        { value: "it", label: "IT, ohjelmistoala tai digipalvelut", scores: { bizCyber: score(5, "digipalveluissa kyber- ja tietoriskit korostuvat"), bizLiability: score(3, "IT-palveluissa vastuu asiakkaalle kannattaa tarkistaa") } },
+        { value: "realEstate", label: "Kiinteistö- tai vuokraustoiminta", scores: { bizProperty: score(5, "kiinteistö- ja vuokraustoiminnassa omaisuus ja toimitilat korostuvat"), bizInterruption: score(3, "vuokratuoton tai toiminnan keskeytys kannattaa tarkistaa") } },
+        { value: "agriculture", label: "Maa- tai metsätalous", scores: { bizProperty: score(4, "maa- tai metsätaloudessa omaisuus ja toiminnan jatkuvuus kannattaa tarkistaa") } },
+        { value: "healthcare", label: "Terveydenhuolto, hyvinvointi tai hoivapalvelut", scores: { bizLiability: score(5, "terveys- ja hoivapalveluissa vastuut pitää tarkistaa"), bizPeople: score(3, "henkilö- ja työkykyratkaisut voivat olla ajankohtaisia") } },
+        { value: "manufacturing", label: "Teollisuus tai valmistava toiminta", scores: { bizProperty: score(5, "koneet, laitteet ja tuotanto-omaisuus korostuvat"), bizInterruption: score(4, "tuotannon häiriö voi keskeyttää toimintaa") } },
+        { value: "other", label: "Muu, mikä?", scores: { bizLiability: score(2, "toimiala kannattaa tarkistaa asiantuntijan kanssa") } }
+      ]
+    },
+    {
+      id: "employeeCount",
+      title: "Työntekijöiden määrä",
+      options: [
+        { value: "solo", label: "Ei työntekijöitä / yksinyrittäjä", scores: { bizPeople: score(3, "yrittäjän oma työkyky ja henkilöturva kannattaa tarkistaa") } },
+        { value: "1_4", label: "1-4 työntekijää", scores: { bizPeople: score(6, "työntekijät nostavat esiin henkilöstöön liittyvät vakuutusratkaisut") } },
+        { value: "5_9", label: "5-9 työntekijää", scores: { bizPeople: score(7, "työntekijämäärä nostaa henkilöriskit vahvasti esiin") } },
+        { value: "10_19", label: "10-19 työntekijää", scores: { bizPeople: score(8, "henkilöstön vakuutusratkaisut kannattaa tarkistaa") } },
+        { value: "20_49", label: "20-49 työntekijää", scores: { bizPeople: score(8, "henkilöstön ja työkyvyn ratkaisut kannattaa tarkistaa") } },
+        { value: "50_plus", label: "50+ työntekijää", scores: { bizPeople: score(9, "henkilöstö- ja työkykyratkaisut ovat keskeinen tarkistusalue") } }
+      ]
+    }
+  ]
+};
+
+insuranceTypes.personal.home.title = "Koti ja irtaimisto";
+insuranceTypes.personal.home.area = "Koti ja asuminen";
+insuranceTypes.personal.home.desc = "Kodin, irtaimiston, asumisen vastuiden ja mahdollisen rakennuksen vakuutustarpeen tarkistus.";
+insuranceTypes.personal.vehicle.title = "Ajoneuvot";
+insuranceTypes.personal.vehicle.area = "Autoilu ja ajoneuvot";
+insuranceTypes.personal.travel.title = "Matkustaminen";
+insuranceTypes.personal.health.title = "Henkilövakuutukset";
+insuranceTypes.personal.health.area = "Terveys, tapaturma ja läheisten turva";
+insuranceTypes.personal.health.desc = "Tapaturma-, sairauskulu-, henkivakuutus- ja toimeentulon turvan alustava tarkistus.";
+insuranceTypes.personal.pet.title = "Lemmikit";
+insuranceTypes.personal.apartment.title = "Vapaa-ajan asunto";
+insuranceTypes.personal.apartment.area = "Mökki ja vapaa-aika";
+insuranceTypes.personal.apartment.desc = "Vapaa-ajan asunnon, irtaimiston ja rakennuksen vakuutustarpeen tarkistus.";
+insuranceTypes.personal.liability = {
+  title: "Vastuu ja oikeusturva",
+  area: "Arjen vastuut",
+  desc: "Vastuuvahinkojen ja oikeudellisten kulujen alustava tarkistus.",
+  materials: [
+    m("Kotivakuutuksen materiaalit", MATERIAL_PAGES.personal, "page"),
+    m("Yleiset sopimusehdot", GENERAL_TERMS_PERSONAL)
+  ]
+};
+
+insuranceTypes.business.bizProperty.title = "Omaisuus ja toimitilat";
+insuranceTypes.business.bizProperty.area = "Yrityksen omaisuus";
+insuranceTypes.business.bizLiability.title = "Vastuu ja oikeusturva";
+insuranceTypes.business.bizLiability.area = "Yrityksen vastuut";
+insuranceTypes.business.bizPeople.title = "Henkilö- ja työkykyratkaisut";
+insuranceTypes.business.bizVehicle.title = "Ajoneuvot ja kuljetus";
+insuranceTypes.business.bizVehicle.area = "Liikkuminen ja kuljetukset";
+insuranceTypes.business.bizCyber.title = "Kyber ja tietoriskit";
+insuranceTypes.business.bizInterruption.title = "Keskeytys ja jatkuvuus";
+
+quickQuestions.personal = [
+  {
+    id: "children",
+    title: "Onko taloudessa lapsia?",
+    desc: "Tämä voi nostaa esiin perheen henkilövakuutusten tarkistuksen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { health: score(6, "taloudessa on lapsia, joten perheen henkilövakuutukset kannattaa tarkistaa") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { health: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "vehicle",
+    title: "Onko sinulla auto tai muu ajoneuvo?",
+    desc: "Ajoneuvo nostaa esiin liikennevakuutuksen ja mahdollisen kaskon.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { vehicle: score(8, "ajoneuvo nostaa esiin liikennevakuutuksen ja vapaaehtoisen kaskon tarkistuksen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { vehicle: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "pets",
+    title: "Onko sinulla lemmikkejä?",
+    desc: "Lemmikit voivat nostaa esiin eläinlääkärikulujen ja lisäturvien tarkistuksen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { pet: score(8, "lemmikit nostavat esiin eläinlääkärikulujen ja lisäturvien tarkistuksen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { pet: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "travel",
+    title: "Matkustatko säännöllisesti?",
+    desc: "Matkustaminen nostaa esiin jatkuvan tai matkakohtaisen matkavakuutuksen tarkistuksen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { travel: score(8, "säännöllinen matkustaminen nostaa esiin matkavakuutuksen tarkistuksen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { travel: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "holidayHome",
+    title: "Onko sinulla vapaa-ajan asunto?",
+    desc: "Vapaa-ajan asunto kannattaa tarkistaa erillisenä asumisen kokonaisuutena.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { apartment: score(8, "vapaa-ajan asunto kannattaa tarkistaa erillisenä vakuutusalueena"), home: score(2, "vapaa-ajan asunnon irtaimisto voi liittyä kodin vakuutuskokonaisuuteen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { apartment: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "valuables",
+    title: "Omistatko arvokasta elektroniikkaa, harrastusvälineitä tai muuta irtaimistoa?",
+    desc: "Arvokas irtaimisto voi vaikuttaa kodin vakuutustarpeeseen ja turvan laajuuteen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { home: score(6, "arvokas irtaimisto nostaa esiin kodin ja tavaroiden turvan tarkistuksen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { home: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "personalInsurance",
+    title: "Haluatko kartoittaa henkilövakuutuksia, kuten tapaturma-, sairauskulu- tai henkivakuutusta?",
+    desc: "Henkilövakuutukset liittyvät terveyteen, tapaturmiin, toimeentuloon ja läheisten turvaan.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { health: score(8, "haluat kartoittaa henkilövakuutuksia") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { health: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "liability",
+    title: "Haluatko tarkistaa arjen vastuu- ja oikeusturva-asiat?",
+    desc: "Vastuu ja oikeusturva voivat olla osa kodin vakuutuskokonaisuutta.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { liability: score(5, "haluat tarkistaa vastuu- ja oikeusturva-asiat") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { liability: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  }
+];
+
+quickQuestions.business = [
+  {
+    id: "premises",
+    title: "Onko yrityksellä toimitiloja?",
+    desc: "Toimitilat voivat nostaa esiin omaisuuden ja toimitilojen vakuutustarpeen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizProperty: score(7, "yrityksellä on toimitiloja") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizProperty: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "vehicles",
+    title: "Onko yrityksellä ajoneuvoja?",
+    desc: "Ajoneuvot nostavat esiin yrityksen ajoneuvot ja mahdolliset kuljetukset.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizVehicle: score(8, "yrityksellä on ajoneuvoja") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizVehicle: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "assets",
+    title: "Onko yrityksellä koneita, laitteita tai varastoa?",
+    desc: "Koneet, laitteet ja varasto voivat olla toiminnan kannalta tärkeitä.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizProperty: score(8, "yrityksellä on koneita, laitteita tai varastoa") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizProperty: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "customerSites",
+    title: "Tehdäänkö työtä asiakkaan tiloissa tai työmailla?",
+    desc: "Asiakkaan tiloissa työskentely voi nostaa esiin vastuu- ja oikeusturvakysymyksiä.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizLiability: score(8, "työtä tehdään asiakkaan tiloissa tai työmailla") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizLiability: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "data",
+    title: "Käsitteleekö yritys asiakas-, henkilö- tai maksutietoja?",
+    desc: "Tietojen käsittely voi nostaa esiin kyber- ja tietoriskit.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizCyber: score(8, "yritys käsittelee asiakas-, henkilö- tai maksutietoja") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizCyber: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "keyPeople",
+    title: "Onko yrityksellä avainhenkilöitä, joiden poissaolo vaikuttaisi toimintaan merkittävästi?",
+    desc: "Avainhenkilöriski voi liittyä henkilöratkaisuihin ja toiminnan jatkuvuuteen.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizPeople: score(6, "avainhenkilön poissaolo voisi vaikuttaa yrityksen toimintaan"), bizInterruption: score(4, "avainhenkilöriski voi vaikuttaa toiminnan jatkuvuuteen") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizPeople: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta"), bizInterruption: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  },
+  {
+    id: "interruption",
+    title: "Voisiko vahinko tai häiriö keskeyttää toiminnan merkittävästi?",
+    desc: "Keskeytysriski liittyy yrityksen jatkuvuuteen ja kassavirtaan.",
+    options: [
+      { value: "yes", label: "Kyllä", scores: { bizInterruption: score(8, "vahinko tai häiriö voisi keskeyttää toiminnan merkittävästi") } },
+      { value: "no", label: "Ei" },
+      { value: "unsure", label: "En osaa sanoa", scores: { bizInterruption: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+    ]
+  }
+];
+
 const q = (id, title, desc, multi, options) => ({ id, title, desc, multi, options: options.map(([value, label, hint]) => ({ value, label, hint })) });
 
 const detailFlows = {
@@ -2841,7 +3215,50 @@ function getAnswerLabels(questions, answers) {
 const PRIMARY_LIMIT = 7;
 const POSSIBLE_LIMIT = 3;
 
-function calculateScores(profileId, answers = {}) {
+function calculateScores(profileId, answers = {}, baseAnswers = {}) {
+  const types = insuranceTypes[profileId];
+  const scores = Object.fromEntries(
+    Object.keys(types).map((key) => [key, { key, score: 0, reasons: [], existing: false }])
+  );
+
+  for (const question of [...(baseQuestions[profileId] || []), ...(quickQuestions[profileId] || [])]) {
+    const answerBag = (baseQuestions[profileId] || []).some((item) => item.id === question.id) ? baseAnswers : answers;
+    const values = toArray(answerBag[question.id]);
+    for (const value of values) {
+      const option = question.options.find((item) => item.value === value);
+      if (!option) continue;
+
+      for (const key of option.existing || []) {
+        if (scores[key]) scores[key].existing = true;
+      }
+
+      for (const [key, entry] of Object.entries(option.scores || {})) {
+        if (!scores[key]) continue;
+        scores[key].score += entry.points || 0;
+        if (entry.reason && !scores[key].reasons.includes(entry.reason)) {
+          scores[key].reasons.push(entry.reason);
+        }
+      }
+    }
+  }
+
+  const items = Object.values(scores)
+    .map((item) => ({
+      ...item,
+      bucket: bucketFor(item.score)
+    }))
+    .sort((a, b) => b.score - a.score || types[a.key].title.localeCompare(types[b.key].title, "fi"));
+
+  return {
+    items,
+    primary: items.filter((item) => item.bucket === "primary"),
+    possible: items.filter((item) => item.bucket === "possible"),
+    notNow: items.filter((item) => item.bucket === "notNow"),
+    existingCoverage: items.filter((item) => item.existing).map((item) => item.key)
+  };
+}
+
+function calculateScoresLegacy(profileId, answers = {}) {
   const types = insuranceTypes[profileId];
   const scores = Object.fromEntries(
     Object.keys(types).map((key) => [key, { key, score: 0, reasons: [], existing: false }])
@@ -3645,9 +4062,12 @@ function track(event, payload = {}) {
 /* src/app.js */
 
 const $ = (id) => document.getElementById(id);
-const views = ["introView", "questionView", "resultsView", "detailView", "detailResultView", "contactView", "summaryView"];
+const views = ["introView", "baseInfoView", "questionView", "resultsView", "detailView", "detailResultView", "contactView", "summaryView"];
 const steps = ["step1", "step2", "step3", "step4"];
-const businessMandatoryKeys = new Set(["bizPeople", "bizVehicle", "bizPatient"]);
+const recommendationAreaOrder = {
+  personal: ["home", "vehicle", "travel", "health", "pet", "apartment", "liability"],
+  business: ["bizProperty", "bizLiability", "bizPeople", "bizVehicle", "bizCyber", "bizInterruption"]
+};
 
 let mode = "personal";
 const states = {
@@ -3657,9 +4077,11 @@ const states = {
 
 function freshState() {
   return {
+    baseAnswers: {},
     quickIndex: 0,
     quickAnswers: {},
     recommendation: null,
+    recommendationRefined: false,
     selectedContact: {},
     selectedPrice: {},
     activeDetail: null,
@@ -3669,7 +4091,8 @@ function freshState() {
     selectedCoverage: {},
     priceEstimateInterest: false,
     contact: {},
-    chatMessages: []
+    chatMessages: [],
+    chatExpanded: false
   };
 }
 
@@ -3702,13 +4125,15 @@ function bindEvents() {
   $("modePersonal").addEventListener("click", () => setMode("personal"));
   $("modeBusiness").addEventListener("click", () => setMode("business"));
   $("startAssessment").addEventListener("click", () => openAssessment());
-  $("startQuick").addEventListener("click", () => startQuick());
+  $("startQuick").addEventListener("click", () => startBaseInfo());
   $("showRecommendations").addEventListener("click", () => openRecommendations());
   $("openContact").addEventListener("click", () => openContact());
+  $("clearAllTop").addEventListener("click", () => resetAssessment("intro"));
+  $("baseBack").addEventListener("click", () => showView("intro"));
+  $("baseNext").addEventListener("click", () => baseNext());
   $("questionBack").addEventListener("click", () => questionBack());
   $("questionNext").addEventListener("click", () => questionNext());
-  $("restartAssessment").addEventListener("click", () => restartAssessment());
-  $("refineTop").addEventListener("click", () => refineTopRecommendation());
+  $("restartAssessment").addEventListener("click", () => resetAssessment("base"));
   $("contactFromResults").addEventListener("click", () => openContact());
   $("detailBack").addEventListener("click", () => detailBack());
   $("detailNext").addEventListener("click", () => detailNext());
@@ -3722,15 +4147,22 @@ function bindEvents() {
   $("contactBack").addEventListener("click", () => openRecommendations());
   $("createSummary").addEventListener("click", () => createCrmSummary());
   $("backToContact").addEventListener("click", () => openContact());
-  $("copySummary").addEventListener("click", () => copySummary());
+  $("restartFromSummary").addEventListener("click", () => resetAssessment("intro"));
+  $("chatClose").addEventListener("click", () => closeChatPopup());
+  $("chatExpand").addEventListener("click", () => toggleChatSize());
 }
 
 function setMode(nextMode) {
+  if (nextMode === mode) return;
+  if (hasProgress() && !window.confirm("Asiakastyypin vaihtaminen tyhjentää nykyiset vastaukset. Haluatko jatkaa?")) return;
+  states[mode] = freshState();
   mode = nextMode;
+  states[mode] = freshState();
   $("modePersonal").classList.toggle("active", mode === "personal");
   $("modeBusiness").classList.toggle("active", mode === "business");
   renderShellTexts();
   renderIntro();
+  renderBaseInfo();
   renderCalculatorPanel();
   renderChatPanel();
   renderSummaryList();
@@ -3764,6 +4196,73 @@ function renderIntro() {
   $("detailChips").innerHTML = p.layer2Chips.map((chip) => `<span class="chip">${escapeHtml(chip)}</span>`).join("");
 }
 
+function startBaseInfo() {
+  renderBaseInfo();
+  showView("base");
+  track("base_info_started", { mode });
+}
+
+function renderBaseInfo() {
+  const questions = baseQuestions[mode] || [];
+  $("baseInfoIntro").textContent = mode === "business"
+    ? "Täydennä ensin yrityksen perustiedot. Näitä ei kysytä uudestaan tarkentavissa vaiheissa."
+    : "Täydennä ensin perustiedot. Näitä ei kysytä uudestaan vakuutuskohtaisissa tarkennuksissa.";
+  $("baseInfoFields").innerHTML = questions.map((question) => renderBaseField(question)).join("");
+  questions.forEach((question) => {
+    const select = $(`base_${question.id}`);
+    const other = $(`base_${question.id}_other`);
+    if (select) {
+      select.addEventListener("change", () => {
+        st().baseAnswers[question.id] = select.value;
+        if (other) other.closest(".field").classList.toggle("hidden", select.value !== "other");
+      });
+    }
+    if (other) {
+      other.addEventListener("input", () => {
+        st().baseAnswers[`${question.id}Other`] = other.value.trim();
+      });
+      other.closest(".field").classList.toggle("hidden", st().baseAnswers[question.id] !== "other");
+    }
+  });
+}
+
+function renderBaseField(question) {
+  const value = st().baseAnswers[question.id] || "";
+  const otherValue = st().baseAnswers[`${question.id}Other`] || "";
+  const otherOption = question.options.some((option) => option.value === "other");
+  return `
+    <label class="field">
+      ${escapeHtml(question.title)}
+      <select id="base_${escapeHtml(question.id)}">
+        <option value="">Valitse</option>
+        ${question.options.map((option) => `<option value="${escapeHtml(option.value)}" ${option.value === value ? "selected" : ""}>${escapeHtml(option.label)}</option>`).join("")}
+      </select>
+    </label>
+    ${otherOption ? `
+      <label class="field ${value === "other" ? "" : "hidden"}">
+        ${escapeHtml(question.otherLabel || "Kuvaile lyhyesti")}
+        <input id="base_${escapeHtml(question.id)}_other" value="${escapeHtml(otherValue)}">
+      </label>
+    ` : ""}
+  `;
+}
+
+function baseNext() {
+  const questions = baseQuestions[mode] || [];
+  const missing = questions.find((question) => !st().baseAnswers[question.id]);
+  const missingOther = questions.find((question) => st().baseAnswers[question.id] === "other" && !st().baseAnswers[`${question.id}Other`]);
+  const error = missing
+    ? `Valitse: ${missing.title}.`
+    : missingOther
+      ? `Täydennä: ${missingOther.otherLabel || missingOther.title}.`
+      : "";
+
+  $("baseError").classList.toggle("hidden", !error);
+  $("baseError").textContent = error;
+  if (error) return;
+  startQuick();
+}
+
 function startQuick() {
   st().quickIndex = 0;
   renderQuestion();
@@ -3778,7 +4277,7 @@ function renderQuestion() {
   $("questionDesc").textContent = question.desc;
   $("multiNote").classList.toggle("hidden", !question.multi);
   $("questionProgress").style.width = `${Math.round(((st().quickIndex + 1) / questions.length) * 100)}%`;
-  $("questionBack").disabled = st().quickIndex === 0;
+  $("questionBack").disabled = false;
   $("questionNext").textContent = st().quickIndex === questions.length - 1 ? "Näytä suositukset" : "Seuraava";
   renderAnswerOptions("answerList", question, st().quickAnswers, (value) => {
     setAnswer(question, st().quickAnswers, value);
@@ -3827,7 +4326,10 @@ function questionBack() {
   if (st().quickIndex > 0) {
     st().quickIndex -= 1;
     renderQuestion();
+    return;
   }
+  renderBaseInfo();
+  showView("base");
 }
 
 function questionNext() {
@@ -3847,7 +4349,7 @@ function questionNext() {
 }
 
 function calculateAndRenderRecommendations() {
-  st().recommendation = calculateScores(mode, st().quickAnswers);
+  st().recommendation = calculateScores(mode, st().quickAnswers, st().baseAnswers);
   primeContactSelection();
   renderRecommendations();
   renderSummaryList();
@@ -3857,7 +4359,7 @@ function openRecommendations() {
   if (!st().recommendation) {
     if (Object.keys(st().quickAnswers).length) calculateAndRenderRecommendations();
     else {
-      startQuick();
+      startBaseInfo();
       return;
     }
   } else {
@@ -3867,91 +4369,69 @@ function openRecommendations() {
 }
 
 function renderRecommendations() {
-  const recommendation = st().recommendation || calculateScores(mode, st().quickAnswers);
+  const recommendation = st().recommendation || calculateScores(mode, st().quickAnswers, st().baseAnswers);
   st().recommendation = recommendation;
-  $("resultsTitle").textContent = mode === "business" ? "Yrityksesi vakuutustarpeet" : "Suositellut vakuutuslajit";
-  $("resultsIntro").textContent = mode === "business"
-    ? "Yrityksen tulokset on jaettu lakisääteisiin tarkistuksiin, toiminnan kannalta kriittisiin tarpeisiin ja tilannekohtaisesti hyödyllisiin vakuutuksiin."
-    : "Vakuutukset on jaettu sen mukaan, kuinka vahvasti ne nousivat esiin vastauksistasi.";
+  $("resultsTitle").textContent = st().recommendationRefined ? "Tarkennetut suositukset" : "Alustavat suositukset";
+  $("resultsIntro").textContent = "Suositukset näkyvät vakuutusalueina. Voit avata jokaisesta tiivistelmän ja PDF-materiaalit, mutta hinta-arvio ja yhteydenotto pidetään sivupalkissa.";
   $("recommendationInsights").innerHTML = renderRecommendationInsights(recommendation);
 
   const buckets = recommendationBuckets(recommendation);
-  $("recommendationBuckets").innerHTML = buckets.map(renderBucket).join("");
-  $("recommendationBuckets").querySelectorAll("[data-detail]").forEach((button) => {
-    button.addEventListener("click", () => openDetail(button.dataset.detail));
-  });
-  $("recommendationBuckets").querySelectorAll("[data-price]").forEach((button) => {
-    button.addEventListener("click", () => selectForPriceEstimate(button.dataset.price));
-  });
-  $("recommendationBuckets").querySelectorAll("[data-contact]").forEach((button) => {
-    const key = button.dataset.contact;
-    button.addEventListener("click", () => {
-      st().selectedContact[key] = true;
-      openContact();
-    });
-  });
+  $("recommendationBuckets").innerHTML = `${buckets.map(renderBucket).join("")}${renderRefinePrompt(recommendation)}`;
+  $("recommendationBuckets").querySelector("[data-refine-recommendations]")?.addEventListener("click", () => refineTopRecommendation());
+  $("recommendationBuckets").querySelector("[data-contact-next]")?.addEventListener("click", () => openContact());
 }
 
 function recommendationBuckets(recommendation) {
-  if (mode !== "business") {
-    return [
-      {
-        key: "primary",
-        title: "Ensisijaisesti tarkasteltavat",
-        desc: "Näissä vastauksesi muodostivat selkeän tarpeen tai riskin.",
-        items: recommendation.primary
-      },
-      {
-        key: "possible",
-        title: "Mahdollisesti hyödylliset",
-        desc: "Nämä voivat olla hyödyllisiä, mutta vaativat kevyen jatkotarkistuksen.",
-        items: recommendation.possible
-      },
-      {
-        key: "notNow",
-        title: "Ei juuri nyt tärkeimmät",
-        desc: "Nämä eivät nousseet nykytilanteessa vahvasti esiin.",
-        items: recommendation.notNow
-      }
-    ];
-  }
-
-  const relevant = recommendation.items.filter((item) => item.score >= 3);
-  const mandatory = relevant.filter((item) => businessMandatoryKeys.has(item.key));
-  const mandatoryKeys = new Set(mandatory.map((item) => item.key));
-  const critical = recommendation.primary.filter((item) => !mandatoryKeys.has(item.key));
-  const useful = recommendation.possible.filter((item) => !mandatoryKeys.has(item.key));
+  const visibleItems = recommendation.items.filter((item) => recommendationAreaOrder[mode].includes(item.key));
+  const primary = visibleItems.filter((item) => item.score >= 7);
+  const possible = visibleItems.filter((item) => item.score >= 3 && item.score < 7);
+  const notNow = visibleItems.filter((item) => item.score < 3);
 
   return [
     {
-      key: "mandatory",
-      title: "Lakisääteiset tai pakollisesti tarkistettavat",
-      desc: "Nämä voivat liittyä työntekijöihin, ajoneuvoihin, toimialaan tai muuhun velvoittavaan tarkistukseen.",
-      items: mandatory
-    },
-    {
       key: "primary",
-      title: "Toiminnan kannalta kriittiset",
-      desc: "Näissä vahinko voisi vaikuttaa suoraan toimintaan, kassaan, asiakkaisiin tai jatkuvuuteen.",
-      items: critical
+      title: "Ensisijaisesti tarkasteltavat",
+      desc: "Näissä vastauksesi muodostivat selkeän tarpeen tai riskin.",
+      items: primary
     },
     {
       key: "possible",
-      title: "Tilannekohtaisesti hyödylliset",
-      desc: "Nämä eivät nousseet aivan kärkeen, mutta voivat täydentää yrityksen vakuutuskokonaisuutta.",
-      items: useful
+      title: "Mahdollisesti hyödylliset",
+      desc: "Nämä voivat täydentää kokonaisuutta tai vaativat kevyen jatkotarkistuksen.",
+      items: possible
     },
     {
       key: "notNow",
       title: "Ei juuri nyt tärkeimmät",
-      desc: "Nämä eivät nousseet nykytilanteessa vahvasti esiin.",
-      items: recommendation.notNow
+      desc: "Nämä eivät nousseet nykytilanteessa vahvasti esiin, mutta voit tutustua niihin.",
+      items: notNow
     }
   ];
 }
 
+function renderRefinePrompt(recommendation) {
+  const hasDetail = recommendation.items
+    .filter((item) => recommendationAreaOrder[mode].includes(item.key) && item.score >= 3)
+    .some((item) => types()[item.key]?.detailFlow && flow(types()[item.key].detailFlow));
+  if (!hasDetail || st().recommendationRefined) return "";
+
+  return `
+    <section class="refine-card">
+      <div>
+        <p class="eyebrow compact">Vapaaehtoinen vaihe</p>
+        <h4>Haluatko tarkentaa suosituksia?</h4>
+        <p>Vastaa muutamaan lisäkysymykseen vain niistä vakuutusalueista, jotka nousivat jo alustavissa suosituksissa.</p>
+      </div>
+      <div class="refine-actions">
+        <button class="btn btn-primary" type="button" data-refine-recommendations>Tarkenna suosituksia</button>
+        <button class="btn btn-secondary" type="button" data-contact-next>Jatka hinta-arvioon / yhteydenottoon</button>
+      </div>
+    </section>
+  `;
+}
+
 function renderRecommendationInsights(recommendation) {
-  const relevant = recommendation.items.filter((item) => item.score >= 3);
+  const relevant = recommendation.items.filter((item) => item.score >= 3 && recommendationAreaOrder[mode].includes(item.key));
   if (!relevant.length) {
     return `
       <section class="needs-summary">
@@ -3983,7 +4463,7 @@ function renderRecommendationInsights(recommendation) {
       </div>
       <div class="needs-next">
         <strong>Seuraavaksi</strong>
-        <span>Tarkenna vain olennaiset vakuutukset, valitse haluamasi turvarakenne ja kokoa hinta-arvion aiheet yhteydenottoon.</span>
+        <span>Avaa haluamasi vakuutusalue, tarkenna suosituksia vapaaehtoisesti tai jatka hinta-arvioon ja yhteydenottoon.</span>
       </div>
     </section>
   `;
@@ -4019,13 +4499,10 @@ function renderBucket(bucket) {
 
 function renderRecommendationCard(item, bucketKey) {
   const meta = types()[item.key];
-  const reasons = item.reasons.length ? item.reasons : ["tämä vakuutus ei noussut vastauksissa vahvasti esiin"];
-  const canDetail = Boolean(meta.detailFlow && flow(meta.detailFlow));
+  const reasons = item.reasons.length ? item.reasons : ["tämä vakuutusalue ei noussut vastauksissa vahvasti esiin"];
   const existing = item.existing ? `<span class="status-pill possible">Nykyinen turva: tarkista riittävyys</span>` : "";
   const comparisonLabel = meta.detailFlow && coverageModels[mode]?.[meta.detailFlow]?.label;
-  const selectedForPrice = Boolean(st().selectedPrice[item.key]);
-  const impact = riskImpactForScore(item.score);
-  const mandatory = mode === "business" && businessMandatoryKeys.has(item.key) && item.score >= 3;
+  const strength = recommendationStrength(item.score);
 
   return `
     <article class="rec-card">
@@ -4034,8 +4511,7 @@ function renderRecommendationCard(item, bucketKey) {
         <h4>${escapeHtml(meta.title)}</h4>
         <p class="muted">${escapeHtml(meta.desc)}</p>
         <div class="chip-row">
-          <span class="status-pill ${bucketKey === "primary" || bucketKey === "mandatory" ? "primary" : bucketKey === "possible" ? "possible" : ""}">${escapeHtml(impact)}</span>
-          ${mandatory ? `<span class="status-pill primary">Pakollinen tarkistus</span>` : ""}
+          <span class="status-pill ${bucketKey === "primary" ? "primary" : bucketKey === "possible" ? "possible" : ""}">${escapeHtml(strength)}</span>
           ${existing}
           ${comparisonLabel ? `<span class="status-pill possible">${escapeHtml(comparisonLabel)}</span>` : ""}
         </div>
@@ -4045,11 +4521,6 @@ function renderRecommendationCard(item, bucketKey) {
           <p>${escapeHtml(reasons.join("; "))}</p>
         </details>
         ${renderRecommendationLearn(meta, item)}
-      </div>
-      <div class="rec-actions">
-        ${canDetail ? `<button class="btn btn-primary btn-small" type="button" data-detail="${escapeHtml(meta.detailFlow)}">Tarkenna tätä vakuutusta</button>` : ""}
-        <button class="btn ${selectedForPrice ? "btn-soft" : "btn-secondary"} btn-small" type="button" data-price="${escapeHtml(item.key)}">${selectedForPrice ? "Valittu hinta-arvioon" : "Valitse hinta-arvioon"}</button>
-        <button class="btn btn-secondary btn-small" type="button" data-contact="${escapeHtml(item.key)}">Pyydä asiantuntijan arvio</button>
       </div>
     </article>
   `;
@@ -4114,24 +4585,29 @@ function productLimits(meta) {
   return "Lopullinen sisältö, rajoitukset, omavastuut, vakuutusmäärät ja soveltuvuus pitää varmistaa tuotemateriaaleista, laskurista tai asiantuntijalta.";
 }
 
+function recommendationStrength(score) {
+  if (score >= 10) return "Olennainen";
+  if (score >= 7) return "Suositeltava";
+  if (score >= 3) return "Mahdollinen";
+  if (score > 0) return "Tarkista asiantuntijan kanssa";
+  return "Ei juuri nyt tärkein";
+}
+
 function riskImpactForScore(score) {
-  if (score >= 10) return "Vaikutus: merkittävä";
-  if (score >= 7) return "Vaikutus: korkea";
-  if (score >= 3) return "Vaikutus: keskitaso";
-  return "Vaikutus: matala";
+  return recommendationStrength(score);
 }
 
 function refineTopRecommendation() {
   if (!st().recommendation) calculateAndRenderRecommendations();
   const detailKey = st().recommendation.items
-    .filter((item) => item.score >= 3)
+    .filter((item) => item.score >= 3 && recommendationAreaOrder[mode].includes(item.key))
     .map((item) => types()[item.key]?.detailFlow)
-    .find(Boolean);
+    .find((key) => key && flow(key));
   openDetail(detailKey || firstDetailFlow());
 }
 
 function firstDetailFlow() {
-  return Object.values(types()).find((item) => item.detailFlow)?.detailFlow;
+  return recommendationAreaOrder[mode].map((key) => types()[key]).find((item) => item?.detailFlow && flow(item.detailFlow))?.detailFlow;
 }
 
 function openDetail(detailKey) {
@@ -4185,6 +4661,7 @@ function detailNext() {
 
   const result = buildDetailResult(mode, detailKey, answers);
   st().detailResults[detailKey] = result;
+  st().recommendationRefined = true;
   st().selectedCoverage[detailKey] = result.comparison?.recommendedKeys?.[0] || result.comparison?.options?.[0]?.key || "";
   const typeKey = typeKeyFromDetail(detailKey);
   if (typeKey) st().selectedContact[typeKey] = true;
@@ -4360,7 +4837,13 @@ function bindCalculatorActions(root) {
     });
   });
   root.querySelectorAll("[data-calculator-start]").forEach((button) => {
-    button.addEventListener("click", () => startQuick());
+    button.addEventListener("click", () => startBaseInfo());
+  });
+  root.querySelectorAll("[data-open-contact]").forEach((button) => {
+    button.addEventListener("click", () => openContact());
+  });
+  root.querySelectorAll("[data-open-chat]").forEach((button) => {
+    button.addEventListener("click", () => openChatPopup());
   });
 }
 
@@ -4467,15 +4950,24 @@ function primeContactSelection() {
   if (!st().recommendation) return;
   const hasAny = Object.keys(st().selectedContact).some((key) => st().selectedContact[key]);
   if (hasAny) return;
-  recommendedKeys(st().recommendation).forEach((key) => {
+  recommendedKeys(st().recommendation).filter((key) => recommendationAreaOrder[mode].includes(key)).forEach((key) => {
     st().selectedContact[key] = true;
   });
+}
+
+function recommendedContactKeys() {
+  const selected = Object.keys(st().selectedContact).filter((key) => st().selectedContact[key] && types()[key]);
+  if (selected.length) return selected.filter((key) => recommendationAreaOrder[mode].includes(key));
+  if (!st().recommendation) return [];
+  return st().recommendation.items
+    .filter((item) => item.score >= 3 && recommendationAreaOrder[mode].includes(item.key))
+    .map((item) => item.key);
 }
 
 function openContact() {
   if (!st().recommendation && Object.keys(st().quickAnswers).length) calculateAndRenderRecommendations();
   if (!st().recommendation) {
-    startQuick();
+    startBaseInfo();
     return;
   }
   primeContactSelection();
@@ -4485,37 +4977,27 @@ function openContact() {
 }
 
 function renderContact() {
-  const keys = Object.keys(types());
   $("contactOrgField")?.classList.toggle("hidden", mode !== "business");
   if (mode !== "business" && $("contactOrg")) $("contactOrg").value = "";
-  $("contactChoices").innerHTML = keys.map((key) => {
+  const selectedKeys = recommendedContactKeys();
+  $("contactChoices").innerHTML = selectedKeys.length ? selectedKeys.map((key) => {
     const meta = types()[key];
-    const checked = st().selectedContact[key] ? "checked" : "";
     const detailBadge = st().detailResults[meta.detailFlow] ? "Tarkennettu" : "";
     const priceBadge = st().selectedPrice[key] ? "Hinta-arvio" : "";
     const badges = [meta.area, detailBadge, priceBadge].filter(Boolean).join(" · ");
     return `
-      <label class="check-card">
-        <input type="checkbox" data-contact-choice="${escapeHtml(key)}" ${checked}>
+      <div class="check-card contact-readonly">
         <span><strong>${escapeHtml(meta.title)}</strong><br><span class="muted small">${escapeHtml(badges)}</span></span>
-      </label>
+      </div>
     `;
-  }).join("");
-  $("contactChoices").querySelectorAll("[data-contact-choice]").forEach((input) => {
-    input.addEventListener("change", () => {
-      st().selectedContact[input.dataset.contactChoice] = input.checked;
-      if (!input.checked) st().selectedPrice[input.dataset.contactChoice] = false;
-      st().priceEstimateInterest = Object.keys(st().selectedPrice).some((key) => st().selectedPrice[key]);
-      renderCalculatorPanel();
-    });
-  });
+  }).join("") : `<div class="check-card contact-readonly"><span><strong>Ei vielä valittuja vakuutusalueita</strong><br><span class="muted small">Voit kertoa tilanteesi lisätiedoissa.</span></span></div>`;
   restoreContactFields();
   if (mode !== "business" && $("contactOrg")) $("contactOrg").value = "";
 }
 
 function restoreContactFields() {
   const contact = st().contact;
-  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactNextStep", "freeText"]) {
+  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactTime", "freeText"]) {
     if ($(id) && Object.prototype.hasOwnProperty.call(contact, id)) $(id).value = contact[id] || "";
   }
   $("privacyConsent").checked = Boolean(contact.privacyConsent);
@@ -4523,7 +5005,7 @@ function restoreContactFields() {
 
 function readContactFields() {
   const contact = {};
-  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactNextStep", "freeText"]) {
+  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactTime", "freeText"]) {
     contact[id] = $(id).value.trim();
   }
   if (mode !== "business") contact.contactOrg = "";
@@ -4548,14 +5030,14 @@ function validateContact(contact) {
   if (!contact.contactName) return "Täytä nimi.";
   if (!contact.contactEmail || !contact.contactEmail.includes("@")) return "Täytä toimiva sähköpostiosoite.";
   if (!contact.privacyConsent) return "Hyväksy tietojen käyttö yhteydenottopyynnön käsittelyyn.";
-  const selected = Object.keys(st().selectedContact).filter((key) => st().selectedContact[key]);
+  const selected = recommendedContactKeys();
   if (!selected.length && !contact.freeText) return "Valitse vähintään yksi vakuutus tai kuvaa tilanne vapaasti.";
   return "";
 }
 
 function buildCrmSummary(contact) {
-  const selected = Object.keys(st().selectedContact).filter((key) => st().selectedContact[key]);
-  const recommendation = st().recommendation || calculateScores(mode, st().quickAnswers);
+  const selected = recommendedContactKeys();
+  const recommendation = st().recommendation || calculateScores(mode, st().quickAnswers, st().baseAnswers);
   const now = new Date();
   const lines = [];
 
@@ -4569,11 +5051,18 @@ function buildCrmSummary(contact) {
   lines.push(`- Sähköposti: ${contact.contactEmail}`);
   if (contact.contactPhone) lines.push(`- Puhelin: ${contact.contactPhone}`);
   lines.push(`- Toivottu yhteydenottotapa: ${contact.contactChannel || "Ei valittu"}`);
-  lines.push(`- Asiakkaan seuraava toive: ${contact.contactNextStep || "Ei valittu"}`);
+  lines.push(`- Paras aika ottaa yhteyttä: ${contact.contactTime || "Ei valittu"}`);
   lines.push("");
-  lines.push("Asiakkaan valitsemat aiheet hinta-arvioon tai yhteydenottoon");
+  lines.push("Asiakkaan mukana kulkevat vakuutusalueet");
   if (selected.length) selected.forEach((key) => lines.push(`- ${types()[key].title}`));
-  else lines.push("- Ei valittuja vakuutuksia");
+  else lines.push("- Ei valittuja vakuutusalueita");
+  lines.push("");
+  lines.push("Perustiedot");
+  (baseQuestions[mode] || []).forEach((question) => {
+    const answer = getOptionLabel(question, st().baseAnswers[question.id]);
+    const other = st().baseAnswers[question.id] === "other" ? st().baseAnswers[`${question.id}Other`] : "";
+    lines.push(`- ${question.title}: ${answer}${other ? ` (${other})` : ""}`);
+  });
   lines.push("");
   lines.push("Lyhyen kartoituksen vastaukset");
   getAnswerLabels(quickQuestions[mode], st().quickAnswers).forEach((item) => {
@@ -4581,7 +5070,7 @@ function buildCrmSummary(contact) {
   });
   lines.push("");
   lines.push(mode === "business" ? "Yrityksen tärkeimmät tunnistetut tarpeet" : "Tärkeimmät tunnistetut tarpeet");
-  recommendation.items.filter((item) => item.score >= 3).slice(0, 8).forEach((item) => {
+  recommendation.items.filter((item) => item.score >= 3 && recommendationAreaOrder[mode].includes(item.key)).slice(0, 8).forEach((item) => {
     lines.push(`- ${types()[item.key].title}: ${riskImpactForScore(item.score)}. ${item.reasons.join("; ") || "Ei erillistä perustelua."}${item.existing ? " Nykyinen turva merkitty, tarkista riittävyys." : ""}`);
   });
   lines.push("");
@@ -4612,7 +5101,6 @@ function buildCrmSummary(contact) {
     lines.push("Hinta-arvio");
     lines.push("- Asiakas kiinnostunut hinta-arviosta.");
     selectedPriceItems().forEach((item) => lines.push(`- Hinta-arvioon valittu: ${item.title} / ${item.detail}`));
-    lines.push(`- Asiakkaan ilmoittama jatkotoive: ${contact.contactNextStep || "Ei valittu"}.`);
     lines.push("- Hinta-arvio edellyttää laskuri-integraatiota tai asiantuntijan arviota.");
   }
   if (st().chatMessages.length) {
@@ -4633,24 +5121,6 @@ function buildCrmSummary(contact) {
   return lines.join("\n");
 }
 
-async function copySummary() {
-  const text = $("crmSummary").value;
-  try {
-    await navigator.clipboard.writeText(text);
-    $("copySummary").textContent = "Kopioitu";
-    $("copySummary").classList.add("copy-state");
-  } catch {
-    $("crmSummary").select();
-    document.execCommand("copy");
-    $("copySummary").textContent = "Kopioitu";
-    $("copySummary").classList.add("copy-state");
-  }
-  setTimeout(() => {
-    $("copySummary").textContent = "Kopioi yhteenveto";
-    $("copySummary").classList.remove("copy-state");
-  }, 1800);
-}
-
 function renderSummaryList() {
   if (!$("summaryList")) return;
   const recommendation = st().recommendation;
@@ -4660,7 +5130,7 @@ function renderSummaryList() {
   const parts = [];
 
   parts.push(`<div class="summary-item"><strong>Asiakastyyppi</strong><span class="muted small">${escapeHtml(profile().label)}</span></div>`);
-  parts.push(`<div class="summary-item"><strong>Lyhyt kysely</strong><span class="muted small">${answered ? `${answered}/${quickQuestions[mode].length} vastausta` : "Ei aloitettu"}</span></div>`);
+  parts.push(`<div class="summary-item"><strong>Lyhyt kartoitus</strong><span class="muted small">${answered ? `${answered}/${quickQuestions[mode].length} vastausta` : "Ei aloitettu"}</span></div>`);
 
   if (recommendation) {
     const top = recommendation.items.filter((item) => item.score >= 3).slice(0, 5).map((item) => types()[item.key].title).join(", ");
@@ -4684,16 +5154,20 @@ function renderCalculatorPanel() {
 
   const context = calculatorContext();
   const priceItems = selectedPriceItems();
+  const selectedAreas = recommendedContactKeys();
   if (!context.title && !priceItems.length) {
     panel.innerHTML = `
       <p class="eyebrow compact">Hinta-arvion laskuri</p>
       <h3>Yhteenveto</h3>
       <p class="muted small">Kun vastaat kartoitukseen, tähän muodostuu vakuutuskohtainen hinta-arvion esinäkymä.</p>
-      <button class="btn btn-primary full-width" type="button" data-calculator-start>Aloita kartoitus</button>
+      <div class="calculator-actions stacked">
+        <button class="btn btn-primary" type="button" data-calculator-start>Aloita kartoitus</button>
+        <button class="btn btn-secondary" type="button" data-open-chat>Avaa chat</button>
+      </div>
       <ul class="calculator-benefits">
         <li>Selkeä turvan laajuus ennen hinta-arviota</li>
-        <li>Valitut vakuutukset mukaan yhteydenottoon</li>
-        <li>CRM-yhteenveto asiantuntijalle</li>
+        <li>Vakuutusalueet mukaan yhteydenottoon</li>
+        <li>Kartoituksen tiedot kulkevat asiantuntijalle</li>
       </ul>
     `;
     bindCalculatorActions(panel);
@@ -4719,8 +5193,20 @@ function renderCalculatorPanel() {
         </div>
         <div class="calculator-actions stacked">
           <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey)}">Pyydä tarkempi hinta-arvio</button>
-          <button class="btn btn-secondary" type="button" data-calculator-more>Lisää toinen vakuutus</button>
+          <button class="btn btn-secondary" type="button" data-open-contact>Pyydä yhteydenottoa</button>
+          <button class="btn btn-secondary" type="button" data-open-chat>Avaa chat</button>
         </div>
+      </div>
+    ` : ""}
+    ${selectedAreas.length ? `
+      <div class="calculator-basket">
+        <strong>Suositellut vakuutusalueet</strong>
+        ${selectedAreas.map((key) => `
+          <div class="basket-line">
+            <span>${escapeHtml(types()[key].title)}</span>
+            <small>${escapeHtml(types()[key].area)}</small>
+          </div>
+        `).join("")}
       </div>
     ` : ""}
     ${priceItems.length ? `
@@ -4734,7 +5220,7 @@ function renderCalculatorPanel() {
           </div>
         `).join("")}
         <div class="calculator-slot compact">
-          <strong>Laskuri-demo</strong>
+          <strong>Laskuri-integraation paikka</strong>
           <span>Valitut aiheet siirtyisivät LähiTapiolan varsinaiseen laskuriin hinta-arvion muodostamista varten.</span>
         </div>
       </div>
@@ -4753,13 +5239,9 @@ function renderChatPanel() {
 
   const context = chatContext();
   const messages = st().chatMessages;
-  const chatOpen = messages.length ? "open" : "";
   panel.innerHTML = `
     <p class="eyebrow compact">Kysymysapu</p>
-    <h3>Chat-avustaja</h3>
-    <p class="muted small">Demo: avustaja käyttää kartoituksen vastauksia taustana, mutta ei anna lopullista vakuutuspäätöstä, korvauslupausta tai hintaa.</p>
-    <details class="chat-drawer" ${chatOpen}>
-      <summary>Kysy suosituksista</summary>
+    <p class="muted small">Avustaja käyttää kartoituksen vastauksia taustana ja ohjaa tarvittaessa PDF-materiaaleihin, laskuriin tai asiantuntijalle.</p>
     <div class="chat-suggestions">
       ${context.suggestions.map((item) => `<button class="btn btn-secondary btn-small" type="button" data-chat-prompt="${escapeHtml(item)}">${escapeHtml(item)}</button>`).join("")}
     </div>
@@ -4775,10 +5257,27 @@ function renderChatPanel() {
       <input id="chatInput" type="text" placeholder="Kirjoita kysymys vakuutuksista">
       <button class="btn btn-primary btn-small" type="button" data-chat-send>Lähetä</button>
     </div>
-    </details>
-    <p class="legal-note">Varsinaisessa toteutuksessa LähiTapiolan chatille välitettäisiin vain kartoituksen taustatiedot ja suostumuksella tarvittavat yhteystiedot.</p>
   `;
   bindChatActions(panel);
+}
+
+function openChatPopup() {
+  $("chatPopup").classList.remove("hidden");
+  $("chatPopup").querySelector(".chat-window")?.classList.toggle("expanded", Boolean(st().chatExpanded));
+  $("chatExpand").textContent = st().chatExpanded ? "Pienennä" : "Suurenna";
+  renderChatPanel();
+  setTimeout(() => $("chatInput")?.focus(), 0);
+  track("chat_opened", { mode });
+}
+
+function closeChatPopup() {
+  $("chatPopup").classList.add("hidden");
+}
+
+function toggleChatSize() {
+  st().chatExpanded = !st().chatExpanded;
+  $("chatPopup").querySelector(".chat-window")?.classList.toggle("expanded", st().chatExpanded);
+  $("chatExpand").textContent = st().chatExpanded ? "Pienennä" : "Suurenna";
 }
 
 function bindChatActions(panel) {
@@ -4808,7 +5307,7 @@ function addChatQuestion(text) {
 
 function chatContext() {
   const recommendation = st().recommendation;
-  const topItems = recommendation?.items.filter((item) => item.score >= 3).slice(0, 3) || [];
+  const topItems = recommendation?.items.filter((item) => item.score >= 3 && recommendationAreaOrder[mode].includes(item.key)).slice(0, 3) || [];
   const activeDetail = st().activeDetail && st().detailResults[st().activeDetail] ? st().activeDetail : "";
   const activeType = activeDetail ? typeKeyFromDetail(activeDetail) : "";
   const topTitle = topItems[0] ? types()[topItems[0].key].title : "";
@@ -4823,11 +5322,14 @@ function chatContext() {
 function buildChatAnswer(question) {
   const context = chatContext();
   const lowered = question.toLocaleLowerCase("fi-FI");
-  const answered = getAnswerLabels(quickQuestions[mode], st().quickAnswers);
+  const answered = [
+    ...getAnswerLabels(baseQuestions[mode] || [], st().baseAnswers),
+    ...getAnswerLabels(quickQuestions[mode], st().quickAnswers)
+  ].filter((item) => item.answer !== "Ei valittu");
   const topItems = context.topItems;
 
   if (!answered.length) {
-    return "Aloita vastaamalla lyhyeen kyllä/ei-kyselyyn. Sen jälkeen voin selittää, miksi tietyt vakuutukset nousivat esiin ja mitä niissä kannattaa tarkistaa.";
+    return "Aloita täyttämällä perustiedot ja lyhyt kartoitus. Sen jälkeen voin selittää, miksi tietyt vakuutusalueet nousivat esiin ja mitä niissä kannattaa tarkistaa.";
   }
 
   if (lowered.includes("hinta") || lowered.includes("laskuri")) {
@@ -4851,7 +5353,7 @@ function buildChatAnswer(question) {
   }
 
   const topText = topItems.length ? topItems.map((item) => types()[item.key].title).join(", ") : "ei vielä vahvoja osumia";
-  return `Vastaustesi perusteella keskeiset aiheet ovat: ${topText}. Voit avata vakuutuskortista tiivistelmän ja PDF-materiaalit, tarkentaa vakuutusta tai lisätä sen hinta-arvion koriin.`;
+  return `Vastaustesi perusteella keskeiset aiheet ovat: ${topText}. Voit avata vakuutuskortista tiivistelmän ja PDF-materiaalit, tarkentaa suosituksia vapaaehtoisessa vaiheessa tai jatkaa hinta-arvioon sivupalkista.`;
 }
 
 function selectedPriceItems() {
@@ -4892,7 +5394,8 @@ function calculatorContext() {
 
   const recommendation = st().recommendation;
   if (recommendation) {
-    const item = recommendation.primary[0] || recommendation.possible[0] || recommendation.items[0];
+    const visibleItems = recommendation.items.filter((item) => recommendationAreaOrder[mode].includes(item.key));
+    const item = visibleItems.find((entry) => entry.score >= 7) || visibleItems.find((entry) => entry.score >= 3) || visibleItems[0];
     if (!item) return {};
     const meta = types()[item.key];
     const comparisonLabel = meta.detailFlow && coverageModels[mode]?.[meta.detailFlow]?.label;
@@ -4912,6 +5415,7 @@ function calculatorContext() {
 function showView(next) {
   const activeView = {
     intro: "introView",
+    base: "baseInfoView",
     quick: "questionView",
     results: "resultsView",
     detail: "detailView",
@@ -4928,7 +5432,7 @@ function showView(next) {
 }
 
 function updateSteps(viewName) {
-  const activeIndex = viewName === "intro" || viewName === "quick" ? 0
+  const activeIndex = viewName === "intro" || viewName === "base" || viewName === "quick" ? 0
     : viewName === "results" ? 1
       : viewName === "detail" || viewName === "detailResult" ? 2
         : 3;
@@ -4940,11 +5444,35 @@ function updateSteps(viewName) {
 }
 
 function restartAssessment() {
+  resetAssessment("base");
+}
+
+function resetAssessment(next = "intro") {
+  if (hasProgress() && !window.confirm("Haluatko varmasti tyhjentää kaikki vastaukset ja aloittaa alusta?")) return;
   states[mode] = freshState();
-  renderQuestion();
-  showView("quick");
+  renderIntro();
+  renderBaseInfo();
+  renderCalculatorPanel();
+  renderChatPanel();
   renderSummaryList();
+  closeChatPopup();
+  showView(next === "base" ? "base" : "intro");
   track("assessment_restarted", { mode });
+}
+
+function hasProgress() {
+  const current = st();
+  return Boolean(
+    Object.keys(current.baseAnswers).length ||
+    Object.keys(current.quickAnswers).length ||
+    current.recommendation ||
+    Object.keys(current.detailAnswers).length ||
+    Object.keys(current.detailResults).length ||
+    Object.keys(current.selectedContact).length ||
+    Object.keys(current.selectedPrice).length ||
+    Object.keys(current.contact).length ||
+    current.chatMessages.length
+  );
 }
 
 function escapeHtml(value) {

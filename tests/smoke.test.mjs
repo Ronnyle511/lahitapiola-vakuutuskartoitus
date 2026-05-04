@@ -1,25 +1,25 @@
 import assert from "node:assert/strict";
-import { detailFlows, insuranceTypes, quickQuestions } from "../src/data.js";
+import { baseQuestions, detailFlows, insuranceTypes, quickQuestions } from "../src/data.js";
 import { buildDetailResult } from "../src/detailResults.js";
 import { calculateScores } from "../src/scoring.js";
 
 const personal = calculateScores("personal", {
-  housing: "yes",
   vehicle: "yes",
   travel: "yes",
-  health: "yes",
-  family: "yes",
+  personalInsurance: "yes",
   pets: "yes",
-  property: "no",
-  children: "no",
-  shock: "yes",
-  currentCovers: "yes"
+  children: "yes",
+  valuables: "yes"
+}, {
+  ageGroup: "36_45",
+  livingType: "house",
+  lifeSituation: "employed"
 });
 
-assert.equal(personal.items[0].key, "home");
+assert.ok(personal.primary.some((item) => item.key === "home"));
 assert.ok(personal.primary.some((item) => item.key === "vehicle"));
 assert.ok(personal.primary.some((item) => item.key === "travel"));
-assert.ok(personal.primary.some((item) => item.key === "life"));
+assert.ok(personal.primary.some((item) => item.key === "health"));
 assert.equal(personal.existingCoverage.length, 0);
 
 const homeResult = buildDetailResult("personal", "home", {
@@ -37,24 +37,20 @@ assert.ok(homeResult.rows.some((row) => row.value.includes("Rakennus ja irtaimis
 assert.ok(homeResult.comparison.recommended.some((option) => option.title === "LaajaPlus"));
 
 const business = calculateScores("business", {
-  companySize: "yes",
-  industry: "yes",
+  premises: "yes",
   assets: "yes",
-  people: "yes",
-  mobility: "yes",
-  riskConcerns: "yes",
+  customerSites: "yes",
   digital: "yes",
-  businessTravel: "yes",
-  cargo: "yes",
-  construction: "no",
-  realEstate: "no",
-  patient: "no",
-  shock: "yes",
-  currentCovers: "yes"
+  vehicles: "yes",
+  keyPeople: "yes",
+  interruption: "yes"
+}, {
+  industry: "it",
+  employeeCount: "1_4"
 });
 
 assert.ok(business.primary.some((item) => item.key === "bizPeople"));
-assert.ok(business.primary.some((item) => item.key === "bizCargo"));
+assert.ok(business.primary.some((item) => item.key === "bizLiability"));
 assert.ok(business.primary.some((item) => item.key === "bizVehicle"));
 assert.ok(business.primary.some((item) => item.key === "bizInterruption"));
 assert.equal(business.existingCoverage.length, 0);
@@ -71,7 +67,8 @@ assert.ok(cyberResult.comparison.recommended.some((option) => option.title === "
 
 for (const profileId of ["personal", "business"]) {
   assert.ok(Object.keys(insuranceTypes[profileId]).length >= 6);
-  assert.ok(quickQuestions[profileId].length >= 8);
+  assert.ok(baseQuestions[profileId].length >= 2);
+  assert.ok(quickQuestions[profileId].length >= 7);
   assert.ok(Object.keys(detailFlows[profileId]).length >= 6);
 }
 
