@@ -693,6 +693,23 @@ h4 {
   font-size: 14px;
 }
 
+.card-refine-cta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px dashed #9fc4dc;
+  border-radius: 8px;
+  background: var(--blue-050);
+}
+
+.card-refine-cta span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .rec-actions {
   display: flex;
   flex-direction: column;
@@ -1388,6 +1405,41 @@ details.source-details summary {
   padding: 16px;
 }
 
+.chat-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 75;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 999px;
+  color: #ffffff;
+  background: var(--blue-700);
+  box-shadow: 0 12px 30px rgba(0, 63, 110, 0.22);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.chat-launcher:hover {
+  background: var(--blue-800);
+}
+
+.chat-launcher span {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  color: var(--blue-700);
+  background: #ffffff;
+  font-size: 10px;
+}
+
 .chat-drawer {
   margin-top: 12px;
   padding: 12px;
@@ -1687,6 +1739,15 @@ details.source-details summary {
     min-width: 0;
   }
 
+  .card-refine-cta {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .card-refine-cta .btn {
+    width: 100%;
+  }
+
   .refine-card {
     align-items: stretch;
     flex-direction: column;
@@ -1730,6 +1791,13 @@ details.source-details summary {
     right: 14px;
     bottom: 14px;
     width: calc(100vw - 28px);
+  }
+
+  .chat-launcher {
+    right: 16px;
+    bottom: 16px;
+    min-height: 52px;
+    padding: 0 22px;
   }
 
   .chat-window-head {

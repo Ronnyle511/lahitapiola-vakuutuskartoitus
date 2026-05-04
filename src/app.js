@@ -32,6 +32,7 @@ function freshState() {
     detailResults: {},
     selectedCoverage: {},
     priceEstimateInterest: false,
+    contactSelectionInitialized: false,
     contact: {},
     chatMessages: [],
     chatExpanded: false
@@ -92,6 +93,7 @@ function bindEvents() {
   $("restartFromSummary").addEventListener("click", () => resetAssessment("intro"));
   $("chatClose").addEventListener("click", () => closeChatPopup());
   $("chatExpand").addEventListener("click", () => toggleChatSize());
+  $("chatLauncher").addEventListener("click", () => openChatPopup());
 }
 
 function setMode(nextMode) {
@@ -321,6 +323,9 @@ function renderRecommendations() {
   $("recommendationBuckets").innerHTML = `${buckets.map(renderBucket).join("")}${renderRefinePrompt(recommendation)}`;
   $("recommendationBuckets").querySelector("[data-refine-recommendations]")?.addEventListener("click", () => refineTopRecommendation());
   $("recommendationBuckets").querySelector("[data-contact-next]")?.addEventListener("click", () => openContact());
+  $("recommendationBuckets").querySelectorAll("[data-card-refine]").forEach((button) => {
+    button.addEventListener("click", () => openDetail(button.dataset.cardRefine || ""));
+  });
 }
 
 function recommendationBuckets(recommendation) {
@@ -445,6 +450,7 @@ function renderRecommendationCard(item, bucketKey) {
   const existing = item.existing ? `<span class="status-pill possible">Nykyinen turva: tarkista riittävyys</span>` : "";
   const comparisonLabel = meta.detailFlow && coverageModels[mode]?.[meta.detailFlow]?.label;
   const strength = recommendationStrength(item.score);
+  const canRefine = Boolean(meta.detailFlow && flow(meta.detailFlow));
 
   return `
     <article class="rec-card">
@@ -463,6 +469,12 @@ function renderRecommendationCard(item, bucketKey) {
           <p>${escapeHtml(reasons.join("; "))}</p>
         </details>
         ${renderRecommendationLearn(meta, item)}
+        ${canRefine ? `
+          <div class="card-refine-cta">
+            <button class="btn btn-primary btn-small" type="button" data-card-refine="${escapeHtml(meta.detailFlow)}">Tarkenna tätä vakuutusaluetta</button>
+            <span>Tarkentava kartoitus auttaa valitsemaan turvan rakenteen ja hinta-arvion pohjan.</span>
+          </div>
+        ` : ""}
       </div>
     </article>
   `;
@@ -890,20 +902,24 @@ function materialTypeLabel(label = "") {
 
 function primeContactSelection() {
   if (!st().recommendation) return;
-  const hasAny = Object.keys(st().selectedContact).some((key) => st().selectedContact[key]);
-  if (hasAny) return;
-  recommendedKeys(st().recommendation).filter((key) => recommendationAreaOrder[mode].includes(key)).forEach((key) => {
+  if (st().contactSelectionInitialized) return;
+  recommendationKeysForContact().forEach((key) => {
     st().selectedContact[key] = true;
   });
+  st().contactSelectionInitialized = true;
+}
+
+function recommendationKeysForContact() {
+  if (!st().recommendation) return [];
+  const keys = st().recommendation.items
+    .filter((item) => item.score >= 3 && recommendationAreaOrder[mode].includes(item.key))
+    .map((item) => item.key);
+  return keys.length ? keys : recommendationAreaOrder[mode].filter((key) => types()[key]);
 }
 
 function recommendedContactKeys() {
   const selected = Object.keys(st().selectedContact).filter((key) => st().selectedContact[key] && types()[key]);
-  if (selected.length) return selected.filter((key) => recommendationAreaOrder[mode].includes(key));
-  if (!st().recommendation) return [];
-  return st().recommendation.items
-    .filter((item) => item.score >= 3 && recommendationAreaOrder[mode].includes(item.key))
-    .map((item) => item.key);
+  return selected.filter((key) => recommendationAreaOrder[mode].includes(key));
 }
 
 function openContact() {
@@ -921,18 +937,29 @@ function openContact() {
 function renderContact() {
   $("contactOrgField")?.classList.toggle("hidden", mode !== "business");
   if (mode !== "business" && $("contactOrg")) $("contactOrg").value = "";
-  const selectedKeys = recommendedContactKeys();
-  $("contactChoices").innerHTML = selectedKeys.length ? selectedKeys.map((key) => {
+  const candidateKeys = recommendationKeysForContact();
+  $("contactChoices").innerHTML = candidateKeys.length ? candidateKeys.map((key) => {
     const meta = types()[key];
+    const checked = st().selectedContact[key] ? "checked" : "";
     const detailBadge = st().detailResults[meta.detailFlow] ? "Tarkennettu" : "";
     const priceBadge = st().selectedPrice[key] ? "Hinta-arvio" : "";
     const badges = [meta.area, detailBadge, priceBadge].filter(Boolean).join(" · ");
     return `
-      <div class="check-card contact-readonly">
+      <label class="check-card">
+        <input type="checkbox" data-contact-choice="${escapeHtml(key)}" ${checked}>
         <span><strong>${escapeHtml(meta.title)}</strong><br><span class="muted small">${escapeHtml(badges)}</span></span>
-      </div>
+      </label>
     `;
   }).join("") : `<div class="check-card contact-readonly"><span><strong>Ei vielä valittuja vakuutusalueita</strong><br><span class="muted small">Voit kertoa tilanteesi lisätiedoissa.</span></span></div>`;
+  $("contactChoices").querySelectorAll("[data-contact-choice]").forEach((input) => {
+    input.addEventListener("change", () => {
+      st().selectedContact[input.dataset.contactChoice] = input.checked;
+      if (!input.checked) st().selectedPrice[input.dataset.contactChoice] = false;
+      st().priceEstimateInterest = Object.keys(st().selectedPrice).some((key) => st().selectedPrice[key]);
+      renderCalculatorPanel();
+      renderSummaryList();
+    });
+  });
   restoreContactFields();
   if (mode !== "business" && $("contactOrg")) $("contactOrg").value = "";
 }
@@ -1096,7 +1123,7 @@ function renderCalculatorPanel() {
 
   const context = calculatorContext();
   const priceItems = selectedPriceItems();
-  const selectedAreas = recommendedContactKeys();
+  const selectedAreas = recommendationKeysForContact();
   if (!context.title && !priceItems.length) {
     panel.innerHTML = `
       <p class="eyebrow compact">Hinta-arvion laskuri</p>
@@ -1104,7 +1131,6 @@ function renderCalculatorPanel() {
       <p class="muted small">Kun vastaat kartoitukseen, tähän muodostuu vakuutuskohtainen hinta-arvion esinäkymä.</p>
       <div class="calculator-actions stacked">
         <button class="btn btn-primary" type="button" data-calculator-start>Aloita kartoitus</button>
-        <button class="btn btn-secondary" type="button" data-open-chat>Avaa chat</button>
       </div>
       <ul class="calculator-benefits">
         <li>Selkeä turvan laajuus ennen hinta-arviota</li>
@@ -1136,7 +1162,6 @@ function renderCalculatorPanel() {
         <div class="calculator-actions stacked">
           <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey)}">Pyydä tarkempi hinta-arvio</button>
           <button class="btn btn-secondary" type="button" data-open-contact>Pyydä yhteydenottoa</button>
-          <button class="btn btn-secondary" type="button" data-open-chat>Avaa chat</button>
         </div>
       </div>
     ` : ""}
@@ -1205,6 +1230,7 @@ function renderChatPanel() {
 
 function openChatPopup() {
   $("chatPopup").classList.remove("hidden");
+  $("chatLauncher").classList.add("hidden");
   $("chatPopup").querySelector(".chat-window")?.classList.toggle("expanded", Boolean(st().chatExpanded));
   $("chatExpand").textContent = st().chatExpanded ? "Pienennä" : "Suurenna";
   renderChatPanel();
@@ -1214,6 +1240,7 @@ function openChatPopup() {
 
 function closeChatPopup() {
   $("chatPopup").classList.add("hidden");
+  $("chatLauncher").classList.remove("hidden");
 }
 
 function toggleChatSize() {
