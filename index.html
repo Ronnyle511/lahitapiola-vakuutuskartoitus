@@ -1372,6 +1372,14 @@ details.source-details summary {
   margin-top: 14px;
 }
 
+.chat-suggestions .btn {
+  justify-content: center;
+  width: 100%;
+  min-height: 42px;
+  white-space: normal;
+  text-align: center;
+}
+
 .chat-popup {
   position: fixed;
   right: 24px;
@@ -1380,7 +1388,15 @@ details.source-details summary {
   width: min(420px, calc(100vw - 28px));
 }
 
+.chat-popup.expanded {
+  width: min(760px, calc(100vw - 28px));
+}
+
 .chat-window {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
+  max-height: min(680px, calc(100vh - 48px));
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--blue-050);
@@ -1389,7 +1405,7 @@ details.source-details summary {
 }
 
 .chat-window.expanded {
-  width: min(760px, calc(100vw - 28px));
+  max-height: min(760px, calc(100vh - 48px));
 }
 
 .chat-window-head {
@@ -1403,13 +1419,36 @@ details.source-details summary {
   color: var(--blue-950);
 }
 
-.chat-window-head div {
+.chat-window-controls {
   display: flex;
   gap: 8px;
+  flex: 0 0 auto;
+}
+
+.chat-icon-button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--blue-900);
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.chat-icon-button:hover {
+  border-color: var(--blue-700);
+  color: #ffffff;
+  background: var(--blue-700);
 }
 
 .chat-window #chatPanel {
   padding: 16px;
+  overflow: auto;
 }
 
 .chat-launcher {
@@ -1497,6 +1536,7 @@ details.source-details summary {
 }
 
 .chat-input-row input {
+  min-width: 0;
   min-height: 40px;
   padding: 9px 11px;
   border: 1px solid #b8c9d8;
@@ -1794,7 +1834,7 @@ details.source-details summary {
   }
 
   .chat-popup,
-  .chat-window.expanded {
+  .chat-popup.expanded {
     right: 14px;
     bottom: 14px;
     width: calc(100vw - 28px);
@@ -1805,11 +1845,6 @@ details.source-details summary {
     bottom: 16px;
     min-height: 52px;
     padding: 0 22px;
-  }
-
-  .chat-window-head {
-    align-items: flex-start;
-    flex-direction: column;
   }
 
   .segmented,
@@ -2014,9 +2049,13 @@ details.source-details summary {
     <div class="chat-window">
       <div class="chat-window-head">
         <strong>Chat-avustaja</strong>
-        <div>
-          <button class="btn btn-secondary btn-small" id="chatExpand" type="button">Suurenna</button>
-          <button class="btn btn-secondary btn-small" id="chatClose" type="button" aria-label="Sulje chat">×</button>
+        <div class="chat-window-controls">
+          <button class="chat-icon-button" id="chatExpand" type="button" aria-label="Suurenna chat" title="Suurenna">
+            <span aria-hidden="true">⛶</span>
+          </button>
+          <button class="chat-icon-button" id="chatClose" type="button" aria-label="Sulje chat" title="Sulje">
+            <span aria-hidden="true">×</span>
+          </button>
         </div>
       </div>
       <div id="chatPanel"></div>
@@ -5361,8 +5400,9 @@ function renderChatPanel() {
 function openChatPopup() {
   $("chatPopup").classList.remove("hidden");
   $("chatLauncher").classList.add("hidden");
+  $("chatPopup").classList.toggle("expanded", Boolean(st().chatExpanded));
   $("chatPopup").querySelector(".chat-window")?.classList.toggle("expanded", Boolean(st().chatExpanded));
-  $("chatExpand").textContent = st().chatExpanded ? "Pienennä" : "Suurenna";
+  updateChatExpandButton();
   renderChatPanel();
   setTimeout(() => $("chatInput")?.focus(), 0);
   track("chat_opened", { mode });
@@ -5375,8 +5415,17 @@ function closeChatPopup() {
 
 function toggleChatSize() {
   st().chatExpanded = !st().chatExpanded;
+  $("chatPopup").classList.toggle("expanded", st().chatExpanded);
   $("chatPopup").querySelector(".chat-window")?.classList.toggle("expanded", st().chatExpanded);
-  $("chatExpand").textContent = st().chatExpanded ? "Pienennä" : "Suurenna";
+  updateChatExpandButton();
+}
+
+function updateChatExpandButton() {
+  const button = $("chatExpand");
+  if (!button) return;
+  button.setAttribute("aria-label", st().chatExpanded ? "Pienennä chat" : "Suurenna chat");
+  button.setAttribute("title", st().chatExpanded ? "Pienennä" : "Suurenna");
+  button.innerHTML = `<span aria-hidden="true">${st().chatExpanded ? "↙" : "⛶"}</span>`;
 }
 
 function bindChatActions(panel) {
