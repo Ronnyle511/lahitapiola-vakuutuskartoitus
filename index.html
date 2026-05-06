@@ -601,6 +601,57 @@ h4 {
   background: var(--blue-050);
 }
 
+.risk-profile {
+  grid-column: 1 / -1;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.risk-item {
+  display: grid;
+  gap: 4px;
+  min-height: 104px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.risk-item strong {
+  color: var(--blue-950);
+}
+
+.risk-item span {
+  width: max-content;
+  padding: 3px 9px;
+  border-radius: 999px;
+  color: var(--blue-900);
+  background: var(--blue-100);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.risk-item.high span {
+  color: #ffffff;
+  background: var(--blue-700);
+}
+
+.risk-item.medium span,
+.risk-item.check span {
+  border: 1px solid var(--line);
+}
+
+.risk-item small {
+  color: var(--muted);
+}
+
 .needs-summary p {
   margin: 8px 0 0;
   color: #254f70;
@@ -677,13 +728,21 @@ h4 {
   margin-top: 3px;
 }
 
+.rec-heading {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
 .rec-area {
   color: var(--blue-700);
   font-size: 13px;
   font-weight: 800;
 }
 
-.rec-main p {
+.rec-main p,
+.rec-desc {
   margin: 7px 0 0;
 }
 
@@ -691,6 +750,19 @@ h4 {
   display: grid;
   gap: 7px;
   margin: 12px 0 0;
+}
+
+.reason-list.concise {
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--blue-050);
+}
+
+.reason-list.concise strong {
+  color: var(--blue-950);
+  font-size: 14px;
 }
 
 .reason {
@@ -981,6 +1053,10 @@ details.source-details summary {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #ffffff;
+}
+
+.calculator-basket.pending {
+  background: var(--blue-050);
 }
 
 .calculator-basket > strong {
@@ -1366,46 +1442,32 @@ details.source-details summary {
   margin-bottom: 12px;
 }
 
-.chat-suggestions {
-  display: grid;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.chat-suggestions .btn {
-  justify-content: center;
-  width: 100%;
-  min-height: 42px;
-  white-space: normal;
-  text-align: center;
-}
-
 .chat-popup {
   position: fixed;
   right: 24px;
   bottom: 24px;
   z-index: 80;
-  width: min(420px, calc(100vw - 28px));
+  width: min(386px, calc(100vw - 28px));
 }
 
 .chat-popup.expanded {
-  width: min(760px, calc(100vw - 28px));
+  width: min(680px, calc(100vw - 28px));
 }
 
 .chat-window {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   width: 100%;
-  max-height: min(680px, calc(100vh - 48px));
+  height: min(576px, calc(100vh - 48px));
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--blue-050);
+  border-radius: 0 14px 14px 0;
+  background: #ffffff;
   box-shadow: var(--shadow);
   overflow: hidden;
 }
 
 .chat-window.expanded {
-  max-height: min(760px, calc(100vh - 48px));
+  height: min(760px, calc(100vh - 48px));
 }
 
 .chat-window-head {
@@ -1413,7 +1475,8 @@ details.source-details summary {
   gap: 12px;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
+  min-height: 60px;
+  padding: 12px 12px;
   border-bottom: 1px solid var(--line);
   background: #ffffff;
   color: var(--blue-950);
@@ -1428,27 +1491,106 @@ details.source-details summary {
 .chat-icon-button {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  border: 1px solid var(--line);
+  width: 34px;
+  height: 34px;
+  border: 0;
   border-radius: 999px;
-  color: var(--blue-900);
+  color: var(--blue-700);
   background: #ffffff;
   cursor: pointer;
-  font-size: 21px;
-  font-weight: 800;
+  font-size: 22px;
+  font-weight: 400;
   line-height: 1;
 }
 
 .chat-icon-button:hover {
-  border-color: var(--blue-700);
-  color: #ffffff;
-  background: var(--blue-700);
+  color: var(--blue-950);
+  background: var(--blue-100);
 }
 
 .chat-window #chatPanel {
-  padding: 16px;
-  overflow: auto;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.chat-body {
+  min-height: 0;
+  padding: 14px 12px 24px;
+  overflow-y: auto;
+  background: #ffffff;
+}
+
+.chat-started {
+  margin: 0 0 14px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+}
+
+.chat-line {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.chat-line.user {
+  justify-items: end;
+}
+
+.chat-name {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chat-bubble {
+  max-width: 92%;
+  padding: 12px 13px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #0069a6;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.chat-line.user .chat-bubble {
+  color: var(--ink);
+  background: var(--blue-100);
+  border: 1px solid var(--line);
+  font-weight: 600;
+}
+
+.chat-time {
+  margin-left: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.chat-compose {
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--line);
+  background: var(--blue-100);
+}
+
+.chat-compose-meta {
+  margin-top: 4px;
+  color: var(--muted);
+  text-align: right;
+  font-size: 14px;
+}
+
+.chat-save-note {
+  margin: 8px 0 0;
+  color: var(--ink);
+  text-align: center;
+  font-size: 12px;
+}
+
+.chat-save-note a {
+  color: var(--blue-800);
 }
 
 .chat-launcher {
@@ -1530,18 +1672,38 @@ details.source-details summary {
 
 .chat-input-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  margin-top: 12px;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  gap: 10px;
+  align-items: center;
 }
 
-.chat-input-row input {
+.chat-input-row textarea {
   min-width: 0;
-  min-height: 40px;
-  padding: 9px 11px;
+  min-height: 64px;
+  max-height: 120px;
+  padding: 14px 14px;
   border: 1px solid #b8c9d8;
-  border-radius: 999px;
+  border-radius: 4px;
+  background: #ffffff;
   color: var(--ink);
+  resize: none;
+}
+
+.chat-send-button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  color: var(--blue-700);
+  background: transparent;
+  cursor: pointer;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.chat-send-button:hover {
+  color: var(--blue-950);
 }
 
 .calculator-benefits {
@@ -1761,7 +1923,8 @@ details.source-details summary {
   .result-grid,
   .form-grid,
   .learn-grid,
-  .needs-summary {
+  .needs-summary,
+  .risk-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1788,6 +1951,10 @@ details.source-details summary {
 
   .card-refine-cta {
     align-items: stretch;
+    flex-direction: column;
+  }
+
+  .rec-heading {
     flex-direction: column;
   }
 
@@ -1830,7 +1997,7 @@ details.source-details summary {
   }
 
   .chat-input-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) 42px;
   }
 
   .chat-popup,
@@ -2048,8 +2215,11 @@ details.source-details summary {
   <div class="chat-popup hidden" id="chatPopup" role="dialog" aria-label="Chat-avustaja">
     <div class="chat-window">
       <div class="chat-window-head">
-        <strong>Chat-avustaja</strong>
+        <strong>Chat</strong>
         <div class="chat-window-controls">
+          <button class="chat-icon-button" id="chatMinimize" type="button" aria-label="Pienennä chat" title="Pienennä">
+            <span aria-hidden="true">-</span>
+          </button>
           <button class="chat-icon-button" id="chatExpand" type="button" aria-label="Suurenna chat" title="Suurenna">
             <span aria-hidden="true">⛶</span>
           </button>
@@ -4261,6 +4431,7 @@ function bindEvents() {
   $("backToContact").addEventListener("click", () => openContact());
   $("restartFromSummary").addEventListener("click", () => resetAssessment("intro"));
   $("chatClose").addEventListener("click", () => closeChatPopup());
+  $("chatMinimize").addEventListener("click", () => closeChatPopup());
   $("chatExpand").addEventListener("click", () => toggleChatSize());
   $("chatLauncher").addEventListener("click", () => openChatPopup());
 }
@@ -4485,7 +4656,7 @@ function renderRecommendations() {
   const recommendation = st().recommendation || calculateScores(mode, st().quickAnswers, st().baseAnswers);
   st().recommendation = recommendation;
   $("resultsTitle").textContent = st().recommendationRefined ? "Tarkennetut suositukset" : "Alustavat suositukset";
-  $("resultsIntro").textContent = "Suositukset näkyvät vakuutusalueina. Voit avata jokaisesta tiivistelmän ja PDF-materiaalit, mutta hinta-arvio ja yhteydenotto pidetään sivupalkissa.";
+  $("resultsIntro").textContent = "Näet ensin tärkeimmät riskialueet ja vakuutusalueet. Voit tarkentaa vain niitä aiheita, jotka tuntuvat olennaisilta.";
   $("recommendationInsights").innerHTML = renderRecommendationInsights(recommendation);
 
   const buckets = recommendationBuckets(recommendation);
@@ -4556,14 +4727,14 @@ function renderRecommendationInsights(recommendation) {
           <h4>Vahvoja osumia ei vielä noussut</h4>
           <p class="muted">Voit silti tarkistaa yksittäisiä vakuutuksia tai pyytää asiantuntijaa arvioimaan tilanteen.</p>
         </div>
+        ${renderRiskProfile(recommendation)}
       </section>
     `;
   }
 
-  const top = relevant.slice(0, 5);
-  const reasonText = [...new Set(top.flatMap((item) => item.reasons.slice(0, 2)))].slice(0, 4);
+  const top = relevant.slice(0, 3);
   const summaryTitle = mode === "business"
-    ? "Yrityksesi kriittiset vakuutustarpeet"
+    ? "Yrityksesi tärkeimmät vakuutustarpeet"
     : "Tärkeimmät tunnistetut tarpeet";
   const summaryText = mode === "business"
     ? `Vastaustesi perusteella yrityksen vakuutustarpeet painottuvat erityisesti: ${top.map((item) => types()[item.key].title).join(", ")}.`
@@ -4575,14 +4746,57 @@ function renderRecommendationInsights(recommendation) {
         <p class="eyebrow compact">Tunnistetut tarpeet</p>
         <h4>${escapeHtml(summaryTitle)}</h4>
         <p>${escapeHtml(summaryText)}</p>
-        ${reasonText.length ? `<div class="need-reasons">${reasonText.map((reason) => `<span>${escapeHtml(capitalize(reason))}</span>`).join("")}</div>` : ""}
       </div>
       <div class="needs-next">
         <strong>Seuraavaksi</strong>
         <span>Avaa haluamasi vakuutusalue, tarkenna suosituksia vapaaehtoisesti tai jatka hinta-arvioon ja yhteydenottoon.</span>
       </div>
+      ${renderRiskProfile(recommendation)}
     </section>
   `;
+}
+
+function renderRiskProfile(recommendation) {
+  const profiles = mode === "business"
+    ? [
+        { title: "Omaisuusriski", keys: ["bizProperty"], hint: "Toimitilat, koneet ja varasto" },
+        { title: "Vastuuriski", keys: ["bizLiability"], hint: "Asiakastyö ja vahingonkorvausvastuut" },
+        { title: "Henkilöriski", keys: ["bizPeople"], hint: "Työntekijät ja avainhenkilöt" },
+        { title: "Jatkuvuusriski", keys: ["bizInterruption", "bizCyber"], hint: "Keskeytys ja tietoriskit" }
+      ]
+    : [
+        { title: "Koti ja omaisuus", keys: ["home", "apartment"], hint: "Asuminen, irtaimisto ja vapaa-ajan asunto" },
+        { title: "Liikkuminen", keys: ["vehicle", "travel"], hint: "Ajoneuvot ja matkustaminen" },
+        { title: "Henkilöturva", keys: ["health"], hint: "Terveys, tapaturmat ja läheiset" },
+        { title: "Arjen vastuut", keys: ["liability", "pet"], hint: "Vastuu, oikeusturva ja lemmikit" }
+      ];
+
+  const byKey = Object.fromEntries(recommendation.items.map((item) => [item.key, item]));
+  return `
+    <div class="risk-profile" aria-label="Riskiprofiili">
+      <p class="eyebrow compact">Riskiprofiili</p>
+      <div class="risk-grid">
+        ${profiles.map((profileItem) => {
+          const score = Math.max(0, ...profileItem.keys.map((key) => byKey[key]?.score || 0));
+          const level = riskLevel(score);
+          return `
+            <div class="risk-item ${level.className}">
+              <strong>${escapeHtml(profileItem.title)}</strong>
+              <span>${escapeHtml(level.label)}</span>
+              <small>${escapeHtml(profileItem.hint)}</small>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function riskLevel(score) {
+  if (score >= 8) return { label: "Korkea", className: "high" };
+  if (score >= 4) return { label: "Keskitaso", className: "medium" };
+  if (score > 0) return { label: "Tarkista", className: "check" };
+  return { label: "Matala", className: "low" };
 }
 
 function selectForPriceEstimate(typeKey) {
@@ -4622,26 +4836,33 @@ function renderRecommendationCard(item, bucketKey) {
   const canRefine = Boolean(meta.detailFlow && flow(meta.detailFlow));
 
   return `
-    <article class="rec-card">
+    <article class="rec-card compact">
       <div class="rec-main">
-        <div class="rec-area">${escapeHtml(meta.area)}</div>
-        <h4>${escapeHtml(meta.title)}</h4>
-        <p class="muted">${escapeHtml(meta.desc)}</p>
-        <div class="chip-row">
+        <div class="rec-heading">
+          <div>
+            <div class="rec-area">${escapeHtml(meta.area)}</div>
+            <h4>${escapeHtml(meta.title)}</h4>
+          </div>
           <span class="status-pill ${bucketKey === "primary" ? "primary" : bucketKey === "possible" ? "possible" : ""}">${escapeHtml(strength)}</span>
+        </div>
+        <p class="muted rec-desc">${escapeHtml(meta.desc)}</p>
+        <div class="chip-row">
           ${existing}
           ${comparisonLabel ? `<span class="status-pill possible">${escapeHtml(comparisonLabel)}</span>` : ""}
         </div>
-        <div class="reason-list">${reasons.slice(0, 3).map((reason) => `<div class="reason">${escapeHtml(capitalize(reason))}.</div>`).join("")}</div>
-        <details class="source-details">
+        <div class="reason-list concise">
+          <strong>Miksi tämä nousi?</strong>
+          <div class="reason">${escapeHtml(capitalize(reasons[0]))}.</div>
+        </div>
+        ${reasons.length > 1 ? `<details class="source-details">
           <summary>Perustuu näihin vastauksiin</summary>
           <p>${escapeHtml(reasons.join("; "))}</p>
-        </details>
+        </details>` : ""}
         ${renderRecommendationLearn(meta, item)}
         ${canRefine ? `
           <div class="card-refine-cta">
-            <button class="btn btn-primary btn-small" type="button" data-card-refine="${escapeHtml(meta.detailFlow)}">Tarkenna tätä vakuutusaluetta</button>
-            <span>Tarkentava kartoitus auttaa valitsemaan turvan rakenteen ja hinta-arvion pohjan.</span>
+            <button class="btn btn-primary btn-small" type="button" data-card-refine="${escapeHtml(meta.detailFlow)}">Tarkenna</button>
+            <span>Muutama lisäkysymys turvan rakenteesta.</span>
           </div>
         ` : ""}
       </div>
@@ -5293,18 +5514,21 @@ function renderCalculatorPanel() {
   const context = calculatorContext();
   const priceItems = selectedPriceItems();
   const selectedAreas = recommendationKeysForContact();
+  const missingDetails = selectedAreas
+    .filter((key) => types()[key]?.detailFlow && !st().detailResults[types()[key].detailFlow])
+    .slice(0, 4);
   if (!context.title && !priceItems.length) {
     panel.innerHTML = `
-      <p class="eyebrow compact">Hinta-arvion laskuri</p>
-      <h3>Yhteenveto</h3>
-      <p class="muted small">Kun vastaat kartoitukseen, tähän muodostuu vakuutuskohtainen hinta-arvion esinäkymä.</p>
+      <p class="eyebrow compact">Hinta-arvio</p>
+      <h3>Hinta-arvion pohja</h3>
+      <p class="muted small">Kun vastaat kartoitukseen, tähän kootaan aiheet ja puuttuvat tarkennukset LähiTapiolan laskuria tai asiantuntijaa varten.</p>
       <div class="calculator-actions stacked">
         <button class="btn btn-primary" type="button" data-calculator-start>Aloita kartoitus</button>
       </div>
       <ul class="calculator-benefits">
-        <li>Selkeä turvan laajuus ennen hinta-arviota</li>
-        <li>Vakuutusalueet mukaan yhteydenottoon</li>
-        <li>Kartoituksen tiedot kulkevat asiantuntijalle</li>
+        <li>Suositellut vakuutusalueet</li>
+        <li>Valitut tarkennukset</li>
+        <li>Yhteydenoton taustatiedot</li>
       </ul>
     `;
     bindCalculatorActions(panel);
@@ -5312,8 +5536,8 @@ function renderCalculatorPanel() {
   }
 
   panel.innerHTML = `
-    <p class="eyebrow compact">Hinta-arvion laskuri</p>
-    <h3>Yhteenveto</h3>
+    <p class="eyebrow compact">Hinta-arvio</p>
+    <h3>Hinta-arvion pohja</h3>
     ${context.title ? `
       <div class="calculator-side-card">
         <div class="calculator-product">
@@ -5321,22 +5545,14 @@ function renderCalculatorPanel() {
           <span>${escapeHtml(context.subtitle)}</span>
         </div>
         <div class="calculator-highlight">
-          <span>Hinta-arvio muodostetaan LähiTapiolan laskurissa</span>
+          <span>Siirtyisi LähiTapiolan laskuriin</span>
           <strong>${escapeHtml(context.recommended)}</strong>
-        </div>
-        <div class="calculator-total">
-          <span>Seuraava vaihe</span>
-          <strong>${escapeHtml(context.nextStep)}</strong>
-        </div>
-        <div class="calculator-actions stacked">
-          <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey)}">Pyydä tarkempi hinta-arvio</button>
-          <button class="btn btn-secondary" type="button" data-open-contact>Pyydä yhteydenottoa</button>
         </div>
       </div>
     ` : ""}
     ${selectedAreas.length ? `
       <div class="calculator-basket">
-        <strong>Suositellut vakuutusalueet</strong>
+        <strong>Mukana hinta-arvion pohjassa</strong>
         ${selectedAreas.map((key) => `
           <div class="basket-line">
             <span>${escapeHtml(types()[key].title)}</span>
@@ -5345,9 +5561,20 @@ function renderCalculatorPanel() {
         `).join("")}
       </div>
     ` : ""}
+    ${missingDetails.length ? `
+      <div class="calculator-basket pending">
+        <strong>Tarkennettavaa ennen hintaa</strong>
+        ${missingDetails.map((key) => `
+          <div class="basket-line">
+            <span>${escapeHtml(types()[key].title)}</span>
+            <small>Turvan rakenne tai laajuus kannattaa tarkentaa.</small>
+          </div>
+        `).join("")}
+      </div>
+    ` : ""}
     ${priceItems.length ? `
       <div class="calculator-basket">
-        <strong>Valittu hinta-arvioon</strong>
+        <strong>Tarkennetut valinnat</strong>
         ${priceItems.map((item) => `
           <div class="basket-line">
             <span>${escapeHtml(item.title)}</span>
@@ -5361,6 +5588,10 @@ function renderCalculatorPanel() {
         </div>
       </div>
     ` : ""}
+    <div class="calculator-actions stacked">
+      <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey || "")}">Siirry hinta-arvioon</button>
+      <button class="btn btn-secondary" type="button" data-open-contact>Pyydä asiantuntijan arvio</button>
+    </div>
     <ul class="calculator-benefits">
       <li>Suositus perustuu antamiisi vastauksiin</li>
       <li>Lopullinen hinta ja soveltuvuus varmistetaan laskurissa tai asiantuntijan kanssa</li>
@@ -5373,25 +5604,30 @@ function renderChatPanel() {
   const panel = $("chatPanel");
   if (!panel) return;
 
-  const context = chatContext();
   const messages = st().chatMessages;
+  const startedAt = new Date().toLocaleTimeString("fi-FI", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   panel.innerHTML = `
-    <p class="eyebrow compact">Kysymysapu</p>
-    <p class="muted small">Avustaja käyttää kartoituksen vastauksia taustana ja ohjaa tarvittaessa PDF-materiaaleihin, laskuriin tai asiantuntijalle.</p>
-    <div class="chat-suggestions">
-      ${context.suggestions.map((item) => `<button class="btn btn-secondary btn-small" type="button" data-chat-prompt="${escapeHtml(item)}">${escapeHtml(item)}</button>`).join("")}
-    </div>
-    <div class="chat-thread" aria-live="polite">
-      ${messages.length ? messages.map((message) => `
-        <div class="chat-message ${message.role === "user" ? "user" : "assistant"}">
-          <strong>${message.role === "user" ? "Sinä" : "Avustaja"}</strong>
-          <span>${escapeHtml(message.text)}</span>
+    <div class="chat-body" aria-live="polite">
+      <p class="chat-started">Chat-keskustelu aloitettu</p>
+      <div class="chat-line assistant">
+        <span class="chat-name">ChatJenni (chatbot)</span>
+        <div class="chat-bubble">Tervetuloa chat-palveluun! Miten voisimme olla avuksi?</div>
+        <span class="chat-time">${escapeHtml(startedAt)}</span>
+      </div>
+      ${messages.map((message) => `
+        <div class="chat-line ${message.role === "user" ? "user" : "assistant"}">
+          <span class="chat-name">${message.role === "user" ? "Sinä" : "ChatJenni (chatbot)"}</span>
+          <div class="chat-bubble">${escapeHtml(message.text)}</div>
         </div>
-      `).join("") : `<div class="chat-empty">Kysy esimerkiksi, miksi jokin vakuutus nousi esiin tai mitä turvatasojen ero tarkoittaa.</div>`}
+      `).join("")}
     </div>
-    <div class="chat-input-row">
-      <input id="chatInput" type="text" placeholder="Kirjoita kysymys vakuutuksista">
-      <button class="btn btn-primary btn-small" type="button" data-chat-send>Lähetä</button>
+    <div class="chat-compose">
+      <div class="chat-input-row">
+        <textarea id="chatInput" maxlength="110" rows="3" placeholder="Kirjoita viesti..."></textarea>
+        <button class="chat-send-button" type="button" data-chat-send aria-label="Lähetä viesti">➤</button>
+      </div>
+      <div class="chat-compose-meta"><span id="chatCounter">0</span>/110</div>
+      <p class="chat-save-note">Tallennamme käydyt chat-keskustelut. <a href="https://www.lahitapiola.fi/henkilo/tietosuoja/" target="_blank" rel="noopener noreferrer">Lue lisää</a></p>
     </div>
   `;
   bindChatActions(panel);
@@ -5429,18 +5665,18 @@ function updateChatExpandButton() {
 }
 
 function bindChatActions(panel) {
-  panel.querySelectorAll("[data-chat-prompt]").forEach((button) => {
-    button.addEventListener("click", () => addChatQuestion(button.dataset.chatPrompt || button.textContent || ""));
-  });
   panel.querySelector("[data-chat-send]")?.addEventListener("click", () => {
     const input = $("chatInput");
     addChatQuestion(input?.value || "");
   });
   panel.querySelector("#chatInput")?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       addChatQuestion(event.currentTarget.value || "");
     }
+  });
+  panel.querySelector("#chatInput")?.addEventListener("input", (event) => {
+    $("chatCounter").textContent = String(event.currentTarget.value.length);
   });
 }
 

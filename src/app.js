@@ -92,6 +92,7 @@ function bindEvents() {
   $("backToContact").addEventListener("click", () => openContact());
   $("restartFromSummary").addEventListener("click", () => resetAssessment("intro"));
   $("chatClose").addEventListener("click", () => closeChatPopup());
+  $("chatMinimize").addEventListener("click", () => closeChatPopup());
   $("chatExpand").addEventListener("click", () => toggleChatSize());
   $("chatLauncher").addEventListener("click", () => openChatPopup());
 }
@@ -316,7 +317,7 @@ function renderRecommendations() {
   const recommendation = st().recommendation || calculateScores(mode, st().quickAnswers, st().baseAnswers);
   st().recommendation = recommendation;
   $("resultsTitle").textContent = st().recommendationRefined ? "Tarkennetut suositukset" : "Alustavat suositukset";
-  $("resultsIntro").textContent = "Suositukset näkyvät vakuutusalueina. Voit avata jokaisesta tiivistelmän ja PDF-materiaalit, mutta hinta-arvio ja yhteydenotto pidetään sivupalkissa.";
+  $("resultsIntro").textContent = "Näet ensin tärkeimmät riskialueet ja vakuutusalueet. Voit tarkentaa vain niitä aiheita, jotka tuntuvat olennaisilta.";
   $("recommendationInsights").innerHTML = renderRecommendationInsights(recommendation);
 
   const buckets = recommendationBuckets(recommendation);
@@ -387,14 +388,14 @@ function renderRecommendationInsights(recommendation) {
           <h4>Vahvoja osumia ei vielä noussut</h4>
           <p class="muted">Voit silti tarkistaa yksittäisiä vakuutuksia tai pyytää asiantuntijaa arvioimaan tilanteen.</p>
         </div>
+        ${renderRiskProfile(recommendation)}
       </section>
     `;
   }
 
-  const top = relevant.slice(0, 5);
-  const reasonText = [...new Set(top.flatMap((item) => item.reasons.slice(0, 2)))].slice(0, 4);
+  const top = relevant.slice(0, 3);
   const summaryTitle = mode === "business"
-    ? "Yrityksesi kriittiset vakuutustarpeet"
+    ? "Yrityksesi tärkeimmät vakuutustarpeet"
     : "Tärkeimmät tunnistetut tarpeet";
   const summaryText = mode === "business"
     ? `Vastaustesi perusteella yrityksen vakuutustarpeet painottuvat erityisesti: ${top.map((item) => types()[item.key].title).join(", ")}.`
@@ -406,14 +407,57 @@ function renderRecommendationInsights(recommendation) {
         <p class="eyebrow compact">Tunnistetut tarpeet</p>
         <h4>${escapeHtml(summaryTitle)}</h4>
         <p>${escapeHtml(summaryText)}</p>
-        ${reasonText.length ? `<div class="need-reasons">${reasonText.map((reason) => `<span>${escapeHtml(capitalize(reason))}</span>`).join("")}</div>` : ""}
       </div>
       <div class="needs-next">
         <strong>Seuraavaksi</strong>
         <span>Avaa haluamasi vakuutusalue, tarkenna suosituksia vapaaehtoisesti tai jatka hinta-arvioon ja yhteydenottoon.</span>
       </div>
+      ${renderRiskProfile(recommendation)}
     </section>
   `;
+}
+
+function renderRiskProfile(recommendation) {
+  const profiles = mode === "business"
+    ? [
+        { title: "Omaisuusriski", keys: ["bizProperty"], hint: "Toimitilat, koneet ja varasto" },
+        { title: "Vastuuriski", keys: ["bizLiability"], hint: "Asiakastyö ja vahingonkorvausvastuut" },
+        { title: "Henkilöriski", keys: ["bizPeople"], hint: "Työntekijät ja avainhenkilöt" },
+        { title: "Jatkuvuusriski", keys: ["bizInterruption", "bizCyber"], hint: "Keskeytys ja tietoriskit" }
+      ]
+    : [
+        { title: "Koti ja omaisuus", keys: ["home", "apartment"], hint: "Asuminen, irtaimisto ja vapaa-ajan asunto" },
+        { title: "Liikkuminen", keys: ["vehicle", "travel"], hint: "Ajoneuvot ja matkustaminen" },
+        { title: "Henkilöturva", keys: ["health"], hint: "Terveys, tapaturmat ja läheiset" },
+        { title: "Arjen vastuut", keys: ["liability", "pet"], hint: "Vastuu, oikeusturva ja lemmikit" }
+      ];
+
+  const byKey = Object.fromEntries(recommendation.items.map((item) => [item.key, item]));
+  return `
+    <div class="risk-profile" aria-label="Riskiprofiili">
+      <p class="eyebrow compact">Riskiprofiili</p>
+      <div class="risk-grid">
+        ${profiles.map((profileItem) => {
+          const score = Math.max(0, ...profileItem.keys.map((key) => byKey[key]?.score || 0));
+          const level = riskLevel(score);
+          return `
+            <div class="risk-item ${level.className}">
+              <strong>${escapeHtml(profileItem.title)}</strong>
+              <span>${escapeHtml(level.label)}</span>
+              <small>${escapeHtml(profileItem.hint)}</small>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function riskLevel(score) {
+  if (score >= 8) return { label: "Korkea", className: "high" };
+  if (score >= 4) return { label: "Keskitaso", className: "medium" };
+  if (score > 0) return { label: "Tarkista", className: "check" };
+  return { label: "Matala", className: "low" };
 }
 
 function selectForPriceEstimate(typeKey) {
@@ -453,26 +497,33 @@ function renderRecommendationCard(item, bucketKey) {
   const canRefine = Boolean(meta.detailFlow && flow(meta.detailFlow));
 
   return `
-    <article class="rec-card">
+    <article class="rec-card compact">
       <div class="rec-main">
-        <div class="rec-area">${escapeHtml(meta.area)}</div>
-        <h4>${escapeHtml(meta.title)}</h4>
-        <p class="muted">${escapeHtml(meta.desc)}</p>
-        <div class="chip-row">
+        <div class="rec-heading">
+          <div>
+            <div class="rec-area">${escapeHtml(meta.area)}</div>
+            <h4>${escapeHtml(meta.title)}</h4>
+          </div>
           <span class="status-pill ${bucketKey === "primary" ? "primary" : bucketKey === "possible" ? "possible" : ""}">${escapeHtml(strength)}</span>
+        </div>
+        <p class="muted rec-desc">${escapeHtml(meta.desc)}</p>
+        <div class="chip-row">
           ${existing}
           ${comparisonLabel ? `<span class="status-pill possible">${escapeHtml(comparisonLabel)}</span>` : ""}
         </div>
-        <div class="reason-list">${reasons.slice(0, 3).map((reason) => `<div class="reason">${escapeHtml(capitalize(reason))}.</div>`).join("")}</div>
-        <details class="source-details">
+        <div class="reason-list concise">
+          <strong>Miksi tämä nousi?</strong>
+          <div class="reason">${escapeHtml(capitalize(reasons[0]))}.</div>
+        </div>
+        ${reasons.length > 1 ? `<details class="source-details">
           <summary>Perustuu näihin vastauksiin</summary>
           <p>${escapeHtml(reasons.join("; "))}</p>
-        </details>
+        </details>` : ""}
         ${renderRecommendationLearn(meta, item)}
         ${canRefine ? `
           <div class="card-refine-cta">
-            <button class="btn btn-primary btn-small" type="button" data-card-refine="${escapeHtml(meta.detailFlow)}">Tarkenna tätä vakuutusaluetta</button>
-            <span>Tarkentava kartoitus auttaa valitsemaan turvan rakenteen ja hinta-arvion pohjan.</span>
+            <button class="btn btn-primary btn-small" type="button" data-card-refine="${escapeHtml(meta.detailFlow)}">Tarkenna</button>
+            <span>Muutama lisäkysymys turvan rakenteesta.</span>
           </div>
         ` : ""}
       </div>
@@ -1124,18 +1175,21 @@ function renderCalculatorPanel() {
   const context = calculatorContext();
   const priceItems = selectedPriceItems();
   const selectedAreas = recommendationKeysForContact();
+  const missingDetails = selectedAreas
+    .filter((key) => types()[key]?.detailFlow && !st().detailResults[types()[key].detailFlow])
+    .slice(0, 4);
   if (!context.title && !priceItems.length) {
     panel.innerHTML = `
-      <p class="eyebrow compact">Hinta-arvion laskuri</p>
-      <h3>Yhteenveto</h3>
-      <p class="muted small">Kun vastaat kartoitukseen, tähän muodostuu vakuutuskohtainen hinta-arvion esinäkymä.</p>
+      <p class="eyebrow compact">Hinta-arvio</p>
+      <h3>Hinta-arvion pohja</h3>
+      <p class="muted small">Kun vastaat kartoitukseen, tähän kootaan aiheet ja puuttuvat tarkennukset LähiTapiolan laskuria tai asiantuntijaa varten.</p>
       <div class="calculator-actions stacked">
         <button class="btn btn-primary" type="button" data-calculator-start>Aloita kartoitus</button>
       </div>
       <ul class="calculator-benefits">
-        <li>Selkeä turvan laajuus ennen hinta-arviota</li>
-        <li>Vakuutusalueet mukaan yhteydenottoon</li>
-        <li>Kartoituksen tiedot kulkevat asiantuntijalle</li>
+        <li>Suositellut vakuutusalueet</li>
+        <li>Valitut tarkennukset</li>
+        <li>Yhteydenoton taustatiedot</li>
       </ul>
     `;
     bindCalculatorActions(panel);
@@ -1143,8 +1197,8 @@ function renderCalculatorPanel() {
   }
 
   panel.innerHTML = `
-    <p class="eyebrow compact">Hinta-arvion laskuri</p>
-    <h3>Yhteenveto</h3>
+    <p class="eyebrow compact">Hinta-arvio</p>
+    <h3>Hinta-arvion pohja</h3>
     ${context.title ? `
       <div class="calculator-side-card">
         <div class="calculator-product">
@@ -1152,22 +1206,14 @@ function renderCalculatorPanel() {
           <span>${escapeHtml(context.subtitle)}</span>
         </div>
         <div class="calculator-highlight">
-          <span>Hinta-arvio muodostetaan LähiTapiolan laskurissa</span>
+          <span>Siirtyisi LähiTapiolan laskuriin</span>
           <strong>${escapeHtml(context.recommended)}</strong>
-        </div>
-        <div class="calculator-total">
-          <span>Seuraava vaihe</span>
-          <strong>${escapeHtml(context.nextStep)}</strong>
-        </div>
-        <div class="calculator-actions stacked">
-          <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey)}">Pyydä tarkempi hinta-arvio</button>
-          <button class="btn btn-secondary" type="button" data-open-contact>Pyydä yhteydenottoa</button>
         </div>
       </div>
     ` : ""}
     ${selectedAreas.length ? `
       <div class="calculator-basket">
-        <strong>Suositellut vakuutusalueet</strong>
+        <strong>Mukana hinta-arvion pohjassa</strong>
         ${selectedAreas.map((key) => `
           <div class="basket-line">
             <span>${escapeHtml(types()[key].title)}</span>
@@ -1176,9 +1222,20 @@ function renderCalculatorPanel() {
         `).join("")}
       </div>
     ` : ""}
+    ${missingDetails.length ? `
+      <div class="calculator-basket pending">
+        <strong>Tarkennettavaa ennen hintaa</strong>
+        ${missingDetails.map((key) => `
+          <div class="basket-line">
+            <span>${escapeHtml(types()[key].title)}</span>
+            <small>Turvan rakenne tai laajuus kannattaa tarkentaa.</small>
+          </div>
+        `).join("")}
+      </div>
+    ` : ""}
     ${priceItems.length ? `
       <div class="calculator-basket">
-        <strong>Valittu hinta-arvioon</strong>
+        <strong>Tarkennetut valinnat</strong>
         ${priceItems.map((item) => `
           <div class="basket-line">
             <span>${escapeHtml(item.title)}</span>
@@ -1192,6 +1249,10 @@ function renderCalculatorPanel() {
         </div>
       </div>
     ` : ""}
+    <div class="calculator-actions stacked">
+      <button class="btn btn-primary" type="button" data-calculator-contact="${escapeHtml(context.detailKey || "")}">Siirry hinta-arvioon</button>
+      <button class="btn btn-secondary" type="button" data-open-contact>Pyydä asiantuntijan arvio</button>
+    </div>
     <ul class="calculator-benefits">
       <li>Suositus perustuu antamiisi vastauksiin</li>
       <li>Lopullinen hinta ja soveltuvuus varmistetaan laskurissa tai asiantuntijan kanssa</li>
@@ -1204,25 +1265,30 @@ function renderChatPanel() {
   const panel = $("chatPanel");
   if (!panel) return;
 
-  const context = chatContext();
   const messages = st().chatMessages;
+  const startedAt = new Date().toLocaleTimeString("fi-FI", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   panel.innerHTML = `
-    <p class="eyebrow compact">Kysymysapu</p>
-    <p class="muted small">Avustaja käyttää kartoituksen vastauksia taustana ja ohjaa tarvittaessa PDF-materiaaleihin, laskuriin tai asiantuntijalle.</p>
-    <div class="chat-suggestions">
-      ${context.suggestions.map((item) => `<button class="btn btn-secondary btn-small" type="button" data-chat-prompt="${escapeHtml(item)}">${escapeHtml(item)}</button>`).join("")}
-    </div>
-    <div class="chat-thread" aria-live="polite">
-      ${messages.length ? messages.map((message) => `
-        <div class="chat-message ${message.role === "user" ? "user" : "assistant"}">
-          <strong>${message.role === "user" ? "Sinä" : "Avustaja"}</strong>
-          <span>${escapeHtml(message.text)}</span>
+    <div class="chat-body" aria-live="polite">
+      <p class="chat-started">Chat-keskustelu aloitettu</p>
+      <div class="chat-line assistant">
+        <span class="chat-name">ChatJenni (chatbot)</span>
+        <div class="chat-bubble">Tervetuloa chat-palveluun! Miten voisimme olla avuksi?</div>
+        <span class="chat-time">${escapeHtml(startedAt)}</span>
+      </div>
+      ${messages.map((message) => `
+        <div class="chat-line ${message.role === "user" ? "user" : "assistant"}">
+          <span class="chat-name">${message.role === "user" ? "Sinä" : "ChatJenni (chatbot)"}</span>
+          <div class="chat-bubble">${escapeHtml(message.text)}</div>
         </div>
-      `).join("") : `<div class="chat-empty">Kysy esimerkiksi, miksi jokin vakuutus nousi esiin tai mitä turvatasojen ero tarkoittaa.</div>`}
+      `).join("")}
     </div>
-    <div class="chat-input-row">
-      <input id="chatInput" type="text" placeholder="Kirjoita kysymys vakuutuksista">
-      <button class="btn btn-primary btn-small" type="button" data-chat-send>Lähetä</button>
+    <div class="chat-compose">
+      <div class="chat-input-row">
+        <textarea id="chatInput" maxlength="110" rows="3" placeholder="Kirjoita viesti..."></textarea>
+        <button class="chat-send-button" type="button" data-chat-send aria-label="Lähetä viesti">➤</button>
+      </div>
+      <div class="chat-compose-meta"><span id="chatCounter">0</span>/110</div>
+      <p class="chat-save-note">Tallennamme käydyt chat-keskustelut. <a href="https://www.lahitapiola.fi/henkilo/tietosuoja/" target="_blank" rel="noopener noreferrer">Lue lisää</a></p>
     </div>
   `;
   bindChatActions(panel);
@@ -1231,8 +1297,9 @@ function renderChatPanel() {
 function openChatPopup() {
   $("chatPopup").classList.remove("hidden");
   $("chatLauncher").classList.add("hidden");
+  $("chatPopup").classList.toggle("expanded", Boolean(st().chatExpanded));
   $("chatPopup").querySelector(".chat-window")?.classList.toggle("expanded", Boolean(st().chatExpanded));
-  $("chatExpand").textContent = st().chatExpanded ? "Pienennä" : "Suurenna";
+  updateChatExpandButton();
   renderChatPanel();
   setTimeout(() => $("chatInput")?.focus(), 0);
   track("chat_opened", { mode });
@@ -1245,23 +1312,32 @@ function closeChatPopup() {
 
 function toggleChatSize() {
   st().chatExpanded = !st().chatExpanded;
+  $("chatPopup").classList.toggle("expanded", st().chatExpanded);
   $("chatPopup").querySelector(".chat-window")?.classList.toggle("expanded", st().chatExpanded);
-  $("chatExpand").textContent = st().chatExpanded ? "Pienennä" : "Suurenna";
+  updateChatExpandButton();
+}
+
+function updateChatExpandButton() {
+  const button = $("chatExpand");
+  if (!button) return;
+  button.setAttribute("aria-label", st().chatExpanded ? "Pienennä chat" : "Suurenna chat");
+  button.setAttribute("title", st().chatExpanded ? "Pienennä" : "Suurenna");
+  button.innerHTML = `<span aria-hidden="true">${st().chatExpanded ? "↙" : "⛶"}</span>`;
 }
 
 function bindChatActions(panel) {
-  panel.querySelectorAll("[data-chat-prompt]").forEach((button) => {
-    button.addEventListener("click", () => addChatQuestion(button.dataset.chatPrompt || button.textContent || ""));
-  });
   panel.querySelector("[data-chat-send]")?.addEventListener("click", () => {
     const input = $("chatInput");
     addChatQuestion(input?.value || "");
   });
   panel.querySelector("#chatInput")?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       addChatQuestion(event.currentTarget.value || "");
     }
+  });
+  panel.querySelector("#chatInput")?.addEventListener("input", (event) => {
+    $("chatCounter").textContent = String(event.currentTarget.value.length);
   });
 }
 
