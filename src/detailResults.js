@@ -11,6 +11,8 @@ export function buildDetailResult(profileId, flowKey, answers = {}) {
     health: buildHealthResult,
     life: buildLifeResult,
     pet: buildPetResult,
+    apartment: buildApartmentResult,
+    liability: buildLiabilityResult,
     bizProperty: buildBizPropertyResult,
     bizLiability: buildBizLiabilityResult,
     bizInterruption: buildBizInterruptionResult,
@@ -258,6 +260,60 @@ function buildPetResult(profileId, flowKey, a) {
     ["eläinlääkärikulut voivat olla merkittävä yllättävä meno, ja lisäturvat riippuvat eläinlajista, iästä ja käyttötarkoituksesta"],
     notes,
     "Tarkista eläimen ikä, terveystiedot, vakuutusmäärät, rajoitukset ja koiran vastuuvakuutuksen tarve."
+  );
+}
+
+function buildApartmentResult(profileId, flowKey, a) {
+  const objects = toArray(a.holidayObjects);
+  const level = a.holidayLevel === "unsure" || !a.holidayLevel ? "laaja" : a.holidayLevel;
+  const levelText = level === "laaja" ? "Laaja" : level === "perus" ? "Perus" : "Suppea";
+  const notes = [];
+
+  if (a.holidayUse === "rented") notes.push("Vuokrauskäyttö, vuokralaisten aiheuttamat vahingot ja vastuukysymykset pitää tarkistaa erikseen.");
+  if (a.holidayUse === "renovation") notes.push("Remontti- ja muutostyöt voivat vaikuttaa turvan laajuuteen ja suojeluohjeisiin.");
+  if (has(objects, "outbuildings")) notes.push("Piharakennusten, saunan ja muiden rakennelmien vakuutusmäärät kannattaa eritellä.");
+  if (has(objects, "tools")) notes.push("Harrastusvälineiden, työkalujen ja muun arvokkaamman irtaimiston enimmäismäärät kannattaa tarkistaa.");
+
+  return result(
+    "Vapaa-ajan asunnon ehdotus",
+    `${levelText} vapaa-ajan asunnolle`,
+    [
+      { label: "Käyttö", value: labelFor(profileId, flowKey, "holidayUse", a.holidayUse) },
+      { label: "Suojattavat kohteet", value: labelsFor(profileId, flowKey, "holidayObjects", objects) },
+      { label: "Valittu turvataso", value: levelText },
+      { label: "Omavastuun linja", value: labelFor(profileId, flowKey, "holidayDeductible", a.holidayDeductible) }
+    ],
+    ["vapaa-ajan asunnossa kannattaa erottaa rakennus, irtaimisto, pihapiirin kohteet ja mahdollinen vuokrauskäyttö"],
+    notes,
+    "Varmista rakennuksen tiedot, käyttökausi, piharakennukset, irtaimisto, vuokrauskäyttö, omavastuu ja turvataso."
+  );
+}
+
+function buildLiabilityResult(profileId, flowKey, a) {
+  const needs = toArray(a.liabilityNeeds);
+  const topics = [];
+  const notes = [];
+
+  if (has(needs, "personal_liability") || a.liabilityConcern === "damage") topics.push("Vastuuvahinkojen tarkistus");
+  if (has(needs, "legal") || a.liabilityConcern === "dispute") topics.push("Oikeusturvan tarkistus");
+  if (has(needs, "home_related")) topics.push("Asumiseen, vuokraamiseen tai remonttiin liittyvä vastuu");
+  if (has(needs, "family")) topics.push("Perheen ja lasten vastuutilanteet");
+  if (has(needs, "pet_related")) topics.push("Lemmikkiin liittyvät vastuutilanteet");
+  if (!topics.length) topics.push("Vastuu- ja oikeusturvan jatkoselvitys");
+  if (a.liabilityScope === "expert" || a.liabilityConcern === "unsure") notes.push("Koska tilanne on epäselvä, asiantuntijan arvio kannattaa ottaa mukaan ennen hinta-arviota.");
+  if (has(needs, "home_related")) notes.push("Asumiseen, remonttiin ja vuokraamiseen liittyvät rajaukset pitää tarkistaa vakuutusehdoista.");
+
+  return result(
+    "Vastuu- ja oikeusturvan ehdotus",
+    topics.join(" + "),
+    [
+      { label: "Tarkistettavat aiheet", value: labelsFor(profileId, flowKey, "liabilityNeeds", needs) },
+      { label: "Päähuoli", value: labelFor(profileId, flowKey, "liabilityConcern", a.liabilityConcern) },
+      { label: "Valittu etenemistapa", value: labelFor(profileId, flowKey, "liabilityScope", a.liabilityScope) }
+    ],
+    ["vastuu- ja oikeusturva kannattaa tarkistaa, jos arjen vahinko toiselle tai riitatilanne voisi aiheuttaa merkittävän kulun"],
+    notes,
+    "Varmista vakuutetut henkilöt, korvausrajat, omavastuut, riitatilanteiden rajaukset ja liittyykö turva kotivakuutukseen."
   );
 }
 
@@ -638,6 +694,20 @@ function chooseCoverageKeys(flowKey, a) {
       if (has(a.petNeeds, "use")) keys.push("kaytto");
       if ((a.petType === "dog" || a.petType === "both") && has(a.petNeeds, "liability")) keys.push("koiranVastuu");
       return picked(keys.length ? keys.slice(0, 3) : ["elainlaakari"], "Lemmikkivakuutuksen rakenne kannattaa valita eläinlääkärikulujen, eläimen iän ja mahdollisten lisäturvien perusteella.");
+    }
+    case "apartment": {
+      if (["suppea", "perus", "laaja"].includes(a.holidayLevel)) return picked([a.holidayLevel], `${labelLevel(a.holidayLevel)} vastaa valitsemaasi turvatasoa vapaa-ajan asunnolle.`);
+      if (a.holidayUse === "rented" || has(a.holidayObjects, "outbuildings") || has(a.holidayObjects, "tools")) {
+        return picked(["laaja"], "Laaja voisi sopia, koska vapaa-ajan asunnon rakennus, irtaimisto, pihapiiri tai vuokrauskäyttö voivat kasvattaa vahinkovaikutusta.");
+      }
+      return picked(["perus"], "Perus voi sopia, jos haluat suojata vapaa-ajan asunnon keskeiset vahingot ilman laajinta rikkoutumissuojaa.");
+    }
+    case "liability": {
+      if (a.liabilityScope === "expert" || a.liabilityConcern === "unsure") return picked(["expert"], "Asiantuntijan arvio voisi sopia, koska vastuu- tai oikeusturvatilanne ei ole vielä selvä.");
+      if (a.liabilityScope === "broader" || has(a.liabilityNeeds, "home_related") || has(a.liabilityNeeds, "pet_related") || has(a.liabilityNeeds, "legal")) {
+        return picked(["broader"], "Laajempi tarkistus voisi sopia, koska vastauksissa nousi esiin useampi vastuu- tai oikeusturvatilanne.");
+      }
+      return picked(["home_bundle"], "Kodin vakuutuksen yhteydessä tehtävä tarkistus voi riittää, jos kyse on tavallisista arjen vastuu- ja oikeusturvatilanteista.");
     }
     case "bizProperty": {
       const keys = [];

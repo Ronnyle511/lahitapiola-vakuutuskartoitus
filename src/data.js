@@ -14,10 +14,10 @@ export const profiles = {
     id: "personal",
     label: "Henkilöasiakas",
     heroTitle: "Löydä tilanteeseesi sopivat vakuutukset",
-    heroLead: "Vastaa lyhyesti elämäntilanteestasi, tutki perustellut suositukset ja jatka hinta-arvioon tai asiantuntijan yhteydenottoon.",
+    heroLead: "Vastaa muutamaan kysymykseen ja näe, mitä vakuutuksia tilanteessasi kannattaa tarkastella.",
     introTitle: "Aloita omasta tilanteestasi",
-    introText: "Kartoitus tunnistaa ensin olennaiset vakuutuslajit. Vasta sen jälkeen voit tarkentaa yksittäistä vakuutusta, kuten kotia, ajoneuvoa, matkaa, terveyttä, henkeä tai lemmikkiä.",
-    shortText: "Kysymme asumisesta, ajoneuvoista, matkoista, terveydestä, läheisistä, eläimistä, omaisuudesta ja taloudellisesta puskurista.",
+    introText: "Vastaa ensin perusasiat. Sen jälkeen näet lyhyet suositukset ja voit tarkentaa vain sinulle kiinnostavia vakuutuksia.",
+    shortText: "Kysymme vain perusasiat, jotta suositukset pysyvät nopeina ja helposti ymmärrettävinä.",
     detailText: "Syventävä vaihe antaa konkreettisen ehdotuksen turvatasosta, lisäturvista, omavastuusta ja jatkotarkistuksista.",
     layer1Chips: ["Asuminen", "Ajoneuvot", "Matkat", "Terveys", "Läheiset", "Eläimet", "Omaisuus"],
     layer2Chips: ["Koti", "Ajoneuvo", "Matka", "Terveys", "Henki", "Koira ja kissa"],
@@ -27,10 +27,10 @@ export const profiles = {
     id: "business",
     label: "Yritysasiakas",
     heroTitle: "Kartoita yrityksen vakuutustarpeet",
-    heroLead: "Vastaa muutamaan helppoon kysymykseen, näe yrityksen kriittiset vakuutustarpeet ja tarkenna vain ne osa-alueet, joista haluat hinta-arvion.",
+    heroLead: "Vastaa lyhyesti yrityksen tilanteesta ja näe, mitä vakuutusalueita kannattaa tarkastella.",
     introTitle: "Aloita yrityksen perustilanteesta",
-    introText: "Yrityspuolen ensimmäinen vaihe ei mene tuotteisiin liian syvälle. Se tunnistaa, liittyykö tilanteeseen omaisuutta, vastuita, henkilöstöä, keskeytysriskiä, ajoneuvoja, matkoja, kuljetuksia tai digitaalista riskiä.",
-    shortText: "Kysymme vain perustilanteesta: ihmisistä, toimitiloista, ajoneuvoista, asiakastyöstä, keskeytysvaikutuksesta, digitaalisuudesta ja nykyisistä vakuutuksista.",
+    introText: "Aloita helpoista perustiedoista. Tarkempiin valintoihin mennään vasta, jos jokin vakuutusalue on yrityksellesi olennainen.",
+    shortText: "Kysymme vain yrityksen perusasioista, kuten tiloista, ajoneuvoista, henkilöstöstä ja asiakastyöstä.",
     detailText: "Syventävä vaihe tarkentaa esimerkiksi vakuutettavaa omaisuutta, vastuun lähdettä, keskeytyksen syytä, kyberturvaa tai henkilöstöratkaisua.",
     layer1Chips: ["Yrityksen koko", "Ihmiset", "Toimitilat", "Ajoneuvot", "Asiakastyö", "Digitaalisuus", "Kassa"],
     layer2Chips: ["Omaisuus", "Vastuu", "Keskeytys", "Kyber", "Henkilöstö", "Ajoneuvot", "Matka", "Kuljetus"],
@@ -636,10 +636,12 @@ insuranceTypes.personal.pet.title = "Lemmikit";
 insuranceTypes.personal.apartment.title = "Vapaa-ajan asunto";
 insuranceTypes.personal.apartment.area = "Mökki ja vapaa-aika";
 insuranceTypes.personal.apartment.desc = "Vapaa-ajan asunnon, irtaimiston ja rakennuksen vakuutustarpeen tarkistus.";
+insuranceTypes.personal.apartment.detailFlow = "apartment";
 insuranceTypes.personal.liability = {
   title: "Vastuu ja oikeusturva",
   area: "Arjen vastuut",
   desc: "Vastuuvahinkojen ja oikeudellisten kulujen alustava tarkistus.",
+  detailFlow: "liability",
   materials: [
     m("Kotivakuutuksen materiaalit", MATERIAL_PAGES.personal, "page"),
     m("Yleiset sopimusehdot", GENERAL_TERMS_PERSONAL)
@@ -880,6 +882,25 @@ export const detailFlows = {
         q("petTravel", "Matkustaako eläin mukana ulkomailla?", "Voimassaolo vaihtelee alueen ja keston mukaan.", false, [["nordic", "Pohjoismaissa"], ["eu", "Muu EU, Iso-Britannia tai Sveitsi"], ["no", "Ei matkusta mukana"]]),
         q("petDeductible", "Mikä omavastuun taso tuntuu sopivalta?", "Eläinlääkärikulujen omavastuu tarkistetaan valittavasta turvasta.", false, [["low", "Matala omavastuu"], ["medium", "Keskitasoinen omavastuu"], ["higher", "Korkeampi omavastuu"]])
       ]
+    },
+    apartment: {
+      title: "Vapaa-ajan asunnon vakuutus",
+      sourceNote: "Perustuu kotivakuutuksen ja vapaa-ajan asunnon tuotetietoihin: rakennus, irtaimisto, pihapiiri, omavastuu ja turvan laajuus.",
+      questions: [
+        q("holidayUse", "Miten vapaa-ajan asuntoa käytetään?", "Käyttö vaikuttaa siihen, painottuuko rakennus, irtaimisto, vuokraus vai kausikäyttö.", false, [["seasonal", "Kausikäytössä omassa käytössä"], ["year_round", "Ympärivuotisessa käytössä"], ["rented", "Vuokraan kohdetta muille"], ["renovation", "Kohteessa tehdään remonttia tai muutostöitä"]]),
+        q("holidayObjects", "Mitä haluat suojata?", "Voit valita useamman.", true, [["building", "Vapaa-ajan asunnon rakennus"], ["contents", "Irtaimisto ja kalusteet"], ["outbuildings", "Sauna, vaja tai muut piharakennukset"], ["tools", "Työkalut, veneily- tai harrastusvälineet"], ["responsibility", "Vastuu- ja oikeusturva"]]),
+        q("holidayLevel", "Mikä turvataso kuulostaa sopivalta?", "Voit valita itse hinta-arvion pohjaksi sopivan laajuuden.", false, [["suppea", "Suppea"], ["perus", "Perus"], ["laaja", "Laaja"], ["unsure", "En osaa sanoa"]]),
+        q("holidayDeductible", "Mikä omavastuulinja tuntuu sopivalta?", "Omavastuu kannattaa suhteuttaa kohteen arvoon ja siihen, mitä vahinkoja haluat maksaa itse.", false, [["low", "Matala omavastuu"], ["medium", "Keskitasoinen omavastuu"], ["high", "Korkeampi omavastuu"]])
+      ]
+    },
+    liability: {
+      title: "Vastuu ja oikeusturva",
+      sourceNote: "Perustuu kotivakuutuksen yhteydessä tarkistettaviin vastuu- ja oikeusturvakysymyksiin sekä yleisiin sopimusehtoihin.",
+      questions: [
+        q("liabilityNeeds", "Mitä haluat tarkistaa?", "Valitse ne aiheet, joista haluat hinta-arvion tai asiantuntijan tarkistuksen taustatiedon.", true, [["personal_liability", "Vastuuvahinko toiselle henkilölle tai toisen omaisuudelle"], ["legal", "Oikeudenkäyntikulut tai riitatilanteet"], ["home_related", "Asumiseen, remonttiin tai vuokraamiseen liittyvät vastuut"], ["family", "Perheen tai lasten aiheuttamat vahingot"], ["pet_related", "Lemmikkiin liittyvät vastuutilanteet"]]),
+        q("liabilityConcern", "Mikä huolestuttaa eniten?", "Tämä auttaa valitsemaan, painottuuko yhteydenotossa vastuu vai oikeusturva.", false, [["damage", "Vahinko toiselle"], ["dispute", "Riita tai oikeudellinen asia"], ["both", "Molemmat"], ["unsure", "En osaa sanoa"]]),
+        q("liabilityScope", "Miten haluat jatkaa?", "Valitse vaihtoehto, joka siirtyy laskurin tai asiantuntijan tarkistuksen pohjaksi.", false, [["home_bundle", "Tarkistetaan kodin vakuutuksen yhteydessä"], ["broader", "Haluan laajemman vastuu- ja oikeusturvatarkistuksen"], ["expert", "Haluan asiantuntijan arvion"], ["unsure", "En osaa sanoa"]])
+      ]
     }
   },
   business: {
@@ -1089,6 +1110,28 @@ export const coverageModels = {
         option("henki", "Eläimen henkivakuutus", "Eläimen arvon turva", "Korvaa eläimen menetykseen liittyvää taloudellista arvoa ehtojen mukaan.", "Kun eläimen hankintahinta, jalostusarvo tai käyttöarvo on merkittävä.", "Sovittu vakuutusmäärä ehtojen mukaisessa kuolema- tai menetystilanteessa.", "Ei korvaa hoitokuluja ilman erillistä eläinlääkärikuluturvaa."),
         option("kaytto", "Käyttöominaisuusturva", "Käyttötarkoituksen turva", "Turvaa eläimen käyttötarkoitukseen liittyvää menetystä.", "Työ-, harrastus-, kilpailu- tai jalostuskäytössä olevalle eläimelle.", "Käyttöominaisuuden menetykseen liittyviä tilanteita ehtojen mukaan.", "Ei ole tarpeen tavalliselle kotilemmikille ilman erityistä käyttötarkoitusta."),
         option("koiranVastuu", "Koiran vastuuvakuutus", "Koiran aiheuttamien vahinkojen varalle", "Turvaa koiran ulkopuolisille aiheuttamia vahinkoja.", "Koiranomistajalle, jos vastuutilanteet mietityttävät.", "Henkilö- tai esinevahinkoja ehtojen mukaan.", "Koskee koiraa, ei kissaa.")
+      ]
+    },
+    apartment: {
+      label: "Turvatasot: Suppea, Perus ja Laaja",
+      title: "Vapaa-ajan asunnon turvatasojen vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Siirry vapaa-ajan asunnon hinta-arvioon, kun laskuri-integraatio on käytössä",
+      options: [
+        option("suppea", "Suppea", "Rajattu mökkiturva", "Varautuminen erityisesti vakavimpiin palo- ja luonnonilmiövahinkoihin.", "Kohteeseen, jossa halutaan suojata vain suurimpia riskejä ja irtaimiston arvo on pieni.", "Tyypillisesti palo-, myrsky-, rae- ja salamaniskuvahinkoja tuotekohtaisten ehtojen mukaan.", "Ei yleensä kata yhtä laajasti vuoto-, varkaus-, ilkivalta- tai rikkoutumisvahinkoja."),
+        option("perus", "Perus", "Keskeisten mökkiriskien turva", "Laajaa rajatumpi ratkaisu vapaa-ajan asunnolle ja siihen liittyvälle irtaimistolle.", "Kun halutaan kattaa mökin keskeisiä vahinkoja ilman laajinta rikkoutumissuojaa.", "Esimerkiksi palo-, myrsky-, vuoto-, varkaus- ja ilkivaltatilanteita ehtojen mukaan.", "Ei kata kaikkia äkillisiä rikkoutumisia samalla tavalla kuin Laaja."),
+        option("laaja", "Laaja", "Laajempi vapaa-ajan asunnon turva", "Kattavampi ratkaisu rakennukselle, irtaimistolle ja pihapiirin kohteille.", "Kun vapaa-ajan asunto, piharakennukset tai irtaimisto ovat taloudellisesti merkittäviä.", "Äkillisiä ja ennalta arvaamattomia vahinkoja sekä rikkoutumisia tuotekohtaisten ehtojen mukaan.", "Rajoitukset, ikävähennykset, omavastuut ja vuokrauskäyttö pitää tarkistaa.")
+      ]
+    },
+    liability: {
+      label: "Rakenne: vastuu ja oikeusturva",
+      title: "Vastuu- ja oikeusturvatarpeen vertailu",
+      notice: defaultNotice,
+      calculatorAction: "Pyydä vastuu- ja oikeusturvan hinta-arvio asiantuntijalta",
+      options: [
+        option("home_bundle", "Kodin vakuutuksen yhteydessä", "Arjen perustarkistus", "Vastuu- ja oikeusturvakysymykset tarkistetaan kodin vakuutuskokonaisuuden rinnalla.", "Kun tarve liittyy tavalliseen asumiseen, perheeseen tai arjen vahinkoihin.", "Vastuuvahinkoihin ja oikeudellisiin kuluihin liittyviä tilanteita sovitun kotivakuutuksen mukaan.", "Korvausrajat, omavastuut, riidan laatu ja vakuutetut henkilöt pitää tarkistaa."),
+        option("broader", "Laajempi vastuu- ja oikeusturvatarkistus", "Useamman tilanteen selvitys", "Asumiseen, vuokraamiseen, remontteihin, lemmikkeihin tai perheeseen liittyvät vastuut tarkistetaan tarkemmin.", "Kun vastauksissa korostuu useampi mahdollinen vastuutilanne tai oikeudellinen huoli.", "Useita vastuu- ja oikeusturvatilanteita tuotekohtaisten ehtojen mukaan.", "Ei tarkoita, että kaikki riidat tai sopimusvastuut kuuluvat turvaan."),
+        option("expert", "Asiantuntijan arvio", "Epäselvän tilanteen jatkoselvitys", "Tilanne viedään asiantuntijalle, jos oikea turva tai vastuun laajuus ei ole asiakkaalle selvä.", "Kun et ole varma, miten vastuu, oikeusturva tai olemassa oleva vakuutus soveltuu tilanteeseesi.", "Asiantuntija voi arvioida, mihin vakuutukseen tarkistus kannattaa liittää.", "Hinta ja soveltuvuus edellyttävät asiantuntijan tai laskurin tarkistusta.")
       ]
     }
   },

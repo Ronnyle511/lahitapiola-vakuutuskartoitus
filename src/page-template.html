@@ -59,7 +59,7 @@
     <section class="app-shell hidden" id="appShell" aria-labelledby="appTitle">
       <div class="app-panel">
         <div class="section">
-          <div class="navrow">
+          <div class="navrow clean-nav">
             <div>
               <p class="eyebrow compact" id="modeLabel"></p>
               <h2 id="appTitle">Kartoitus</h2>
@@ -81,7 +81,7 @@
           <div id="introView">
             <h3 id="introTitle"></h3>
             <p class="muted" id="introText"></p>
-            <div class="intro-grid">
+            <div class="intro-grid quiet-intro">
               <div class="intro-box"><h4>Lyhyt kartoitus</h4><p id="shortText"></p><div class="chip-row" id="shortChips"></div></div>
               <div class="intro-box"><h4>Tarkentava kartoitus</h4><p id="detailText"></p><div class="chip-row" id="detailChips"></div></div>
             </div>
@@ -93,6 +93,7 @@
           <div id="baseInfoView" class="hidden" aria-live="polite">
             <h3>Perustiedot</h3>
             <p class="muted" id="baseInfoIntro"></p>
+            <p class="flow-hint">Tämä vaihe kysytään vain kerran. Seuraavaksi vastaat muutamaan kyllä / ei / en osaa sanoa -kysymykseen.</p>
             <div class="form-grid base-info-grid" id="baseInfoFields"></div>
             <p class="form-error hidden" id="baseError"></p>
             <div class="actions">
@@ -102,6 +103,7 @@
           </div>
 
           <div id="questionView" class="hidden" aria-live="polite">
+            <p class="question-count" id="questionCount"></p>
             <h3 class="question-title" id="questionTitle"></h3>
             <p class="question-desc" id="questionDesc"></p>
             <div class="progress" aria-hidden="true"><div id="questionProgress"></div></div>
@@ -118,7 +120,7 @@
             <p class="muted" id="resultsIntro"></p>
             <div class="top-actions spaced">
               <button class="btn btn-secondary" id="restartAssessment" type="button">Tyhjennä kaikki</button>
-              <button class="btn btn-soft" id="contactFromResults" type="button">Pyydä yhteydenottoa</button>
+              <button class="btn btn-primary" id="contactFromResults" type="button">Jatka yhteydenottoon</button>
             </div>
             <div id="recommendationInsights"></div>
             <div id="recommendationBuckets"></div>
@@ -126,6 +128,7 @@
 
           <div id="detailView" class="hidden" aria-live="polite">
             <p class="eyebrow compact" id="detailSource"></p>
+            <p class="question-count" id="detailCount"></p>
             <h3 class="question-title" id="detailTitle"></h3>
             <p class="question-desc" id="detailDesc"></p>
             <div class="progress" aria-hidden="true"><div id="detailProgress"></div></div>
@@ -144,13 +147,15 @@
             <div class="top-actions spaced">
               <button class="btn btn-secondary" id="detailAgain" type="button">Tee tarkennus uudelleen</button>
               <button class="btn btn-soft" id="backToResults" type="button">Palaa suosituksiin</button>
-              <button class="btn btn-primary" id="contactFromDetail" type="button">Pyydä yhteydenottoa</button>
+              <button class="btn btn-primary" id="contactFromDetail" type="button">Jatka hinta-arvioon</button>
             </div>
           </div>
 
           <div id="contactView" class="hidden">
-            <h3>Yhteydenottopyyntö</h3>
-            <p class="muted">Suositellut vakuutusalueet ja kartoituksen vastaukset kulkevat mukana yhteydenottopyynnössä.</p>
+            <h3>Hinta-arvio ja yhteydenotto</h3>
+            <p class="muted">Valitut vakuutusalueet, tarkennukset ja kartoituksen vastaukset kulkevat mukana yhteydenottopyynnössä.</p>
+            <div id="contactPriceSummary"></div>
+            <h4 class="contact-subtitle">Mistä haluat keskustella?</h4>
             <div class="contact-list" id="contactChoices"></div>
             <div class="form-grid">
               <label class="field">Nimi <input id="contactName" autocomplete="name" required></label>

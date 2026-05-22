@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const root = dirname(fileURLToPath(new URL("../package.json", import.meta.url)));
 const src = (file) => readFileSync(join(root, file), "utf8");
 
-const html = src("index.html");
+const html = src("src/page-template.html");
 const css = src("src/styles.css");
 const jsFiles = [
   "src/data.js",
@@ -27,5 +27,6 @@ const standalone = html
   .replace('<script type="module" src="./src/app.js"></script>', `<script>\n${bundledJs}\n</script>`);
 
 mkdirSync(join(root, "dist"), { recursive: true });
+writeFileSync(join(root, "index.html"), standalone, "utf8");
 writeFileSync(join(root, "dist", "preview.html"), standalone, "utf8");
-console.log("dist/preview.html created");
+console.log("index.html and dist/preview.html created");
