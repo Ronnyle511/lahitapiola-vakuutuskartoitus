@@ -35,7 +35,7 @@ export function buildDetailResult(profileId, flowKey, answers = {}) {
       [{ label: "Tulos", value: "Syventävää logiikkaa ei ole vielä mallinnettu tälle vakuutukselle." }],
       ["suositus perustuu lyhyen kartoituksen vastauksiin"],
       [],
-      "Jatka hinta-arvioon ja varmista vakuutusmäärät, rajaukset ja omavastuut asiantuntijan kanssa."
+      "Jatka tarvittaessa asiantuntijan kanssa ja varmista vakuutusmäärät, rajaukset ja omavastuut."
     );
     return attachCoverageComparison(profileId, flowKey, answers, fallback);
   }
@@ -90,9 +90,7 @@ function buildHomeResult(profileId, flowKey, a) {
     { label: "Rooli", value: labelFor(profileId, flowKey, "role", a.role) },
     { label: "Vakuutettava kohde", value: labelFor(profileId, flowKey, "insuredObject", a.insuredObject) },
     { label: "Ehdotettu turvataso", value: levelText },
-    { label: "Lisäturvat", value: additions.length ? additions.join(", ") : "Ei erillistä lisäturvaa vastauksilla" },
-    { label: "Irtaimiston omavastuu", value: a.insuredObject === "building_only" ? "Ei ensisijainen" : labelFor(profileId, flowKey, "deductibleContents", a.deductibleContents) },
-    { label: "Rakennuksen omavastuu", value: a.insuredObject === "contents" ? "Ei ensisijainen" : labelFor(profileId, flowKey, "deductibleBuilding", a.deductibleBuilding) }
+    { label: "Lisäturvat", value: additions.length ? additions.join(", ") : "Ei erillistä lisäturvaa vastauksilla" }
   ];
 
   return result(
@@ -123,7 +121,6 @@ function buildVehicleResult(profileId, flowKey, a) {
     [
       { label: "Ajoneuvo", value: labelFor(profileId, flowKey, "vehicleType", a.vehicleType) },
       { label: "Ehdotettu rakenne", value: additions.join(", ") },
-      { label: "Omavastuun linja", value: labelFor(profileId, flowKey, "vehicleDeductible", a.vehicleDeductible) },
       { label: "Ulkomaankäyttö", value: labelFor(profileId, flowKey, "abroadVehicle", a.abroadVehicle) }
     ],
     ["liikennevakuutus on ajoneuvolle lakisääteinen, ja kasko mitoitetaan ajoneuvon arvoon sekä vahinkohuoliin"],
@@ -168,8 +165,7 @@ function buildTravelResult(profileId, flowKey, a) {
       { label: "Matkustamisen tyyppi", value: labelFor(profileId, flowKey, "tripPattern", a.tripPattern) },
       { label: "Ehdotettu sopimusmuoto", value: contractType },
       { label: "Ehdotetut turvat", value: covers.join(", ") },
-      { label: "Matkustajat", value: labelFor(profileId, flowKey, "travelers", a.travelers) },
-      { label: "Matkatavaroiden omavastuu", value: labelFor(profileId, flowKey, "travelDeductible", a.travelDeductible) }
+      { label: "Matkustajat", value: labelFor(profileId, flowKey, "travelers", a.travelers) }
     ],
     ["matkaturva kannattaa sovittaa matkojen toistuvuuteen, kestoon ja siihen, tarvitaanko jatkuva vai matkakohtainen vakuutus"],
     notes,
@@ -198,7 +194,6 @@ function buildHealthResult(profileId, flowKey, a) {
     [
       { label: "Kohdehenkilö", value: labelFor(profileId, flowKey, "healthTarget", a.healthTarget) },
       { label: "Ehdotetut turvat", value: covers.join(", ") },
-      { label: "Sairauden hoitoturvan omavastuu", value: labelFor(profileId, flowKey, "healthDeductible", a.healthDeductible) },
       { label: "Tarkistettavat rajat", value: labelsFor(profileId, flowKey, "healthLimits", a.healthLimits) }
     ],
     ["terveysturvan rakenne kannattaa erottaa sairauteen, tapaturmaan, urheiluun ja toimeentuloon liittyviin tarpeisiin"],
@@ -254,8 +249,7 @@ function buildPetResult(profileId, flowKey, a) {
     [
       { label: "Eläin", value: labelFor(profileId, flowKey, "petType", a.petType) },
       { label: "Ikä", value: labelFor(profileId, flowKey, "petAge", a.petAge) },
-      { label: "Ehdotetut turvat", value: covers.join(", ") },
-      { label: "Omavastuun linja", value: labelFor(profileId, flowKey, "petDeductible", a.petDeductible) }
+      { label: "Ehdotetut turvat", value: covers.join(", ") }
     ],
     ["eläinlääkärikulut voivat olla merkittävä yllättävä meno, ja lisäturvat riippuvat eläinlajista, iästä ja käyttötarkoituksesta"],
     notes,
@@ -280,8 +274,7 @@ function buildApartmentResult(profileId, flowKey, a) {
     [
       { label: "Käyttö", value: labelFor(profileId, flowKey, "holidayUse", a.holidayUse) },
       { label: "Suojattavat kohteet", value: labelsFor(profileId, flowKey, "holidayObjects", objects) },
-      { label: "Valittu turvataso", value: levelText },
-      { label: "Omavastuun linja", value: labelFor(profileId, flowKey, "holidayDeductible", a.holidayDeductible) }
+      { label: "Valittu turvataso", value: levelText }
     ],
     ["vapaa-ajan asunnossa kannattaa erottaa rakennus, irtaimisto, pihapiirin kohteet ja mahdollinen vuokrauskäyttö"],
     notes,
@@ -300,7 +293,7 @@ function buildLiabilityResult(profileId, flowKey, a) {
   if (has(needs, "family")) topics.push("Perheen ja lasten vastuutilanteet");
   if (has(needs, "pet_related")) topics.push("Lemmikkiin liittyvät vastuutilanteet");
   if (!topics.length) topics.push("Vastuu- ja oikeusturvan jatkoselvitys");
-  if (a.liabilityScope === "expert" || a.liabilityConcern === "unsure") notes.push("Koska tilanne on epäselvä, asiantuntijan arvio kannattaa ottaa mukaan ennen hinta-arviota.");
+  if (a.liabilityScope === "expert" || a.liabilityConcern === "unsure") notes.push("Koska tilanne on epäselvä, asiantuntijan arvio kannattaa ottaa mukaan ennen jatkopäätöstä.");
   if (has(needs, "home_related")) notes.push("Asumiseen, remonttiin ja vuokraamiseen liittyvät rajaukset pitää tarkistaa vakuutusehdoista.");
 
   return result(
@@ -336,8 +329,7 @@ function buildBizPropertyResult(profileId, flowKey, a) {
     [
       { label: "Vakuutettava omaisuus", value: labelsFor(profileId, flowKey, "propertyAssets", assets) },
       { label: "Kohteen hallinta", value: labelFor(profileId, flowKey, "propertyControl", a.propertyControl) },
-      { label: "Ehdotettu rakenne", value: [...new Set(products)].join(", ") },
-      { label: "Omavastuun linja", value: labelFor(profileId, flowKey, "propertyDeductible", a.propertyDeductible) }
+      { label: "Ehdotettu rakenne", value: [...new Set(products)].join(", ") }
     ],
     ["omaisuusturva kannattaa rakentaa sen mukaan, mitä yritys omistaa, vuokraa tai käyttää toiminnassaan"],
     notes,
@@ -577,8 +569,7 @@ function buildBizRealEstateResult(profileId, flowKey, a) {
     [
       { label: "Kohde", value: labelFor(profileId, flowKey, "realEstateType", a.realEstateType) },
       { label: "Rooli", value: labelFor(profileId, flowKey, "realEstateRole", a.realEstateRole) },
-      { label: "Ehdotettu rakenne", value: products.join(", ") },
-      { label: "Omavastuun linja", value: labelFor(profileId, flowKey, "realEstateDeductible", a.realEstateDeductible) }
+      { label: "Ehdotettu rakenne", value: products.join(", ") }
     ],
     ["kiinteistöturva pitää sovittaa rakennuksen käyttötarkoitukseen, omistajan vastuisiin ja vuokratuottoriskiin"],
     notes,

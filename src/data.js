@@ -14,11 +14,11 @@ export const profiles = {
     id: "personal",
     label: "Henkilöasiakas",
     heroTitle: "Löydä tilanteeseesi sopivat vakuutukset",
-    heroLead: "Vastaa muutamaan kysymykseen ja näe, mitä vakuutuksia tilanteessasi kannattaa tarkastella.",
+    heroLead: "Kerro elämäntilanteesi perustiedot ja näe heti, millainen vakuutuskokonaisuus voisi sopia sinulle.",
     introTitle: "Aloita omasta tilanteestasi",
-    introText: "Vastaa ensin perusasiat. Sen jälkeen näet lyhyet suositukset ja voit tarkentaa vain sinulle kiinnostavia vakuutuksia.",
-    shortText: "Kysymme vain perusasiat, jotta suositukset pysyvät nopeina ja helposti ymmärrettävinä.",
-    detailText: "Syventävä vaihe antaa konkreettisen ehdotuksen turvatasosta, lisäturvista, omavastuusta ja jatkotarkistuksista.",
+    introText: "Anna ensin elämäntilanteesi perustiedot. Saat heti alustavan kokonaisuuden, jota voit halutessasi tarkentaa.",
+    shortText: "Ikäryhmä, asumismuoto ja elämäntilanne riittävät alustavan kokonaisuuden muodostamiseen.",
+    detailText: "Syventävä vaihe antaa konkreettisen ehdotuksen turvatasosta, lisäturvista ja jatkotarkistuksista.",
     layer1Chips: ["Asuminen", "Ajoneuvot", "Matkat", "Terveys", "Läheiset", "Eläimet", "Omaisuus"],
     layer2Chips: ["Koti", "Ajoneuvo", "Matka", "Terveys", "Henki", "Koira ja kissa"],
     materialsIntro: "Hinta-arvio muodostetaan laskuri-integraatiossa tai asiantuntijan kanssa."
@@ -27,12 +27,12 @@ export const profiles = {
     id: "business",
     label: "Yritysasiakas",
     heroTitle: "Kartoita yrityksen vakuutustarpeet",
-    heroLead: "Vastaa lyhyesti yrityksen tilanteesta ja näe, mitä vakuutusalueita kannattaa tarkastella.",
+    heroLead: "Valitse yrityksen toimiala ja vastaa muutamaan arjen toimintaan liittyvään kysymykseen. Saat selkeän kuvan siitä, mitä vakuutusalueita kannattaa ymmärtää paremmin.",
     introTitle: "Aloita yrityksen perustilanteesta",
-    introText: "Aloita helpoista perustiedoista. Tarkempiin valintoihin mennään vasta, jos jokin vakuutusalue on yrityksellesi olennainen.",
-    shortText: "Kysymme vain yrityksen perusasioista, kuten tiloista, ajoneuvoista, henkilöstöstä ja asiakastyöstä.",
+    introText: "Aloita toimialasta ja muutamasta kyllä/ei-kysymyksestä. Tarkempiin vakuutuskohtaisiin valintoihin mennään vain halutessasi.",
+    shortText: "Toimiala, ihmiset, toimitilat, omaisuus, ajoneuvot, matkustaminen ja digitaalisuus auttavat hahmottamaan vakuutusalueet.",
     detailText: "Syventävä vaihe tarkentaa esimerkiksi vakuutettavaa omaisuutta, vastuun lähdettä, keskeytyksen syytä, kyberturvaa tai henkilöstöratkaisua.",
-    layer1Chips: ["Yrityksen koko", "Ihmiset", "Toimitilat", "Ajoneuvot", "Asiakastyö", "Digitaalisuus", "Kassa"],
+    layer1Chips: ["Toimiala", "Ihmiset", "Toimitilat", "Omaisuus", "Ajoneuvot", "Matkustaminen", "Digitaalisuus"],
     layer2Chips: ["Omaisuus", "Vastuu", "Keskeytys", "Kyber", "Henkilöstö", "Ajoneuvot", "Matka", "Kuljetus"],
     materialsIntro: "Hinta-arvio muodostetaan laskuri-integraatiossa tai asiantuntijan kanssa."
   }
@@ -327,6 +327,7 @@ export const quickQuestions = {
       id: "housing",
       title: "Onko sinulla koti, omistusasunto, vuokra-asunto, omakotitalo tai vapaa-ajan asunto?",
       desc: "Kotivakuutuksen tarkennuksessa selvitetään myöhemmin, oletko vuokralainen, omistaja, vuokranantaja tai mökin omistaja.",
+      showIf: { base: { livingType: ["other"] } },
       options: [
         { value: "yes", label: "Kyllä", scores: { home: score(8, "asumiseen liittyvä irtaimisto, vastuu, oikeusturva tai rakennus kannattaa tarkistaa") } },
         { value: "no", label: "Ei" }
@@ -363,6 +364,7 @@ export const quickQuestions = {
       id: "family",
       title: "Onko joku taloudellisesti riippuvainen sinusta?",
       desc: "Tämä voi nostaa esiin läheisten taloudellisen turvan ja henkivakuutuksen tarkistuksen.",
+      showIf: { base: { ageGroup: { not: ["under18"] } } },
       options: [
         { value: "yes", label: "Kyllä", scores: { life: score(8, "läheisiä on taloudellisesti riippuvaisia tuloistasi") } },
         { value: "no", label: "Ei" }
@@ -390,6 +392,7 @@ export const quickQuestions = {
       id: "children",
       title: "Onko perheessä raskaus, lapsi tai lapsen vakuutusturva ajankohtainen?",
       desc: "Tarkennus voidaan tehdä myöhemmin, jos aihe nousee sinulle ajankohtaiseksi.",
+      showIf: { base: { ageGroup: { not: ["under18", "over65"] } } },
       options: [
         { value: "yes", label: "Kyllä", scores: { pregnancy: score(4, "raskaus tai lapsen turva voi olla ajankohtainen"), childSerious: score(4, "lapsen vakavan sairauden turva voi olla hyvä tarkistaa"), health: score(2, "perheen terveys- ja tapaturmaturvat voivat olla ajankohtaisia") } },
         { value: "no", label: "Ei" }
@@ -398,7 +401,7 @@ export const quickQuestions = {
     {
       id: "shock",
       title: "Olisiko iso yllättävä kulu vaikea maksaa itse?",
-      desc: "Tämä auttaa arvioimaan, pitäisikö turvan laajuutta tai omavastuuta tarkastella tarkemmin.",
+      desc: "Tämä auttaa arvioimaan, pitäisikö turvan laajuutta tarkastella tarkemmin.",
       options: [
         { value: "yes", label: "Kyllä", scores: { home: score(2, "iso yllättävä kulu olisi vaikea maksaa itse"), vehicle: score(2, "iso yllättävä kulu olisi vaikea maksaa itse"), health: score(2, "iso yllättävä kulu olisi vaikea maksaa itse"), travel: score(2, "iso yllättävä kulu olisi vaikea maksaa itse"), life: score(2, "iso yllättävä kulu olisi vaikea maksaa itse"), pet: score(2, "iso yllättävä kulu olisi vaikea maksaa itse") } },
         { value: "no", label: "Ei" }
@@ -419,6 +422,7 @@ export const quickQuestions = {
       id: "companySize",
       title: "Onko yrityksellä työntekijöitä?",
       desc: "Työntekijät nostavat esiin lakisääteiset ja henkilöstöön liittyvät vakuutustarkistukset.",
+      showIf: false,
       options: [
         { value: "yes", label: "Kyllä", scores: { bizPeople: score(8, "yrityksellä on työntekijöitä, jolloin henkilöstö- ja työtapaturmariskit pitää tarkistaa") } },
         { value: "no", label: "Ei" }
@@ -491,6 +495,7 @@ export const quickQuestions = {
       id: "cargo",
       title: "Kuljettaako yritys omaa tavaraa, asiakkaan tavaraa tai myytäviä tuotteita?",
       desc: "Kuljetukset nostavat esiin tavarankuljetus- ja kuljetusvastuuriskin.",
+      showIf: { base: { industry: ["logistics", "grocery", "commerce", "restaurant", "manufacturing", "construction", "automotive", "other"] } },
       options: [
         { value: "yes", label: "Kyllä", scores: { bizCargo: score(8, "yritys kuljettaa tavaraa tai vastaa kuljetettavasta omaisuudesta") } },
         { value: "no", label: "Ei" }
@@ -500,6 +505,7 @@ export const quickQuestions = {
       id: "construction",
       title: "Tehdäänkö yrityksessä rakennus-, asennus-, korjaus- tai projektitöitä?",
       desc: "Työmaa- ja projektiriskit tarkennetaan vasta syventävässä vaiheessa.",
+      showIf: { base: { industry: ["construction", "other"] } },
       options: [
         { value: "yes", label: "Kyllä", scores: { bizConstruction: score(8, "rakennus-, asennus- tai projektityö voi vaatia kohdekohtaisen vakuutustarkistuksen"), bizLiability: score(3, "työmaalla voi syntyä vastuita asiakkaalle tai sivulliselle"), bizProperty: score(2, "työkalut ja materiaalit voivat tarvita omaisuusturvaa") } },
         { value: "no", label: "Ei" }
@@ -509,6 +515,7 @@ export const quickQuestions = {
       id: "realEstate",
       title: "Omistaako yritys kiinteistön, rakennuksen tai vuokrattavan kohteen?",
       desc: "Kiinteistöön liittyvät vakuutukset tarkennetaan erikseen, jos aihe on ajankohtainen.",
+      showIf: { base: { industry: ["realEstate", "agriculture", "other"] } },
       options: [
         { value: "yes", label: "Kyllä", scores: { bizRealEstate: score(8, "yrityksellä on kiinteistö, rakennus tai vuokrattava kohde"), bizInterruption: score(2, "vuokratuoton tai tilan käytön keskeytys voi olla riski") } },
         { value: "no", label: "Ei" }
@@ -518,6 +525,7 @@ export const quickQuestions = {
       id: "patient",
       title: "Tarjoaako yritys terveyden-, sairaanhoidon, hoivan tai kuntoutuksen palveluja?",
       desc: "Tietyissä sote- ja terveyspalveluissa potilasvakuutus pitää tarkistaa.",
+      showIf: { base: { industry: ["healthcare", "other"] } },
       options: [
         { value: "yes", label: "Kyllä", scores: { bizPatient: score(8, "terveyden- tai sairaanhoidon toiminta voi edellyttää potilasvakuutuksen tarkistusta"), bizLiability: score(3, "sote- ja hoivapalveluissa toiminnan vastuut kannattaa tarkistaa") } },
         { value: "no", label: "Ei" }
@@ -587,6 +595,90 @@ export const baseQuestions = {
         { value: "service", label: "Varusmies- tai siviilipalveluksessa" },
         { value: "other", label: "Muu, mikä?", scores: { health: score(1, "työ- tai elämäntilanne kannattaa huomioida henkilövakuutuksissa") } }
       ]
+    },
+    {
+      id: "hasChildren",
+      title: "Onko taloudessasi lapsia tai onko lapsen vakuutusturva ajankohtainen?",
+      desc: "Tämä auttaa tunnistamaan, pitäisikö perheen terveys-, tapaturma- tai läheisten taloudellista turvaa avata tarkemmin.",
+      layout: "icon-question",
+      icon: "children",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { health: score(6, "taloudessa on lapsia, joten perheen henkilövakuutukset kannattaa tarkistaa"), life: score(2, "lasten taloudellinen turva voi olla hyvä tarkistaa") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { health: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "hasPersonalVehicle",
+      title: "Onko sinulla auto, moottoripyörä, mopo tai muu ajoneuvo?",
+      desc: "Ajoneuvo voi nostaa esiin liikennevakuutuksen ja vapaaehtoisen kaskon tarkistuksen.",
+      layout: "icon-question",
+      icon: "vehicle",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { vehicle: score(8, "ajoneuvo nostaa esiin liikennevakuutuksen ja vapaaehtoisen kaskon tarkistuksen") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { vehicle: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "travelsRegularly",
+      title: "Matkustatko ulkomaille tai pidemmille kotimaanmatkoille?",
+      desc: "Matkustaminen voi nostaa esiin jatkuvan tai matkakohtaisen matkavakuutuksen tarkistuksen.",
+      layout: "icon-question",
+      icon: "travel",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { travel: score(8, "matkustaminen nostaa esiin matkustajan, matkatavaroiden ja peruutustilanteiden turvan"), home: score(1, "matkatavaroiden suhde kotivakuutukseen kannattaa tarkistaa") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { travel: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "healthCoverInterest",
+      title: "Haluatko ymmärtää terveys-, tapaturma- tai toimeentuloturvaa paremmin?",
+      desc: "Tämän avulla voidaan avata, millaisia henkilövakuutuksia tilanteessasi voisi olla hyödyllistä tarkastella.",
+      layout: "icon-question",
+      icon: "health",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { health: score(8, "terveys- tai tapaturmaturva kiinnostaa ja sen sisältö kannattaa tarkentaa") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { health: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "financialDependents",
+      title: "Onko joku taloudellisesti riippuvainen sinusta?",
+      desc: "Tämä voi nostaa esiin läheisten taloudellisen turvan ja henkivakuutuksen tarkistuksen.",
+      layout: "icon-question",
+      icon: "life",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { life: score(8, "läheisiä on taloudellisesti riippuvaisia tuloistasi") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { life: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "hasPets",
+      title: "Onko sinulla koira, kissa tai muu vakuutettava lemmikki?",
+      desc: "Lemmikki voi nostaa esiin eläinlääkärikulujen ja mahdollisten lisäturvien tarkistuksen.",
+      layout: "icon-question",
+      icon: "pet",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { pet: score(8, "lemmikki nostaa esiin eläinlääkärikulujen ja mahdollisten lisäturvien tarkistuksen") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { pet: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "valuableOrLeisureProperty",
+      title: "Onko sinulla arvokasta irtaimistoa, harrastusvälineitä, mökki, vene tai muuta vapaa-ajan omaisuutta?",
+      desc: "Tämä auttaa tunnistamaan, pitäisikö kodin, tavaroiden tai vapaa-ajan omaisuuden turvaa avata tarkemmin.",
+      layout: "icon-question",
+      icon: "property",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { home: score(5, "arvokas irtaimisto nostaa esiin kodin ja tavaroiden turvan tarkistuksen"), apartment: score(3, "mökki tai vapaa-ajan omaisuus kannattaa tarkistaa erillisenä vakuutusalueena"), boat: score(2, "vene tai muu vapaa-ajan omaisuus voi tarvita oman tarkistuksen") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { home: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
     }
   ],
   business: [
@@ -595,31 +687,118 @@ export const baseQuestions = {
       title: "Toimiala",
       otherLabel: "Kuvaile toimiala lyhyesti",
       options: [
-        { value: "construction", label: "Rakentaminen ja remontointi", scores: { bizProperty: score(4, "rakentamisessa omaisuus ja työmaat kannattaa tarkistaa"), bizLiability: score(4, "rakentamisessa vastuu ja oikeusturva korostuvat") } },
+        { value: "professional", label: "IT, ohjelmisto, asiantuntija- ja konsultointipalvelut", scores: { bizCyber: score(5, "digitaalisessa ja asiantuntijatyössä kyber- ja tietoriskit korostuvat"), bizLiability: score(5, "asiantuntijatyössä vastuu asiakkaalle kannattaa tarkistaa") } },
+        { value: "beauty", label: "Parturi, kampaamo, kauneus ja hyvinvointi", scores: { bizProperty: score(4, "liiketila, työvälineet ja tuotteet voivat olla toiminnalle tärkeitä"), bizLiability: score(4, "asiakkaalle tehtävässä palvelussa vastuut kannattaa tarkistaa") } },
+        { value: "restaurant", label: "Ravintola, kahvila ja elintarvikeala", scores: { bizProperty: score(5, "toimitila, laitteet ja varasto voivat olla toiminnalle tärkeitä"), bizLiability: score(4, "asiakas- ja tuotevastuut kannattaa tarkistaa"), bizInterruption: score(4, "toiminnan keskeytys voi vaikuttaa nopeasti tuloihin") } },
+        { value: "grocery", label: "Ruokakauppa, kioski ja kivijalkakauppa", scores: { bizProperty: score(5, "myymälä, varasto ja tuotteet kannattaa tarkistaa"), bizLiability: score(3, "tuotevastuu ja asiakkaisiin liittyvät riskit kannattaa tarkistaa") } },
+        { value: "commerce", label: "Kauppa ja verkkokauppa", scores: { bizProperty: score(4, "varasto ja myytävät tuotteet kannattaa tarkistaa"), bizLiability: score(3, "tuotevastuu kannattaa tarkistaa"), bizCyber: score(3, "verkkokauppa ja maksaminen nostavat esiin tietoriskit") } },
+        { value: "construction", label: "Rakennus, asennus ja huolto", scores: { bizProperty: score(4, "rakentamisessa omaisuus ja työmaat kannattaa tarkistaa"), bizLiability: score(4, "rakentamisessa vastuu ja oikeusturva korostuvat") } },
         { value: "logistics", label: "Kuljetus ja logistiikka", scores: { bizVehicle: score(5, "kuljetus ja logistiikka nostaa esiin ajoneuvot ja kuljetusvastuut") } },
-        { value: "food", label: "Ravintola, kahvila tai elintarvikeala", scores: { bizProperty: score(4, "toimitila, laitteet ja varasto voivat olla toiminnalle tärkeitä"), bizLiability: score(3, "asiakas- ja tuotevastuut kannattaa tarkistaa") } },
-        { value: "retail", label: "Kauppa ja vähittäismyynti", scores: { bizProperty: score(4, "varasto ja myytävät tuotteet kannattaa tarkistaa"), bizLiability: score(3, "tuotevastuu ja asiakkaisiin liittyvät riskit kannattaa tarkistaa") } },
-        { value: "consulting", label: "Konsultointi tai asiantuntijapalvelut", scores: { bizLiability: score(5, "asiantuntijatyössä vastuu ja oikeusturva voivat olla keskeisiä") } },
-        { value: "it", label: "IT, ohjelmistoala tai digipalvelut", scores: { bizCyber: score(5, "digipalveluissa kyber- ja tietoriskit korostuvat"), bizLiability: score(3, "IT-palveluissa vastuu asiakkaalle kannattaa tarkistaa") } },
-        { value: "realEstate", label: "Kiinteistö- tai vuokraustoiminta", scores: { bizProperty: score(5, "kiinteistö- ja vuokraustoiminnassa omaisuus ja toimitilat korostuvat"), bizInterruption: score(3, "vuokratuoton tai toiminnan keskeytys kannattaa tarkistaa") } },
-        { value: "agriculture", label: "Maa- tai metsätalous", scores: { bizProperty: score(4, "maa- tai metsätaloudessa omaisuus ja toiminnan jatkuvuus kannattaa tarkistaa") } },
-        { value: "healthcare", label: "Terveydenhuolto, hyvinvointi tai hoivapalvelut", scores: { bizLiability: score(5, "terveys- ja hoivapalveluissa vastuut pitää tarkistaa"), bizPeople: score(3, "henkilö- ja työkykyratkaisut voivat olla ajankohtaisia") } },
-        { value: "manufacturing", label: "Teollisuus tai valmistava toiminta", scores: { bizProperty: score(5, "koneet, laitteet ja tuotanto-omaisuus korostuvat"), bizInterruption: score(4, "tuotannon häiriö voi keskeyttää toimintaa") } },
+        { value: "manufacturing", label: "Teollisuus ja valmistus", scores: { bizProperty: score(5, "koneet, laitteet ja tuotanto-omaisuus korostuvat"), bizInterruption: score(4, "tuotannon häiriö voi keskeyttää toimintaa") } },
+        { value: "realEstate", label: "Kiinteistö ja vuokraustoiminta", scores: { bizProperty: score(5, "kiinteistö- ja vuokraustoiminnassa omaisuus ja toimitilat korostuvat"), bizInterruption: score(3, "vuokratuoton tai toiminnan keskeytys kannattaa tarkistaa") } },
+        { value: "healthcare", label: "Terveys- ja hoivapalvelut", scores: { bizLiability: score(5, "terveys- ja hoivapalveluissa vastuut pitää tarkistaa"), bizPeople: score(3, "henkilö- ja työkykyratkaisut voivat olla ajankohtaisia") } },
+        { value: "agriculture", label: "Maa-, metsä- ja hevostalous", scores: { bizProperty: score(4, "maa-, metsä- tai hevostaloudessa omaisuus ja toiminnan jatkuvuus kannattaa tarkistaa") } },
+        { value: "automotive", label: "Autokorjaamo, huolto ja autokauppa", scores: { bizVehicle: score(5, "autoalan toiminta tarvitsee ajoneuvojen erityisratkaisujen tarkistuksen"), bizLiability: score(4, "huolto- ja korjausvastuut kannattaa tarkistaa") } },
+        { value: "events", label: "Tapahtumat, matkailu ja majoitus", scores: { bizLiability: score(4, "asiakas- ja tapahtumavastuut kannattaa tarkistaa"), bizInterruption: score(4, "tapahtuman tai majoitustoiminnan keskeytys voi vaikuttaa nopeasti tuloihin") } },
         { value: "other", label: "Muu, mikä?", scores: { bizLiability: score(2, "toimiala kannattaa tarkistaa asiantuntijan kanssa") } }
       ]
     },
     {
-      id: "employeeCount",
-      title: "Työntekijöiden määrä",
+      id: "hasEmployees",
+      title: "Onko yritykselläsi työntekijöitä?",
+      desc: "Työntekijät voivat tuoda mukaan lakisääteisesti tarkistettavia vakuutuksia ja henkilöstön turvaan liittyviä aiheita.",
+      layout: "icon-question",
+      icon: "people",
       options: [
-        { value: "solo", label: "Ei työntekijöitä / yksinyrittäjä", scores: { bizPeople: score(3, "yrittäjän oma työkyky ja henkilöturva kannattaa tarkistaa") } },
-        { value: "1_4", label: "1-4 työntekijää", scores: { bizPeople: score(6, "työntekijät nostavat esiin henkilöstöön liittyvät vakuutusratkaisut") } },
-        { value: "5_9", label: "5-9 työntekijää", scores: { bizPeople: score(7, "työntekijämäärä nostaa henkilöriskit vahvasti esiin") } },
-        { value: "10_19", label: "10-19 työntekijää", scores: { bizPeople: score(8, "henkilöstön vakuutusratkaisut kannattaa tarkistaa") } },
-        { value: "20_49", label: "20-49 työntekijää", scores: { bizPeople: score(8, "henkilöstön ja työkyvyn ratkaisut kannattaa tarkistaa") } },
-        { value: "50_plus", label: "50+ työntekijää", scores: { bizPeople: score(9, "henkilöstö- ja työkykyratkaisut ovat keskeinen tarkistusalue") } }
+        { value: "yes", label: "Kyllä", scores: { bizPeople: score(8, "yrityksellä on työntekijöitä, jolloin henkilöstö- ja työtapaturmariskit pitää tarkistaa") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { bizPeople: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
       ]
-    }
+    },
+    {
+      id: "entrepreneurWorks",
+      title: "Työskenteletkö itse yrittäjänä yrityksessä?",
+      desc: "Yrittäjän oma työskentely yrityksessä voi edellyttää YEL-vakuuttamisen ehtojen tarkistamista.",
+      layout: "icon-question",
+      icon: "people",
+      options: [
+        { value: "yes", label: "Kyllä" },
+        { value: "no", label: "En" },
+        { value: "unsure", label: "En osaa sanoa" }
+      ]
+    },
+    {
+      id: "businessTravelNeed",
+      title: "Matkustatko sinä tai yrityksesi henkilöt työn vuoksi?",
+      desc: "Työmatkat voivat nostaa esiin matkustajan, matkatavaroiden ja matkaan liittyvien vastuiden tarkistuksen.",
+      layout: "icon-question",
+      icon: "travel",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { bizTravel: score(7, "yrityksessä tehdään työmatkoja"), bizPeople: score(1, "työmatkat voivat liittyä henkilöturvaan") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { bizTravel: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "ownsBusinessProperty",
+      title: "Omistaako yritys kiinteistöjä, varastoja tai muita rakennuksia?",
+      desc: "Rakennukset, vuokrattavat kohteet ja varastot vaikuttavat siihen, mitä omaisuutta kannattaa tarkastella.",
+      layout: "icon-question",
+      icon: "property",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { bizRealEstate: score(7, "yrityksellä on kiinteistö, rakennus tai vuokrattava kohde"), bizProperty: score(4, "yrityksen rakennus- tai varastoriskit kannattaa tarkistaa"), bizInterruption: score(2, "tilan käytön keskeytys voi vaikuttaa toimintaan") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { bizRealEstate: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta"), bizProperty: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "hasPremises",
+      title: "Onko yrityksellä toimitilat, liiketila tai työpiste?",
+      desc: "Toimitilat voivat nostaa esiin irtaimiston, sisustusten, vastuunjaon ja keskeytyksen tarkistuksen.",
+      layout: "icon-question",
+      icon: "premises",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { bizProperty: score(7, "yrityksellä on toimitila tai liiketila, jonka omaisuus ja vastuunjako kannattaa tarkistaa"), bizInterruption: score(2, "toimitilan vahinko voi keskeyttää toimintaa") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { bizProperty: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "hasBusinessAssets",
+      title: "Onko yrityksellä koneita, laitteita, kalusteita, työkaluja tai myytävää varastoa?",
+      desc: "Yrityksen arjessa tärkeä omaisuus kannattaa erottaa jo alussa, jotta oikeat tarkennukset nousevat esiin.",
+      layout: "icon-question",
+      icon: "assets",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { bizProperty: score(8, "yrityksellä on omaisuutta, jonka vahinko voisi vaikuttaa toimintaan") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { bizProperty: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "hasVehicles",
+      title: "Onko yrityksellä autoja, pakettiautoja, työkoneita tai muuta ajoneuvokalustoa?",
+      desc: "Ajoneuvot voivat edellyttää lakisääteisen liikennevakuutuksen ja vapaaehtoisen turvan tarkistusta.",
+      layout: "icon-question",
+      icon: "vehicle",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { bizVehicle: score(8, "yrityksellä on ajoneuvoja tai kalustoa käytössä") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { bizVehicle: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
+    {
+      id: "digitalDependency",
+      title: "Käsitteleekö yritys asiakas-, henkilö- tai maksutietoja tai käyttääkö se tärkeitä järjestelmiä?",
+      desc: "Tämä auttaa tunnistamaan, pitäisikö kyber- ja tietoriskejä avata tarkemmin.",
+      layout: "icon-question",
+      icon: "cyber",
+      options: [
+        { value: "yes", label: "Kyllä", scores: { bizCyber: score(8, "yritys on riippuvainen järjestelmistä tai asiakasdatasta"), bizInterruption: score(2, "järjestelmäkatko voi keskeyttää toimintaa") } },
+        { value: "no", label: "Ei" },
+        { value: "unsure", label: "En osaa sanoa", scores: { bizCyber: score(2, "Tämä nousi tarkistettavaksi, koska et ollut varma vastauksesta") } }
+      ]
+    },
   ]
 };
 
@@ -648,14 +827,16 @@ insuranceTypes.personal.liability = {
   ]
 };
 
-insuranceTypes.business.bizProperty.title = "Omaisuus ja toimitilat";
+insuranceTypes.business.bizProperty.title = "Irtaimisto ja toimitila";
 insuranceTypes.business.bizProperty.area = "Yrityksen omaisuus";
 insuranceTypes.business.bizLiability.title = "Vastuu ja oikeusturva";
 insuranceTypes.business.bizLiability.area = "Yrityksen vastuut";
-insuranceTypes.business.bizPeople.title = "Henkilö- ja työkykyratkaisut";
-insuranceTypes.business.bizVehicle.title = "Ajoneuvot ja kuljetus";
-insuranceTypes.business.bizVehicle.area = "Liikkuminen ja kuljetukset";
-insuranceTypes.business.bizCyber.title = "Kyber ja tietoriskit";
+insuranceTypes.business.bizPeople.title = "Henkilöstö";
+insuranceTypes.business.bizPeople.area = "Henkilöstö ja työkyky";
+insuranceTypes.business.bizVehicle.title = "Ajoneuvot";
+insuranceTypes.business.bizVehicle.area = "Ajoneuvot ja kalusto";
+insuranceTypes.business.bizCyber.title = "Kyber";
+insuranceTypes.business.bizCyber.area = "Tietoriskit ja järjestelmät";
 insuranceTypes.business.bizInterruption.title = "Keskeytys ja jatkuvuus";
 
 quickQuestions.personal = [
@@ -663,6 +844,7 @@ quickQuestions.personal = [
     id: "children",
     title: "Onko taloudessa lapsia?",
     desc: "Tämä voi nostaa esiin perheen henkilövakuutusten tarkistuksen.",
+    showIf: { base: { ageGroup: { not: ["under18", "over65"] } } },
     options: [
       { value: "yes", label: "Kyllä", scores: { health: score(6, "taloudessa on lapsia, joten perheen henkilövakuutukset kannattaa tarkistaa") } },
       { value: "no", label: "Ei" },
@@ -703,6 +885,7 @@ quickQuestions.personal = [
     id: "holidayHome",
     title: "Onko sinulla vapaa-ajan asunto?",
     desc: "Vapaa-ajan asunto kannattaa tarkistaa erillisenä asumisen kokonaisuutena.",
+    showIf: { base: { livingType: { not: ["holiday"] } } },
     options: [
       { value: "yes", label: "Kyllä", scores: { apartment: score(8, "vapaa-ajan asunto kannattaa tarkistaa erillisenä vakuutusalueena"), home: score(2, "vapaa-ajan asunnon irtaimisto voi liittyä kodin vakuutuskokonaisuuteen") } },
       { value: "no", label: "Ei" },
@@ -746,6 +929,7 @@ quickQuestions.business = [
     id: "premises",
     title: "Onko yrityksellä toimitiloja?",
     desc: "Toimitilat voivat nostaa esiin omaisuuden ja toimitilojen vakuutustarpeen.",
+    showIf: { base: { industry: ["construction", "restaurant", "grocery", "commerce", "realEstate", "agriculture", "healthcare", "manufacturing", "beauty", "automotive", "events", "other"] } },
     options: [
       { value: "yes", label: "Kyllä", scores: { bizProperty: score(7, "yrityksellä on toimitiloja") } },
       { value: "no", label: "Ei" },
@@ -756,6 +940,7 @@ quickQuestions.business = [
     id: "vehicles",
     title: "Onko yrityksellä ajoneuvoja?",
     desc: "Ajoneuvot nostavat esiin yrityksen ajoneuvot ja mahdolliset kuljetukset.",
+    showIf: { base: { industry: ["construction", "logistics", "restaurant", "grocery", "commerce", "agriculture", "manufacturing", "automotive", "events", "other"] } },
     options: [
       { value: "yes", label: "Kyllä", scores: { bizVehicle: score(8, "yrityksellä on ajoneuvoja") } },
       { value: "no", label: "Ei" },
@@ -766,6 +951,7 @@ quickQuestions.business = [
     id: "assets",
     title: "Onko yrityksellä koneita, laitteita tai varastoa?",
     desc: "Koneet, laitteet ja varasto voivat olla toiminnan kannalta tärkeitä.",
+    showIf: { base: { industry: ["construction", "logistics", "restaurant", "grocery", "commerce", "realEstate", "agriculture", "healthcare", "manufacturing", "beauty", "automotive", "events", "other"] } },
     options: [
       { value: "yes", label: "Kyllä", scores: { bizProperty: score(8, "yrityksellä on koneita, laitteita tai varastoa") } },
       { value: "no", label: "Ei" },
@@ -776,6 +962,7 @@ quickQuestions.business = [
     id: "customerSites",
     title: "Tehdäänkö työtä asiakkaan tiloissa tai työmailla?",
     desc: "Asiakkaan tiloissa työskentely voi nostaa esiin vastuu- ja oikeusturvakysymyksiä.",
+    showIf: { base: { industry: ["construction", "professional", "healthcare", "beauty", "automotive", "events", "other"] } },
     options: [
       { value: "yes", label: "Kyllä", scores: { bizLiability: score(8, "työtä tehdään asiakkaan tiloissa tai työmailla") } },
       { value: "no", label: "Ei" },
@@ -786,6 +973,7 @@ quickQuestions.business = [
     id: "data",
     title: "Käsitteleekö yritys asiakas-, henkilö- tai maksutietoja?",
     desc: "Tietojen käsittely voi nostaa esiin kyber- ja tietoriskit.",
+    showIf: { base: { industry: ["restaurant", "grocery", "commerce", "professional", "realEstate", "healthcare", "beauty", "automotive", "events", "other"] } },
     options: [
       { value: "yes", label: "Kyllä", scores: { bizCyber: score(8, "yritys käsittelee asiakas-, henkilö- tai maksutietoja") } },
       { value: "no", label: "Ei" },
@@ -814,7 +1002,14 @@ quickQuestions.business = [
   }
 ];
 
-const q = (id, title, desc, multi, options) => ({ id, title, desc, multi, options: options.map(([value, label, hint]) => ({ value, label, hint })) });
+const q = (id, title, desc, multi, options, showIf) => ({
+  id,
+  title,
+  desc,
+  multi,
+  options: options.map(([value, label, hint]) => ({ value, label, hint })),
+  ...(showIf !== undefined ? { showIf } : {})
+});
 
 export const detailFlows = {
   personal: {
@@ -822,13 +1017,11 @@ export const detailFlows = {
       title: "Kotivakuutus",
       sourceNote: "Perustuu kotivakuutuksen tuotetietoihin: Laaja, Perus, Suppea, Laaja Plus, matkatavaraturva, irtaimisto ja rakennus.",
       questions: [
-        q("role", "Mikä kuvaa parhaiten rooliasi?", "Rooli ratkaisee, painottuuko ehdotuksessa irtaimisto, rakennus, vastuu vai vuokrattava kohde.", false, [["tenant", "Asun vuokralla"], ["owner_occupier", "Asun omistusasunnossa"], ["landlord", "Olen vuokranantaja"], ["house_owner", "Omistan ja asun omakotitalossa"], ["holiday_owner", "Omistan vapaa-ajan asunnon tai mökin"]]),
-        q("insuredObject", "Mitä haluat vakuuttaa?", "Kerros- ja rivitalossa painotus on usein irtaimistossa ja kiinteissä sisustuksissa. Omakotitalossa rakennus on usein mukana.", false, [["contents", "Irtaimisto"], ["building_and_contents", "Rakennus ja irtaimisto"], ["building_only", "Rakennus"]]),
+        q("role", "Mikä kuvaa parhaiten rooliasi?", "Rooli ratkaisee, painottuuko ehdotuksessa irtaimisto, rakennus, vastuu vai vuokrattava kohde.", false, [["tenant", "Asun vuokralla"], ["owner_occupier", "Asun omistusasunnossa"], ["landlord", "Olen vuokranantaja"], ["house_owner", "Omistan ja asun omakotitalossa"], ["holiday_owner", "Omistan vapaa-ajan asunnon tai mökin"]], { base: { livingType: ["withFamily", "other"] } }),
+        q("insuredObject", "Mitä haluat vakuuttaa?", "Kerros- ja rivitalossa painotus on usein irtaimistossa ja kiinteissä sisustuksissa. Omakotitalossa rakennus on usein mukana.", false, [["contents", "Irtaimisto"], ["building_and_contents", "Rakennus ja irtaimisto"], ["building_only", "Rakennus"]], { detail: { role: ["landlord", "house_owner", "holiday_owner"] } }),
         q("coverLevel", "Mikä turvataso sopii parhaiten?", "Laaja on kattavin taso ja on ainoa taso, joka korvaa rikkoutumisvahinkoja.", false, [["laaja", "Laaja"], ["perus", "Perus"], ["suppea", "Suppea"], ["unsure", "En osaa sanoa"]]),
-        q("plusNeed", "Haluatko irtaimistolle Laaja Plus -lisäturvan?", "Laaja Plus on mahdollinen Laajan kotivakuutuksen yhteydessä.", false, [["yes", "Kyllä"], ["no", "En"], ["unsure", "En osaa sanoa"]]),
-        q("travelAddon", "Tarvitsetko matkatavaraturvan ulkomaanmatkoille?", "Kotivakuutuksen matkatavaraturva ulkomaanmatkoille pitää valita erikseen ennen matkaa.", false, [["yes", "Kyllä"], ["no", "En"], ["unsure", "En osaa sanoa"]]),
-        q("deductibleContents", "Mikä irtaimiston omavastuu tuntuu sopivalta?", "Vaihtoehdot: 200, 300, 500, 1 000 ja 2 000 euroa.", false, [["200", "200 euroa"], ["300", "300 euroa"], ["500", "500 euroa"], ["1000", "1 000 euroa"], ["2000", "2 000 euroa"]]),
-        q("deductibleBuilding", "Mikä rakennuksen omavastuu tuntuu sopivalta?", "Vaihtoehdot: 200, 300, 500, 1 000, 2 000 ja 5 000 euroa.", false, [["200", "200 euroa"], ["300", "300 euroa"], ["500", "500 euroa"], ["1000", "1 000 euroa"], ["2000", "2 000 euroa"], ["5000", "5 000 euroa"]])
+        q("plusNeed", "Haluatko irtaimistolle Laaja Plus -lisäturvan?", "Laaja Plus on mahdollinen Laajan kotivakuutuksen yhteydessä.", false, [["yes", "Kyllä"], ["no", "En"], ["unsure", "En osaa sanoa"]], { detail: { coverLevel: ["laaja"], insuredObject: ["contents", "building_and_contents"] } }),
+        q("travelAddon", "Tarvitsetko matkatavaraturvan ulkomaanmatkoille?", "Kotivakuutuksen matkatavaraturva ulkomaanmatkoille pitää valita erikseen ennen matkaa.", false, [["yes", "Kyllä"], ["no", "En"], ["unsure", "En osaa sanoa"]], { base: { travelsRegularly: ["yes", "unsure"] } })
       ]
     },
     vehicle: {
@@ -838,8 +1031,7 @@ export const detailFlows = {
         q("vehicleType", "Mikä ajoneuvo on kyseessä?", "Ajoneuvon tyyppi vaikuttaa saataviin turviin ja lisäturviin.", false, [["car", "Henkilöauto tai pakettiauto"], ["motorcycle", "Moottoripyörä, mopo tai mönkijä"], ["camper", "Matkailuauto tai matkailuperävaunu"], ["other", "Muu ajoneuvo"]]),
         q("finance", "Onko ajoneuvo rahoitettu, leasingissä tai kallis korvata itse?", "Rahoitus- ja leasingtilanne kannattaa tarkistaa kaskon yhteydessä.", false, [["yes", "Kyllä"], ["no", "Ei"], ["unsure", "En osaa sanoa"]]),
         q("vehicleConcerns", "Mistä vahingoista olet erityisen huolissasi?", "Voit valita useamman.", true, [["collision", "Kolarointi tai tieltä suistuminen"], ["parking", "Pysäköintivahingot"], ["glass", "Lasivahingot"], ["animal_weather_theft", "Eläintörmäys, luonnonilmiö, palo, varkaus tai ilkivalta"], ["replacement", "Sijaisauto tai sijaisajoneuvo"], ["none", "Haluan vain välttämättömimmän"]]),
-        q("abroadVehicle", "Ajatko ajoneuvolla ulkomailla?", "Ulkomailla ajaminen voi vaikuttaa lisäturvien ja vastuun tarkistuksiin.", false, [["yes", "Kyllä"], ["sometimes", "Satunnaisesti"], ["no", "En"]]),
-        q("vehicleDeductible", "Mikä omavastuun taso tuntuu sopivalta kaskossa?", "Sovita omavastuu ajoneuvon arvoon ja omaan kassaan.", false, [["low", "Matala omavastuu"], ["medium", "Keskitasoinen omavastuu"], ["high", "Korkeampi omavastuu"]])
+        q("abroadVehicle", "Ajatko ajoneuvolla ulkomailla?", "Ulkomailla ajaminen voi vaikuttaa lisäturvien ja vastuun tarkistuksiin.", false, [["yes", "Kyllä"], ["sometimes", "Satunnaisesti"], ["no", "En"]])
       ]
     },
     travel: {
@@ -848,8 +1040,7 @@ export const detailFlows = {
       questions: [
         q("tripPattern", "Millainen matkustaminen kuvaa sinua parhaiten?", "Matkojen määrä ja kesto ratkaisevat, kannattaako tutkia jatkuvaa vai matkakohtaista vakuutusta.", false, [["single", "Yksittäinen matka tai matkustan harvoin"], ["several", "Useita matkoja vuodessa"], ["long", "Yli kolmen kuukauden matka"], ["domestic", "Pääosin kotimaanmatkoja yli 50 km päähän"]]),
         q("travelConcerns", "Mikä matkustamisessa huolestuttaa?", "Voit valita useamman.", true, [["medical", "Sairastuminen tai tapaturma matkalla"], ["cancel", "Matkan peruuntuminen"], ["interrupt", "Matkan keskeytyminen"], ["delay", "Jatkoyhteydeltä myöhästyminen"], ["luggage", "Matkatavaroiden vahinko tai viivästyminen"], ["liability_legal", "Matkavastuu tai matkaoikeusturva"]]),
-        q("travelers", "Ketkä matkustavat?", "Matkatavaravakuutus voi kattaa samassa taloudessa asuvat yhteisellä matkalla.", false, [["alone", "Matkustan yksin"], ["partner", "Matkustan puolison kanssa"], ["family", "Matkustan perheen kanssa"], ["child_alone", "Lapsi matkustaa yksin"]]),
-        q("travelDeductible", "Mikä omavastuulinja tuntuu sopivalta matkatavaroille?", "Sovita omavastuu tavaroiden arvoon.", false, [["low", "Matala omavastuu"], ["medium", "Keskitasoinen omavastuu"], ["high", "Korkeampi omavastuu"]])
+        q("travelers", "Ketkä matkustavat?", "Matkatavaravakuutus voi kattaa samassa taloudessa asuvat yhteisellä matkalla.", false, [["alone", "Matkustan yksin"], ["partner", "Matkustan puolison kanssa"], ["family", "Matkustan perheen kanssa"], ["child_alone", "Lapsi matkustaa yksin"]])
       ]
     },
     health: {
@@ -858,7 +1049,6 @@ export const detailFlows = {
       questions: [
         q("healthTarget", "Kenelle turvaa haetaan?", "Terveysvakuutusta voi hakea itselle, puolisolle, lapselle tai syntyvälle lapselle.", false, [["self", "Itselleni"], ["partner", "Puolisolle"], ["child", "Lapselle"], ["unborn", "Syntyvälle lapselle"]]),
         q("healthNeeds", "Mitä haluat suojata?", "Voit valita useamman.", true, [["illness_full", "Sairauden laajemmat hoitokulut"], ["illness_basic", "Yleislääkärikäynnit ja perustason sairauskulut"], ["accident", "Tapaturmien hoitokulut"], ["sports", "Urheilutapaturmat"], ["income", "Päiväraha työkyvyttömyyden varalle"], ["permanent", "Pysyvä haitta tai tapaturmainen kuolema"]]),
-        q("healthDeductible", "Mikä sairauden hoitoturvan omavastuu tuntuu sopivalta?", "Sairauden hoitoturvan omavastuut ovat 300, 500 tai 1 000 euroa kalenterivuodessa.", false, [["300", "300 euroa / kalenterivuosi"], ["500", "500 euroa / kalenterivuosi"], ["1000", "1 000 euroa / kalenterivuosi"], ["not_needed", "En tarvitse sairauden hoitoturvaa"]]),
         q("healthLimits", "Onko jokin näistä erityisen tärkeä tarkistaa?", "Voit valita useamman.", true, [["health_statement", "Terveysselvitys ja mahdolliset rajoitusehdot"], ["sports_level", "Urheilulajin tai harrastustason vaikutus"], ["abroad", "Voimassaolo ulkomailla"], ["age", "Ikärajat ja päättymisiät"], ["none", "Ei erityistä"]])
       ]
     },
@@ -879,8 +1069,7 @@ export const detailFlows = {
         q("petType", "Mikä eläin on kyseessä?", "Koira- ja kissavakuutuksessa turvat ovat osin samat, mutta vastuuvakuutus koskee koiraa.", false, [["dog", "Koira"], ["cat", "Kissa"], ["both", "Sekä koira että kissa"]]),
         q("petAge", "Minkä ikäinen eläin on?", "Vakuutuksen myöntämisikä ja lisäturvat riippuvat eläimen iästä.", false, [["puppy_kitten", "5 viikkoa - alle 1 vuotta"], ["young", "1 - alle 5 vuotta"], ["adult", "5 - alle 8 vuotta"], ["older", "8 vuotta tai vanhempi"]]),
         q("petNeeds", "Mitä haluat suojata?", "Voit valita useamman.", true, [["vet", "Eläinlääkärikulut"], ["plus", "Hoitoturva Plus ja fysioterapiaan liittyvät lisät"], ["life", "Eläimen henkivakuutus"], ["use", "Käyttöominaisuusturva"], ["liability", "Koiran vastuuvakuutus"]]),
-        q("petTravel", "Matkustaako eläin mukana ulkomailla?", "Voimassaolo vaihtelee alueen ja keston mukaan.", false, [["nordic", "Pohjoismaissa"], ["eu", "Muu EU, Iso-Britannia tai Sveitsi"], ["no", "Ei matkusta mukana"]]),
-        q("petDeductible", "Mikä omavastuun taso tuntuu sopivalta?", "Eläinlääkärikulujen omavastuu tarkistetaan valittavasta turvasta.", false, [["low", "Matala omavastuu"], ["medium", "Keskitasoinen omavastuu"], ["higher", "Korkeampi omavastuu"]])
+        q("petTravel", "Matkustaako eläin mukana ulkomailla?", "Voimassaolo vaihtelee alueen ja keston mukaan.", false, [["nordic", "Pohjoismaissa"], ["eu", "Muu EU, Iso-Britannia tai Sveitsi"], ["no", "Ei matkusta mukana"]], { base: { travelsRegularly: ["yes", "unsure"] } })
       ]
     },
     apartment: {
@@ -889,15 +1078,14 @@ export const detailFlows = {
       questions: [
         q("holidayUse", "Miten vapaa-ajan asuntoa käytetään?", "Käyttö vaikuttaa siihen, painottuuko rakennus, irtaimisto, vuokraus vai kausikäyttö.", false, [["seasonal", "Kausikäytössä omassa käytössä"], ["year_round", "Ympärivuotisessa käytössä"], ["rented", "Vuokraan kohdetta muille"], ["renovation", "Kohteessa tehdään remonttia tai muutostöitä"]]),
         q("holidayObjects", "Mitä haluat suojata?", "Voit valita useamman.", true, [["building", "Vapaa-ajan asunnon rakennus"], ["contents", "Irtaimisto ja kalusteet"], ["outbuildings", "Sauna, vaja tai muut piharakennukset"], ["tools", "Työkalut, veneily- tai harrastusvälineet"], ["responsibility", "Vastuu- ja oikeusturva"]]),
-        q("holidayLevel", "Mikä turvataso kuulostaa sopivalta?", "Voit valita itse hinta-arvion pohjaksi sopivan laajuuden.", false, [["suppea", "Suppea"], ["perus", "Perus"], ["laaja", "Laaja"], ["unsure", "En osaa sanoa"]]),
-        q("holidayDeductible", "Mikä omavastuulinja tuntuu sopivalta?", "Omavastuu kannattaa suhteuttaa kohteen arvoon ja siihen, mitä vahinkoja haluat maksaa itse.", false, [["low", "Matala omavastuu"], ["medium", "Keskitasoinen omavastuu"], ["high", "Korkeampi omavastuu"]])
+        q("holidayLevel", "Mikä turvataso kuulostaa sopivalta?", "Voit valita itse jatkoselvitykseen sopivan laajuuden.", false, [["suppea", "Suppea"], ["perus", "Perus"], ["laaja", "Laaja"], ["unsure", "En osaa sanoa"]])
       ]
     },
     liability: {
       title: "Vastuu ja oikeusturva",
       sourceNote: "Perustuu kotivakuutuksen yhteydessä tarkistettaviin vastuu- ja oikeusturvakysymyksiin sekä yleisiin sopimusehtoihin.",
       questions: [
-        q("liabilityNeeds", "Mitä haluat tarkistaa?", "Valitse ne aiheet, joista haluat hinta-arvion tai asiantuntijan tarkistuksen taustatiedon.", true, [["personal_liability", "Vastuuvahinko toiselle henkilölle tai toisen omaisuudelle"], ["legal", "Oikeudenkäyntikulut tai riitatilanteet"], ["home_related", "Asumiseen, remonttiin tai vuokraamiseen liittyvät vastuut"], ["family", "Perheen tai lasten aiheuttamat vahingot"], ["pet_related", "Lemmikkiin liittyvät vastuutilanteet"]]),
+        q("liabilityNeeds", "Mitä haluat tarkistaa?", "Valitse ne aiheet, joista haluat asiantuntijan tarkistuksen taustatiedon.", true, [["personal_liability", "Vastuuvahinko toiselle henkilölle tai toisen omaisuudelle"], ["legal", "Oikeudenkäyntikulut tai riitatilanteet"], ["home_related", "Asumiseen, remonttiin tai vuokraamiseen liittyvät vastuut"], ["family", "Perheen tai lasten aiheuttamat vahingot"], ["pet_related", "Lemmikkiin liittyvät vastuutilanteet"]]),
         q("liabilityConcern", "Mikä huolestuttaa eniten?", "Tämä auttaa valitsemaan, painottuuko yhteydenotossa vastuu vai oikeusturva.", false, [["damage", "Vahinko toiselle"], ["dispute", "Riita tai oikeudellinen asia"], ["both", "Molemmat"], ["unsure", "En osaa sanoa"]]),
         q("liabilityScope", "Miten haluat jatkaa?", "Valitse vaihtoehto, joka siirtyy laskurin tai asiantuntijan tarkistuksen pohjaksi.", false, [["home_bundle", "Tarkistetaan kodin vakuutuksen yhteydessä"], ["broader", "Haluan laajemman vastuu- ja oikeusturvatarkistuksen"], ["expert", "Haluan asiantuntijan arvion"], ["unsure", "En osaa sanoa"]])
       ]
@@ -910,15 +1098,14 @@ export const detailFlows = {
       questions: [
         q("propertyAssets", "Mitä omaisuutta halutaan suojata?", "Voit valita useamman.", true, [["premises", "Toimitila tai liiketila"], ["equipment", "Koneet, laitteet ja työkalut"], ["inventory", "Varasto ja vaihto-omaisuus"], ["tenant_improvements", "Vuokratilan muutostyöt ja kiinteät sisustukset"], ["building", "Rakennus tai kiinteistö"], ["construction", "Rakennus- tai asennuskohde"]]),
         q("propertyControl", "Miten kohde on yrityksen käytössä?", "Omistus- ja vuokrasuhde vaikuttaa vakuutettavaan omaisuuteen.", false, [["owned", "Yritys omistaa kohteen"], ["leased", "Yritys toimii vuokratilassa"], ["multiple", "Useita toimipaikkoja tai liikkuvaa omaisuutta"], ["project", "Projektikohtainen kohde"]]),
-        q("propertyConcerns", "Mistä vahingoista olet huolissasi?", "Voit valita useamman.", true, [["fire_water", "Palo, vuoto tai luonnonilmiö"], ["theft", "Murto, varkaus tai ilkivalta"], ["breakdown", "Koneen tai laitteen rikkoutuminen"], ["flood", "Poikkeuksellinen tulva"], ["site", "Työmaa- tai asennuskohteen vahinko"]]),
-        q("propertyDeductible", "Mikä omavastuulinja sopii yritykselle?", "Omavastuu kannattaa sovittaa kassaan ja vahinkojen todennäköisyyteen.", false, [["low", "Matala omavastuu"], ["medium", "Keskitasoinen omavastuu"], ["high", "Korkeampi omavastuu"]])
+        q("propertyConcerns", "Mistä vahingoista olet huolissasi?", "Voit valita useamman.", true, [["fire_water", "Palo, vuoto tai luonnonilmiö"], ["theft", "Murto, varkaus tai ilkivalta"], ["breakdown", "Koneen tai laitteen rikkoutuminen"], ["flood", "Poikkeuksellinen tulva"], ["site", "Työmaa- tai asennuskohteen vahinko"]])
       ]
     },
     bizLiability: {
       title: "Yrityksen vastuuvakuutukset",
       sourceNote: "Perustuu vastuuvakuutusten tuotetietoihin: toiminnan vastuu, tuotevastuu, varallisuusvastuu, IT-vastuu ja hallinnon vastuu.",
       questions: [
-        q("liabilityActivity", "Mihin vastuu ensisijaisesti liittyy?", "Valinta ohjaa vastuuvakuutuksen rakennetta.", false, [["operations", "Toiminnan aiheuttamat henkilö- tai esinevahingot"], ["products", "Tuotteet, valmistus, myynti tai maahantuonti"], ["professional", "Neuvonta, suunnittelu tai konsultointi"], ["it", "IT-palvelut, data tai järjestelmät"], ["management", "Johto, hallitus tai päätöksenteko"], ["healthcare", "Terveyden- tai sairaanhoito"]]),
+        q("liabilityActivity", "Mihin vastuu ensisijaisesti liittyy?", "Valinta ohjaa vastuuvakuutuksen rakennetta.", false, [["operations", "Toiminnan aiheuttamat henkilö- tai esinevahingot"], ["products", "Tuotteet, valmistus, myynti tai maahantuonti"], ["professional", "Neuvonta, suunnittelu tai konsultointi"], ["it", "IT-palvelut, data tai järjestelmät"], ["management", "Johto, hallitus tai päätöksenteko"], ["healthcare", "Terveyden- tai sairaanhoito"]], { base: { industry: ["professional", "logistics", "realEstate", "agriculture", "other"] } }),
         q("liabilityConcerns", "Mitä vastuutilanteita haluat korostaa?", "Voit valita useamman.", true, [["injury_property", "Henkilö- ja esinevahingot"], ["financial_loss", "Taloudellinen vahinko ilman esinevahinkoa"], ["ip", "Immateriaalioikeudet"], ["environment", "Ympäristövahingot"], ["recall", "Tuotteen takaisinveto"], ["contract", "Sopimusvaatimukset"]]),
         q("liabilityMarket", "Missä yritys toimii?", "Markkina-alue vaikuttaa vastuiden ja vakuutusmäärien arviointiin.", false, [["local", "Paikallisesti Suomessa"], ["finland", "Koko Suomessa"], ["eu", "EU-alueella"], ["global", "Kansainvälisesti"]]),
         q("liabilityLimit", "Mikä vakuutusmäärän taso vaatii jatkolaskennan?", "Tarkka määrä määräytyy sopimusten, liikevaihdon ja vahinkopotentiaalin perusteella.", false, [["basic", "Perustaso"], ["higher", "Korkeampi sopimusvaatimusten taso"], ["major", "Merkittävä vastuuriski tai kansainvälinen toiminta"]])
@@ -958,7 +1145,7 @@ export const detailFlows = {
       title: "Henkilö- ja työkykyratkaisut",
       sourceNote: "Perustuu työtapaturma-, yrittäjien tapaturma-, sairauskulu- ja työkykyratkaisuihin.",
       questions: [
-        q("peopleSize", "Kenelle turvaa haetaan?", "Henkilömäärä ohjaa työkykyvakuutuksen vaihtoehtoja.", false, [["solo", "Yrittäjä ilman työntekijöitä"], ["micro", "2-9 henkilöä"], ["small", "10-49 henkilöä"], ["medium", "50+ henkilöä"]]),
+        q("peopleSize", "Kenelle turvaa haetaan?", "Henkilömäärä ohjaa työkykyvakuutuksen vaihtoehtoja.", false, [["solo", "Yrittäjä ilman työntekijöitä"], ["micro", "2-9 henkilöä"], ["small", "10-49 henkilöä"], ["medium", "50+ henkilöä"]], false),
         q("peopleNeeds", "Mitä halutaan turvata?", "Voit valita useamman.", true, [["statutory", "Työtapaturma- ja ammattitautivakuutus työntekijöille"], ["entrepreneur_accident", "Yrittäjän tapaturma tai vapaaehtoinen työajan vakuutus"], ["medical", "Sairauskulut ja nopea hoitoon pääsy"], ["workability", "Työkyvyn tuki ja poissaolojen hallinta"], ["leisure", "Vapaa-ajan tapaturmat"], ["key_people", "Avainhenkilöt tai johtoryhmä"]]),
         q("healthLevel", "Mikä hoitotaso kuulostaa oikealta?", "Työkykyvakuutuksessa taso voi määräytyä yleis- tai erikoislääkäritason mukaan.", false, [["basic", "Yleislääkäritasoinen"], ["specialist", "Erikoislääkäritasoinen"], ["key", "Avainhenkilö- tai johtoryhmätaso"], ["not_sure", "En osaa sanoa"]]),
         q("peopleTax", "Onko tavoitteena henkilöstöetu koko henkilöstölle?", "Tämä vaikuttaa jatkoselvitykseen ja verotukselliseen arvioon.", false, [["all", "Koko henkilöstölle samansisältöisenä"], ["selected", "Vain osalle henkilöstöä"], ["entrepreneur", "Vain yrittäjälle"], ["unknown", "Ei vielä päätetty"]])
@@ -999,8 +1186,7 @@ export const detailFlows = {
       questions: [
         q("realEstateType", "Minkä tyyppinen kohde on?", "Kohteen käyttötarkoitus vaikuttaa riskiprofiiliin.", false, [["residential", "Asuin- tai vuokratalo"], ["commercial", "Liike- tai toimistokiinteistö"], ["industrial", "Teollisuus- tai tuotantokiinteistö"], ["mixed", "Sekakäyttöinen kohde"]]),
         q("realEstateRole", "Mikä on yrityksen rooli?", "Omistajan ja vuokralaisen tarpeet eroavat toisistaan.", false, [["owner", "Omistaja"], ["landlord", "Vuokranantaja"], ["tenant", "Vuokralainen"], ["manager", "Isännöinti tai hallinnointi"]]),
-        q("realEstateConcerns", "Mitä pitää huomioida?", "Voit valita useamman.", true, [["building", "Rakennusvahingot"], ["liability", "Kiinteistön omistajan vastuu"], ["rental_income", "Vuokratuoton keskeytys"], ["flood", "Poikkeuksellinen tulva"], ["renovation", "Korjaus- tai muutostyöt"]]),
-        q("realEstateDeductible", "Mikä omavastuulinja sopii?", "Kiinteistössä omavastuu kannattaa sovittaa kohteen arvoon ja kassaan.", false, [["low", "Matala"], ["medium", "Keskitasoinen"], ["high", "Korkea"]])
+        q("realEstateConcerns", "Mitä pitää huomioida?", "Voit valita useamman.", true, [["building", "Rakennusvahingot"], ["liability", "Kiinteistön omistajan vastuu"], ["rental_income", "Vuokratuoton keskeytys"], ["flood", "Poikkeuksellinen tulva"], ["renovation", "Korjaus- tai muutostyöt"]])
       ]
     },
     bizPatient: {

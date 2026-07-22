@@ -8,9 +8,11 @@ const src = (file) => readFileSync(join(root, file), "utf8");
 const html = src("src/page-template.html");
 const css = src("src/styles.css");
 const jsFiles = [
+  "src/solutionData.js",
   "src/data.js",
   "src/scoring.js",
   "src/detailResults.js",
+  "src/solutionEngine.js",
   "src/analytics.js",
   "src/app.js"
 ];

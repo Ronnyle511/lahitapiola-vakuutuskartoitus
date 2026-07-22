@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { baseQuestions, detailFlows, insuranceTypes, quickQuestions } from "../src/data.js";
 import { buildDetailResult } from "../src/detailResults.js";
 import { calculateScores } from "../src/scoring.js";
@@ -27,9 +28,7 @@ const homeResult = buildDetailResult("personal", "home", {
   insuredObject: "building_and_contents",
   coverLevel: "laaja",
   plusNeed: "yes",
-  travelAddon: "yes",
-  deductibleContents: "300",
-  deductibleBuilding: "500"
+  travelAddon: "yes"
 });
 
 assert.match(homeResult.title, /Laaja/);
@@ -40,13 +39,13 @@ const business = calculateScores("business", {
   premises: "yes",
   assets: "yes",
   customerSites: "yes",
-  digital: "yes",
+  data: "yes",
   vehicles: "yes",
   keyPeople: "yes",
   interruption: "yes"
 }, {
-  industry: "it",
-  employeeCount: "1_4"
+  industry: "professional",
+  hasEmployees: "yes"
 });
 
 assert.ok(business.primary.some((item) => item.key === "bizPeople"));
@@ -71,5 +70,23 @@ for (const profileId of ["personal", "business"]) {
   assert.ok(quickQuestions[profileId].length >= 7);
   assert.ok(Object.keys(detailFlows[profileId]).length >= 6);
 }
+
+const appSource = readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
+const templateSource = readFileSync(new URL("../src/page-template.html", import.meta.url), "utf8");
+assert.match(appSource, /lahitapiola-vakuutuskartoitus-v3/);
+assert.match(appSource, /function openCustomerSummary/);
+assert.match(appSource, /localStorage\.setItem/);
+assert.match(appSource, /id: "reviewGoal"[\s\S]*?multi: true/);
+assert.doesNotMatch(appSource, /id: "coveragePreference"/);
+assert.match(appSource, /function activeIntakeQuestions\(\) \{\s*return intakeQuestions\(\);\s*\}/);
+assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
+assert.doesNotMatch(appSource, /function isMandatoryRelatedType/);
+assert.doesNotMatch(appSource, /const isLegal = isMandatoryRelatedType/);
+assert.match(templateSource, /Oma vakuutusyhteenveto/);
+assert.match(templateSource, /Tulosta tai tallenna PDF/);
+assert.equal(insuranceTypes.business.bizPeople.title, "Henkilöstö");
+assert.equal(insuranceTypes.business.bizVehicle.title, "Ajoneuvot");
+assert.equal(insuranceTypes.business.bizProperty.title, "Irtaimisto ja toimitila");
+assert.equal(insuranceTypes.business.bizCyber.title, "Kyber");
 
 console.log("Smoke tests passed");

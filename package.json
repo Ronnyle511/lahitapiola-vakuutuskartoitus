@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node scripts/build-standalone.mjs",
     "serve": "node server.mjs",
-    "test": "node tests/smoke.test.mjs",
+    "test": "node tests/smoke.test.mjs && node tests/solution-engine.test.mjs",
     "check:links": "node tests/link-check.mjs"
   }
 }
