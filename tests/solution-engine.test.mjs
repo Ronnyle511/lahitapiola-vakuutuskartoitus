@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { buildAssessmentResult, getBusinessFlow, getCompanySizeClass, normalizeEmployeeBand, normalizeIndustry } from "../src/solutionEngine.js";
 
-const state = (baseAnswers, selectedRelevantNeeds = [], selectedCoverage = {}, detailResults = {}) => ({
+const state = (baseAnswers, selectedRelevantNeeds = [], selectedCoverage = {}, detailResults = {}, quickAnswers = {}) => ({
   baseAnswers,
-  quickAnswers: {},
+  quickAnswers,
   selectedRelevantNeeds,
   selectedCoverage,
   detailResults
@@ -74,19 +74,83 @@ const restaurantMandatoryIds = restaurant.mandatoryChecks.map((item) => item.id)
 assert.ok(healthcare.mandatoryChecks.some((item) => item.id === "patient"));
 assert.ok(!restaurantMandatoryIds.includes("patient"));
 
+const businessBaseNeeds = buildAssessmentResult("business", state({
+  industry: "grocery",
+  hasEmployees: "yes",
+  hasVehicles: "yes",
+  digitalDependency: "yes",
+  businessTravelNeed: "yes"
+}));
+assert.ok(businessBaseNeeds.recommendedCovers.some((item) => item.key === "bizVehicle"));
+assert.ok(businessBaseNeeds.recommendedCovers.some((item) => item.key === "bizCyber"));
+assert.ok(businessBaseNeeds.recommendedCovers.some((item) => item.key === "bizTravel"));
+assert.ok(businessBaseNeeds.pricingPayload.selectedRelevantNeeds.includes("vehicles_or_transport"));
+assert.equal(businessBaseNeeds.profile.employeeBand, "Työntekijöitä");
+assert.equal(businessBaseNeeds.mandatoryChecks.find((item) => item.id === "traffic")?.badgeLabel, "Lakisääteinen liikennekäytössä");
+assert.equal(businessBaseNeeds.mandatoryChecks.find((item) => item.id === "group_life")?.obligationKind, "collective_agreement");
+assert.equal(businessBaseNeeds.mandatoryChecks.find((item) => item.id === "group_life")?.badgeLabel, "Työehtosopimuksen perusteella");
+
 const family = buildAssessmentResult("personal", state({
   ageGroup: "36_45",
   livingType: "house",
-  lifeSituation: "employed"
+  lifeSituation: "employed",
+  hasPersonalVehicle: "yes",
+  travelsRegularly: "yes",
+  hasPets: "yes",
+  financialDependents: "yes"
 }, ["children_health", "family_financial_security", "vehicle"]));
 assert.equal(family.flowType, "personal_solution_package");
 assert.ok(family.recommendedCovers.some((item) => item.key === "home"));
 assert.ok(family.recommendedCovers.some((item) => item.key === "health"));
 assert.ok(family.recommendedCovers.some((item) => item.key === "life"));
 assert.ok(family.recommendedCovers.some((item) => item.key === "vehicle"));
+assert.ok(family.recommendedCovers.some((item) => item.key === "travel"));
+assert.ok(family.recommendedCovers.some((item) => item.key === "pet"));
+assert.ok(family.mandatoryChecks.some((item) => item.id === "traffic"));
+assert.ok(!family.mandatoryChecks.some((item) => item.id === "yel"));
 assert.equal(family.selectedCoverageLevels.home.refined, false);
 assert.equal(family.pricingPayload.selectedCoverageLevels.home, undefined);
 assert.equal(family.pricingPayload.priceImpactSymbol, "");
+
+const currentCoverReview = buildAssessmentResult("personal", state({
+  ageGroup: "26_35",
+  livingType: "rent",
+  lifeSituation: "employed"
+}, [], {}, {}, {
+  currentInsuranceAreas: ["home", "vehicle", "travel", "health"],
+  reviewGoal: ["check", "compare"]
+}));
+const currentReviewKeys = currentCoverReview.recommendedCovers.map((item) => item.key);
+assert.ok(currentReviewKeys.includes("vehicle"));
+assert.ok(currentReviewKeys.includes("travel"));
+assert.match(currentCoverReview.recommendedCovers.find((item) => item.key === "vehicle").reason, /voimassa/i);
+assert.ok(currentCoverReview.pricingPayload.selectedCovers.includes("vehicle"));
+assert.ok(currentCoverReview.pricingPayload.selectedCovers.includes("travel"));
+
+const entrepreneurNotWorking = buildAssessmentResult("business", state({
+  industry: "professional",
+  hasEmployees: "no",
+  entrepreneurWorks: "no",
+  hasVehicles: "no"
+}));
+assert.ok(!entrepreneurNotWorking.mandatoryChecks.some((item) => item.id === "yel"));
+
+const entrepreneurWorking = buildAssessmentResult("business", state({
+  industry: "professional",
+  hasEmployees: "no",
+  entrepreneurWorks: "yes",
+  hasVehicles: "no"
+}));
+assert.ok(entrepreneurWorking.mandatoryChecks.some((item) => item.id === "yel"));
+
+const logisticsWithoutVehicles = buildAssessmentResult("business", state({
+  industry: "logistics",
+  hasEmployees: "no",
+  entrepreneurWorks: "yes",
+  hasVehicles: "no"
+}));
+assert.ok(!logisticsWithoutVehicles.mandatoryChecks.some((item) => item.id === "traffic"));
+assert.ok(!logisticsWithoutVehicles.recommendedCovers.some((item) => item.key === "bizVehicle"));
 
 const familyPerus = buildAssessmentResult("personal", state({
   ageGroup: "36_45",
@@ -104,7 +168,7 @@ assert.equal(familyPerus.selectedCoverageLevels.home.selectedKey, "perus");
 assert.equal(familyPerus.selectedCoverageLevels.home.refined, true);
 assert.equal(familyPerus.pricingPayload.selectedCoverageLevels.home.selectedKey, "perus");
 assert.equal(familyPerus.aiContext.selectedCoverageLevels.home.selectedKey, "perus");
-assert.match(familyPerus.contactSummary, /Hinta-arvion vaikutus/);
+assert.match(familyPerus.contactSummary, /Valittujen laajuuksien suunta/);
 assert.match(familyPerus.pricingPayload.disclaimer, /ei ole lopullinen hinta/i);
 
 console.log("Solution engine tests passed");

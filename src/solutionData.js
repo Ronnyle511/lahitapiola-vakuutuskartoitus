@@ -62,38 +62,50 @@ export const mandatoryInsuranceRules = [
   {
     id: "yel",
     name: "YEL-vakuutus",
-    appliesIf: (profile) => profile.sizeClass === "solo" || profile.entrepreneurWorks === true,
+    obligationKind: "statutory",
+    badgeLabel: "Lakisääteinen, jos ehdot täyttyvät",
+    appliesIf: (profile) => profile.customerType === "business" && profile.entrepreneurWorks !== false,
     text: "YEL-vakuutus tulee tarkistaa, jos yrittäjä työskentelee yrityksessä ja YEL-vakuuttamisen ehdot täyttyvät."
   },
   {
     id: "tyel",
     name: "TyEL-vakuutus",
-    appliesIf: (profile) => profile.hasEmployees,
+    obligationKind: "statutory",
+    badgeLabel: "Lakisääteinen, jos ehdot täyttyvät",
+    appliesIf: (profile) => profile.customerType === "business" && profile.employeeStatus !== "no",
     text: "TyEL-vakuutus tulee tarkistaa, jos yrityksellä on työntekijöitä."
   },
   {
     id: "workers_comp",
     name: "Työtapaturma- ja ammattitautivakuutus",
-    appliesIf: (profile) => profile.hasEmployees,
-    text: "Työtapaturma- ja ammattitautivakuutus tulee tarkistaa, jos yrityksellä on työntekijöitä."
+    obligationKind: "statutory",
+    badgeLabel: "Lakisääteinen, jos ehdot täyttyvät",
+    appliesIf: (profile) => profile.customerType === "business" && profile.employeeStatus !== "no",
+    text: "Työtapaturma- ja ammattitautivakuutus tulee tarkistaa, jos yrityksellä on työntekijöitä ja vakuuttamisvelvollisuuden ehdot täyttyvät."
   },
   {
     id: "traffic",
     name: "Liikennevakuutus",
+    obligationKind: "statutory",
+    badgeLabel: "Lakisääteinen liikennekäytössä",
     appliesIf: (profile) => profile.hasVehicles,
-    text: "Liikennevakuutus tulee tarkistaa yrityksen liikenteessä käytettäville ajoneuvoille."
+    text: "Liikennevakuutus on lakisääteinen liikenteessä käytettävälle ajoneuvolle. Muut ajoneuvovakuutukset, kuten kasko, ovat vapaaehtoisia."
   },
   {
     id: "patient",
     name: "Potilasvakuutus",
-    appliesIf: (profile) => profile.industryKey === "healthcare",
+    obligationKind: "statutory",
+    badgeLabel: "Lakisääteinen, jos toiminta kuuluu piiriin",
+    appliesIf: (profile) => profile.customerType === "business" && profile.industryKey === "healthcare",
     text: "Potilasvakuutus tulee tarkistaa, jos yritys harjoittaa potilasvakuutuksen piiriin kuuluvaa terveyden- tai sairaanhoitotoimintaa."
   },
   {
     id: "group_life",
     name: "Työntekijäin ryhmähenkivakuutus",
-    appliesIf: (profile) => profile.hasEmployees,
-    text: "Työntekijäin ryhmähenkivakuutus tulee tarkistaa, jos alan ehdot tai sopimukset sitä edellyttävät."
+    obligationKind: "collective_agreement",
+    badgeLabel: "Työehtosopimuksen perusteella",
+    appliesIf: (profile) => profile.customerType === "business" && profile.employeeStatus !== "no",
+    text: "Työntekijäin ryhmähenkivakuutus tulee tarkistaa, jos yritystä sitova työehtosopimus edellyttää sitä."
   }
 ];
 
