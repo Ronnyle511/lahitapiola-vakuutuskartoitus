@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { buildAssessmentResult, getCompanySizeClass, normalizeEmployeeBand, normalizeIndustry } from "../src/solutionEngine.js";
+import { buildAssessmentResult, getBusinessFlow, getCompanySizeClass, normalizeEmployeeBand, normalizeIndustry } from "../src/solutionEngine.js";
 
 const state = (baseAnswers, selectedRelevantNeeds = [], selectedCoverage = {}, detailResults = {}) => ({
   baseAnswers,
@@ -12,9 +12,19 @@ const state = (baseAnswers, selectedRelevantNeeds = [], selectedCoverage = {}, d
 assert.equal(getCompanySizeClass("solo"), "solo");
 assert.equal(getCompanySizeClass("1_10"), "micro");
 assert.equal(getCompanySizeClass("11_50"), "small");
-assert.equal(normalizeEmployeeBand("unknown"), "solo");
+assert.equal(getCompanySizeClass("51_249"), "mid");
+assert.equal(getCompanySizeClass("250_plus"), "large");
+assert.equal(normalizeEmployeeBand("1_4"), "micro");
+assert.equal(normalizeEmployeeBand("20_49"), "small");
+assert.equal(normalizeEmployeeBand("50_plus"), "mid");
 assert.equal(normalizeIndustry("it"), "professional");
 assert.equal(normalizeIndustry("consulting"), "professional");
+
+assert.equal(getBusinessFlow({ sizeClass: "solo" }), "solution_package");
+assert.equal(getBusinessFlow({ sizeClass: "micro" }), "solution_package");
+assert.equal(getBusinessFlow({ sizeClass: "small" }), "solution_package");
+assert.equal(getBusinessFlow({ sizeClass: "mid" }), "risk_area_discussion");
+assert.equal(getBusinessFlow({ sizeClass: "large" }), "direct_expert_contact");
 
 const restaurant = buildAssessmentResult("business", state({
   industry: "restaurant",
@@ -27,9 +37,6 @@ assert.deepEqual(
 );
 assert.ok(restaurant.mandatoryChecks.some((item) => item.id === "tyel"));
 assert.ok(restaurant.mandatoryChecks.some((item) => item.id === "workers_comp"));
-assert.ok(restaurant.mandatoryChecks.every((item) => item.purpose));
-assert.ok(restaurant.nonRelevantCovers.length > 0);
-assert.ok(restaurant.nonRelevantCovers.every((item) => !restaurant.recommendedCovers.some((recommended) => recommended.key === item.key)));
 
 const professional = buildAssessmentResult("business", state({
   industry: "professional",
@@ -40,6 +47,24 @@ assert.ok(professional.recommendedCovers.some((item) => item.key === "bizLiabili
 assert.ok(professional.recommendedCovers.some((item) => item.key === "bizCyber"));
 assert.ok(professional.recommendedCovers.some((item) => item.key === "bizPeople"));
 assert.ok(professional.recommendedCovers.some((item) => item.key === "bizInterruption"));
+
+const manufacturingMid = buildAssessmentResult("business", state({
+  industry: "manufacturing",
+  employeeCount: "51_249"
+}));
+assert.equal(manufacturingMid.flowType, "risk_area_discussion");
+assert.equal(manufacturingMid.recommendedCovers.length, 0);
+assert.ok(manufacturingMid.riskAreas.some((item) => item.id === "property"));
+assert.ok(manufacturingMid.riskAreas.some((item) => item.id === "program"));
+assert.match(manufacturingMid.contactSummary, /Riskialueet/);
+
+const largeBusiness = buildAssessmentResult("business", state({
+  industry: "manufacturing",
+  employeeCount: "250_plus"
+}));
+assert.equal(largeBusiness.flowType, "direct_expert_contact");
+assert.equal(largeBusiness.recommendedCovers.length, 0);
+assert.ok(largeBusiness.sellerDiscussionPoints.length >= 3);
 
 const healthcare = buildAssessmentResult("business", state({
   industry: "healthcare",
@@ -60,7 +85,8 @@ assert.ok(family.recommendedCovers.some((item) => item.key === "health"));
 assert.ok(family.recommendedCovers.some((item) => item.key === "life"));
 assert.ok(family.recommendedCovers.some((item) => item.key === "vehicle"));
 assert.equal(family.selectedCoverageLevels.home.refined, false);
-assert.ok(Array.isArray(family.nonRelevantCovers));
+assert.equal(family.pricingPayload.selectedCoverageLevels.home, undefined);
+assert.equal(family.pricingPayload.priceImpactSymbol, "");
 
 const familyPerus = buildAssessmentResult("personal", state({
   ageGroup: "36_45",
@@ -76,7 +102,9 @@ const familyPerus = buildAssessmentResult("personal", state({
 }));
 assert.equal(familyPerus.selectedCoverageLevels.home.selectedKey, "perus");
 assert.equal(familyPerus.selectedCoverageLevels.home.refined, true);
+assert.equal(familyPerus.pricingPayload.selectedCoverageLevels.home.selectedKey, "perus");
 assert.equal(familyPerus.aiContext.selectedCoverageLevels.home.selectedKey, "perus");
-assert.doesNotMatch(familyPerus.contactSummary, /Hinta-arvio/i);
+assert.match(familyPerus.contactSummary, /Hinta-arvion vaikutus/);
+assert.match(familyPerus.pricingPayload.disclaimer, /ei ole lopullinen hinta/i);
 
 console.log("Solution engine tests passed");

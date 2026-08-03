@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="./src/styles.css">
 </head>
 <body>
+  <div class="demo-banner" role="note">Konseptidemo – ei virallisessa käytössä</div>
   <header class="site-header">
     <div class="site-topline" aria-label="Asiakasryhmät">
       <span>Henkilöasiakkaat</span>
@@ -20,7 +21,7 @@
       </div>
       <nav class="site-links" aria-label="Päänavigaatio">
         <a href="#appShell">Vakuutukset</a>
-        <a href="#resultsView">Suositukset</a>
+        <a href="#appShell">Kartoitus</a>
         <a href="#contactView">Yhteydenotto</a>
       </nav>
       <button class="btn btn-secondary btn-small" type="button">Kirjaudu</button>
@@ -45,23 +46,12 @@
           <div class="hero-copy">
             <h1 id="heroTitle"></h1>
             <p class="lead" id="heroLead"></p>
-
             <div class="hero-actions">
               <button class="btn btn-primary" id="startAssessment" type="button">Aloita vakuutuskartoitus</button>
             </div>
           </div>
           <figure class="hero-media">
-            <img
-              id="heroImage"
-              src="./assets/images/kartoitus-henkilo-1200.webp"
-              srcset="./assets/images/kartoitus-henkilo-640.webp 640w, ./assets/images/kartoitus-henkilo-1200.webp 1200w"
-              sizes="(max-width: 760px) 100vw, 480px"
-              width="1200"
-              height="675"
-              alt="Pariskunta kotinsa pihalla."
-              fetchpriority="high"
-              decoding="async"
-            >
+            <img id="heroImage" src="./assets/images/kartoitus-henkilo-1200.webp" srcset="./assets/images/kartoitus-henkilo-640.webp 640w, ./assets/images/kartoitus-henkilo-1200.webp 1200w" sizes="(max-width: 760px) 100vw, 480px" width="1200" height="675" alt="Pariskunta kotinsa pihalla." fetchpriority="high" decoding="async">
           </figure>
         </div>
 
@@ -111,15 +101,7 @@
             <h3 id="introTitle"></h3>
             <p class="muted" id="introText"></p>
             <figure class="intro-media">
-              <img
-                id="introImage"
-                src="./assets/images/kartoitus-perhe-800.webp"
-                width="800"
-                height="450"
-                alt="Kaksi lasta leikkii kotona."
-                loading="lazy"
-                decoding="async"
-              >
+              <img id="introImage" src="./assets/images/kartoitus-perhe-800.webp" width="800" height="450" alt="Kaksi lasta leikkii kotona." loading="lazy" decoding="async">
             </figure>
             <div class="intro-grid quiet-intro">
               <div class="intro-box"><h4>Perustiedot</h4><p id="shortText"></p><div class="chip-row" id="shortChips"></div></div>
@@ -196,17 +178,7 @@
           <div id="contactView" class="hidden">
             <h3>Vapaaehtoinen yhteydenotto</h3>
             <p class="muted">Voit käyttää kartoitusta ja nähdä oman yhteenvedon myös ilman yhteystietojen antamista. Täytä tämä osio vain, jos haluat valmistella yhteydenottopyynnön.</p>
-            <figure class="contact-media">
-              <img
-                src="./assets/images/kartoitus-yhteydenotto-800.webp"
-                width="800"
-                height="450"
-                alt="Asiantuntija ja asiakas käyvät yhdessä läpi kartoituksen tietoja."
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
-            <div id="contactHandoffSummary"></div>
+            <div id="contactPriceSummary" class="hidden" aria-hidden="true"></div>
             <h4 class="contact-subtitle">Mistä haluat keskustella?</h4>
             <div class="contact-list" id="contactChoices"></div>
             <div class="form-grid">
@@ -216,9 +188,6 @@
               <label class="field">Puhelin <input id="contactPhone" autocomplete="tel"></label>
               <label class="field">Toivottu yhteydenottotapa <select id="contactChannel"><option>Puhelu</option><option>Sähköposti</option><option>Verkkotapaaminen</option></select></label>
               <label class="field">Paras aika ottaa yhteyttä <select id="contactTime"><option>Arkisin aamupäivällä</option><option>Arkisin iltapäivällä</option><option>Arkisin alkuillasta</option><option>Sähköpostilla milloin vain</option></select></label>
-              <label class="field">Milloin asia on ajankohtainen? <select id="contactTimeline"><option>Mahdollisimman pian</option><option>Seuraavan kuukauden aikana</option><option>1–3 kuukauden sisällä</option><option>Kartoitan vasta vaihtoehtoja</option></select></label>
-              <label class="field">Mitä haluat saavuttaa? <select id="contactGoal"><option>Haluan varmistaa, että nykyinen turva on riittävä</option><option>Haluan vertailla sopivia turvatasoja</option><option>Tarvitsen vakuutukset uuteen elämäntilanteeseen tai yritykseen</option><option>Haluan keskustella asiantuntijan kanssa vaihtoehdoista</option></select></label>
-              <label class="field">Nykyinen vakuutustilanne <select id="currentInsuranceStatus"><option>Minulla on jo vakuutuksia LähiTapiolassa</option><option>Minulla on vakuutuksia toisessa yhtiössä</option><option>Minulla ei vielä ole näitä vakuutuksia</option><option>En ole varma nykyisestä turvastani</option></select></label>
               <label class="field full">Lisätiedot tai kysymykset
                 <textarea id="freeText" placeholder="Kuvaa tilannettasi omin sanoin"></textarea>
               </label>
@@ -244,12 +213,11 @@
             <details class="crm-summary-details hidden" id="crmSummaryDetails">
               <summary>Yhteydenoton taustayhteenveto</summary>
               <p class="muted small">Tämä kooste voidaan siirtää asiakaspalvelulle yhteydenoton yhteydessä.</p>
-              <textarea id="crmSummary" class="summary-box" aria-label="Asiantuntijalle välitettävä yhteenveto" readonly></textarea>
+              <textarea id="crmSummary" class="summary-box" readonly></textarea>
               <button class="btn btn-secondary btn-small" id="backToContact" type="button">Muokkaa yhteydenottoa</button>
             </details>
             <div class="summary-actions">
               <button class="btn btn-secondary" id="summaryBackToResults" type="button">Takaisin suosituksiin</button>
-              <button class="btn btn-secondary" id="editAnswers" type="button">Muokkaa vastauksia</button>
               <button class="btn btn-soft" id="summaryRefine" type="button">Tarkenna vakuutuksia</button>
               <button class="btn btn-primary" id="summaryContact" type="button">Pyydä yhteydenottoa</button>
               <button class="link-button summary-restart" id="restartFromSummary" type="button">Aloita alusta</button>

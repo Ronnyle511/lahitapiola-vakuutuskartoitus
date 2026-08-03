@@ -1,6 +1,6 @@
 import { insuranceTypes } from "../src/data.js";
 
-const timeoutMs = Number(process.env.LINK_TIMEOUT_MS || 20000);
+const timeoutMs = Number(process.env.LINK_TIMEOUT_MS || 12000);
 const links = [];
 
 for (const [profileId, types] of Object.entries(insuranceTypes)) {
@@ -37,20 +37,11 @@ if (failures.length) {
 }
 
 async function checkLink(url) {
-  let lastResult = { ok: false, error: "UnknownError" };
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    lastResult = await checkLinkOnce(url, attempt === 0 ? "HEAD" : "GET");
-    if (lastResult.ok) return lastResult;
-  }
-  return lastResult;
-}
-
-async function checkLinkOnce(url, initialMethod) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    let response = await fetch(url, { method: initialMethod, redirect: "follow", signal: controller.signal });
-    if (initialMethod === "HEAD" && (response.status === 405 || response.status === 403)) {
+    let response = await fetch(url, { method: "HEAD", redirect: "follow", signal: controller.signal });
+    if (response.status === 405 || response.status === 403) {
       response = await fetch(url, { method: "GET", redirect: "follow", signal: controller.signal });
     }
     return { ok: response.ok, status: response.status };

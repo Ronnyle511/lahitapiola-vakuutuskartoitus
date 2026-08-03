@@ -35,7 +35,7 @@ export function buildDetailResult(profileId, flowKey, answers = {}) {
       [{ label: "Tulos", value: "Syventävää logiikkaa ei ole vielä mallinnettu tälle vakuutukselle." }],
       ["suositus perustuu lyhyen kartoituksen vastauksiin"],
       [],
-      "Varmista vakuutusmäärät, rajaukset ja omavastuut asiantuntijan kanssa."
+      "Jatka hinta-arvioon ja varmista vakuutusmäärät, rajaukset ja omavastuut asiantuntijan kanssa."
     );
     return attachCoverageComparison(profileId, flowKey, answers, fallback);
   }
@@ -300,7 +300,7 @@ function buildLiabilityResult(profileId, flowKey, a) {
   if (has(needs, "family")) topics.push("Perheen ja lasten vastuutilanteet");
   if (has(needs, "pet_related")) topics.push("Lemmikkiin liittyvät vastuutilanteet");
   if (!topics.length) topics.push("Vastuu- ja oikeusturvan jatkoselvitys");
-  if (a.liabilityScope === "expert" || a.liabilityConcern === "unsure") notes.push("Koska tilanne on epäselvä, turvan sisältö kannattaa varmistaa asiantuntijan kanssa.");
+  if (a.liabilityScope === "expert" || a.liabilityConcern === "unsure") notes.push("Koska tilanne on epäselvä, asiantuntijan arvio kannattaa ottaa mukaan ennen hinta-arviota.");
   if (has(needs, "home_related")) notes.push("Asumiseen, remonttiin ja vuokraamiseen liittyvät rajaukset pitää tarkistaa vakuutusehdoista.");
 
   return result(
@@ -645,7 +645,7 @@ function attachCoverageComparison(profileId, flowKey, answers, output) {
     recommended,
     alternatives,
     basis: recommendation.basis,
-    nextStep: recommendation.nextStep || "Tarkka vakuutusturva ja soveltuvuus varmistetaan asiantuntijan kanssa."
+    nextStep: recommendation.nextStep || model.calculatorAction
   };
   return output;
 }
@@ -678,7 +678,7 @@ function chooseCoverageKeys(flowKey, a) {
       if (has(a.healthNeeds, "sports")) keys.push("urheilu");
       if (has(a.healthNeeds, "accident")) keys.push("tapaturma");
       if (has(a.healthNeeds, "income") || has(a.healthNeeds, "permanent")) keys.push("paivaraha");
-      return picked(keys.length ? keys : ["tapaturma"], "Terveysturvan rakenne kannattaa valita sen mukaan, painottuuko vastauksissa sairaus, tapaturma, urheilu vai toimeentulon turva.");
+      return picked(keys.length ? keys.slice(0, 3) : ["tapaturma"], "Terveysturvan rakenne kannattaa valita sen mukaan, painottuuko vastauksissa sairaus, tapaturma, urheilu vai toimeentulon turva.");
     }
     case "life": {
       if (has(a.lifeGoal, "serious_illness")) return picked(["vakavaSairaus", "kuolemanvara"], "Vakavan sairauden kertakorvaus ja kuolemanvaraturva nousivat esiin, koska haluat turvaa sairastumisen ja läheisten talouden varalle.");
@@ -693,7 +693,7 @@ function chooseCoverageKeys(flowKey, a) {
       if (has(a.petNeeds, "life")) keys.push("henki");
       if (has(a.petNeeds, "use")) keys.push("kaytto");
       if ((a.petType === "dog" || a.petType === "both") && has(a.petNeeds, "liability")) keys.push("koiranVastuu");
-      return picked(keys.length ? keys : ["elainlaakari"], "Lemmikkivakuutuksen rakenne kannattaa valita eläinlääkärikulujen, eläimen iän ja mahdollisten lisäturvien perusteella.");
+      return picked(keys.length ? keys.slice(0, 3) : ["elainlaakari"], "Lemmikkivakuutuksen rakenne kannattaa valita eläinlääkärikulujen, eläimen iän ja mahdollisten lisäturvien perusteella.");
     }
     case "apartment": {
       if (["suppea", "perus", "laaja"].includes(a.holidayLevel)) return picked([a.holidayLevel], `${labelLevel(a.holidayLevel)} vastaa valitsemaasi turvatasoa vapaa-ajan asunnolle.`);
@@ -741,14 +741,14 @@ function chooseCoverageKeys(flowKey, a) {
       if (a.peopleSize === "solo" || has(a.peopleNeeds, "entrepreneur_accident")) keys.push("entrepreneur");
       if (has(a.peopleNeeds, "medical") || has(a.peopleNeeds, "workability")) keys.push("workability");
       if (has(a.peopleNeeds, "key_people")) keys.push("keyPeople");
-      return picked(keys.length ? keys : ["entrepreneur"], "Henkilöratkaisuissa erotetaan työntekijöiden lakisääteinen turva, yrittäjän oma turva ja vapaaehtoiset työkykyratkaisut.");
+      return picked(keys.length ? keys.slice(0, 3) : ["entrepreneur"], "Henkilöratkaisuissa erotetaan työntekijöiden lakisääteinen turva, yrittäjän oma turva ja vapaaehtoiset työkykyratkaisut.");
     }
     case "bizTravel": {
       const keys = ["traveler"];
       if (a.bizTripType === "posted") keys.push("posted");
       if (has(a.bizTravelConcerns, "luggage") || has(a.bizTravelConcerns, "liability")) keys.push("luggage");
       if (has(a.bizTravelConcerns, "legal")) keys.push("legal");
-      return picked(keys, "Yrityksen matkaturva rakentuu matkustajaturvasta ja tarvittaessa komennus-, tavara-, vastuu- ja oikeusturvasta.");
+      return picked(keys.slice(0, 3), "Yrityksen matkaturva rakentuu matkustajaturvasta ja tarvittaessa komennus-, tavara-, vastuu- ja oikeusturvasta.");
     }
     case "bizCargo":
       return picked([{ own_goods: "ownGoods", carrier: "carrier", forwarder: "forwarder", exhibition: "exhibition" }[a.cargoRole] || "ownGoods"], "Kuljetusvakuutuksen oikea rakenne riippuu siitä, kuljettaako yritys omaa tavaraa vai vastaako asiakkaan tavarasta.");

@@ -1,5 +1,5 @@
 import { coverageModels, insuranceTypes } from "./data.js";
-import { businessIndustries, businessPlaybooks, businessRelevantNeedOptions, companySizeClasses, employeeBandAliases, industryAliases, mandatoryInsuranceRules, privatePlaybooks, privateRelevantNeedOptions } from "./solutionData.js";
+import { businessIndustries, businessPlaybooks, businessRelevantNeedOptions, businessRiskAreaPlaybooks, companySizeClasses, employeeBandAliases, industryAliases, indicativePriceSymbol, mandatoryInsuranceRules, priceImpactDisclaimer, privatePlaybooks, privateRelevantNeedOptions } from "./solutionData.js";
 
 export function normalizeEmployeeBand(value) {
   return employeeBandAliases[value] || "solo";
@@ -13,13 +13,19 @@ export function getCompanySizeClass(employeeBand) {
   return normalizeEmployeeBand(employeeBand);
 }
 
+export function getBusinessFlow(profile) {
+  if (profile.sizeClass === "large") return "direct_expert_contact";
+  if (profile.sizeClass === "mid") return "risk_area_discussion";
+  return "solution_package";
+}
+
 export function relevantNeedOptions(mode, state = {}) {
   if (mode === "personal") return privateRelevantNeedOptions;
   const industryKey = normalizeIndustry(state.baseAnswers?.industry);
   const playbook = businessPlaybooks[industryKey] || businessPlaybooks.other;
   const group = playbook.relevantGroup || "generic";
   const options = businessRelevantNeedOptions[group] || businessRelevantNeedOptions.generic;
-  return [...options, { id: "current_cover_unclear", label: "Nykyinen vakuutusturva on epäselvä tai haluan tarkistaa riittävyyden", affects: ["all"] }, { id: "unsure", label: "En osaa sanoa", affects: [] }];
+  return [...options, { id: "current_cover_unclear", label: "Nykyinen vakuutusturva on epäselvä tai haluan tarkistaa riittävyyden", affects: ["all"], priceImpact: 0 }, { id: "unsure", label: "En osaa sanoa", affects: [], priceImpact: 0 }];
 }
 
 export function buildAssessmentResult(mode, state = {}, legacyRecommendation = null) {
@@ -44,7 +50,7 @@ export function buildBusinessAssessmentResult(state = {}, legacyRecommendation =
       || state.selectedRelevantNeeds?.includes("vehicles_or_transport")
       || ["logistics", "automotive"].includes(industryKey)
   };
-  const flowType = "solution_package";
+  const flowType = getBusinessFlow(profile);
   const playbook = businessPlaybooks[industryKey] || businessPlaybooks.other;
   const selectedRelevantNeeds = [...(state.selectedRelevantNeeds || [])];
   const needOptions = relevantNeedOptions("business", state);
@@ -60,22 +66,26 @@ export function buildBusinessAssessmentResult(state = {}, legacyRecommendation =
     defaultCoverageKey: item.defaultCoverageKey
   }));
   const recommendedCovers = uniqueCovers([...(playbook.recommendedCovers || []), ...activatedOptional]);
-  const riskAreas = [];
+  const riskAreas = flowType === "risk_area_discussion"
+    ? businessRiskAreaPlaybooks.generic.riskAreas
+    : [];
 
   return {
     mode: "business",
     profile,
     flowType,
-    title: playbook.title,
+    title: flowType === "solution_package" ? playbook.title : flowType === "risk_area_discussion" ? businessRiskAreaPlaybooks.generic.title : "Räätälöity yritysvakuutusten kokonaisuus",
     summary: playbook.summary,
     legacyRecommendation,
     mandatoryChecks: applyMandatoryRules(profile),
-    recommendedCovers,
-    optionalCovers,
+    recommendedCovers: flowType === "solution_package" ? recommendedCovers : [],
+    optionalCovers: flowType === "solution_package" ? optionalCovers : [],
     riskAreas,
     selectedRelevantNeeds,
     selectedCoverageLevels: {},
-    sellerDiscussionPoints: []
+    sellerDiscussionPoints: flowType === "direct_expert_contact"
+      ? ["Nykyinen vakuutusohjelma ja uusimisajankohta", "Toimipaikat ja omaisuusarvot", "Sopimus- ja kansainväliset vastuut", "Henkilöstö, toimitusketjut ja mahdollinen vakuutusmeklari"]
+      : riskAreas.map((item) => item.title)
   };
 }
 
@@ -147,7 +157,7 @@ export function buildPrivateAssessmentResult(state = {}, legacyRecommendation = 
 export function applyMandatoryRules(profile) {
   return mandatoryInsuranceRules
     .filter((rule) => rule.appliesIf(profile))
-    .map(({ id, name, purpose, text }) => ({ id, name, purpose, text }));
+    .map(({ id, name, text }) => ({ id, name, text }));
 }
 
 export function refreshDerivedAssessmentData(result, state = {}) {
@@ -156,23 +166,10 @@ export function refreshDerivedAssessmentData(result, state = {}) {
     selectedRelevantNeeds: [...(state.selectedRelevantNeeds || result.selectedRelevantNeeds || [])]
   };
   next.selectedCoverageLevels = buildCoverageLevelRecommendations(next, state.detailResults || {}, state.selectedCoverage || {});
-  next.nonRelevantCovers = buildNonRelevantCovers(next);
+  next.pricingPayload = buildPricingPayload(next);
   next.contactSummary = buildContactSummary(next);
   next.aiContext = buildAiContext(next);
   return next;
-}
-
-export function buildNonRelevantCovers(result) {
-  const shownKeys = new Set([
-    ...(result.recommendedCovers || []).map((item) => item.key),
-    ...(result.optionalCovers || []).map((item) => item.key)
-  ]);
-  return Object.keys(insuranceTypes[result.mode] || {})
-    .filter((key) => !shownKeys.has(key))
-    .map((key) => ({
-      key,
-      reason: "Tämä vakuutusalue ei noussut antamiesi tietojen perusteella ajankohtaiseksi. Voit silti avata sen tarkistettavaksi."
-    }));
 }
 
 export function buildCoverageLevelRecommendations(result, detailResults = {}, selectedCoverage = {}) {
@@ -204,10 +201,41 @@ export function buildCoverageLevelRecommendations(result, detailResults = {}, se
       selectedKey,
       selectedTitle: selectedOption.title,
       basis: detailComparison?.basis || coverItem.reason || "Ehdotus perustuu asiakasprofiiliin ja valittuihin tilanteisiin.",
+      priceImpactSymbol: indicativePriceSymbol(selectedKey),
       refined
     };
   });
   return levels;
+}
+
+export function buildPricingPayload(result) {
+  const selectedCovers = uniqueCovers([
+    ...(result.recommendedCovers || []),
+    ...(result.optionalCovers || []).filter((item) => item.active)
+  ]).map((item) => item.key);
+  const refinedCoverageLevels = Object.fromEntries(
+    Object.entries(result.selectedCoverageLevels || {}).filter(([, item]) => item.refined)
+  );
+  const symbols = Object.values(refinedCoverageLevels).map((item) => item.priceImpactSymbol);
+  const priceImpactSymbol = symbols.includes("€€€") ? "€€€" : symbols.includes("€€") ? "€€" : symbols.length ? "€" : "";
+  return {
+    customerType: result.mode,
+    flowType: result.flowType,
+    selectedCovers,
+    mandatoryChecks: (result.mandatoryChecks || []).map((item) => item.id),
+    selectedCoverageLevels: refinedCoverageLevels,
+    selectedRelevantNeeds: result.selectedRelevantNeeds || [],
+    riskFactors: (result.riskAreas || []).map((item) => item.id),
+    calculatorInputs: {
+      industry: result.profile?.industryKey || "",
+      companySize: result.profile?.sizeClass || "",
+      ageGroup: result.profile?.ageGroup || "",
+      livingType: result.profile?.livingType || ""
+    },
+    priceImpactLevel: priceImpactSymbol === "€€€" ? "laaja" : priceImpactSymbol === "€€" ? "tasapainoinen" : priceImpactSymbol ? "kevyt" : "ei arvioitu",
+    priceImpactSymbol,
+    disclaimer: priceImpactDisclaimer
+  };
 }
 
 export function buildAiContext(result) {
@@ -220,10 +248,10 @@ export function buildAiContext(result) {
     mandatoryChecks: result.mandatoryChecks || [],
     recommendedCovers: result.recommendedCovers || [],
     activeOptionalCovers: (result.optionalCovers || []).filter((item) => item.active),
-    nonRelevantCovers: result.nonRelevantCovers || [],
     riskAreas: result.riskAreas || [],
     selectedRelevantNeeds: result.selectedRelevantNeeds || [],
     selectedCoverageLevels: result.selectedCoverageLevels || {},
+    pricingPayload: result.pricingPayload || null,
     sellerDiscussionPoints: result.sellerDiscussionPoints || []
   };
 }
@@ -241,7 +269,9 @@ export function buildContactSummary(result) {
       : `Profiili: ${result.profile.ageGroup || "ikäryhmä ei tiedossa"}, ${result.profile.livingType || "asumismuoto ei tiedossa"}, ${result.profile.lifeSituation || "elämäntilanne ei tiedossa"}`,
     coverTitles.length ? `Suositellut vakuutusalueet: ${coverTitles.join(", ")}` : "",
     activeOptionalTitles.length ? `Tilanteesta riippuvat valinnat: ${activeOptionalTitles.join(", ")}` : "",
-    result.riskAreas?.length ? `Riskialueet: ${result.riskAreas.map((item) => item.title).join(", ")}` : ""
+    result.riskAreas?.length ? `Riskialueet: ${result.riskAreas.map((item) => item.title).join(", ")}` : "",
+    `Hinta-arvion vaikutus: ${result.pricingPayload?.priceImpactSymbol || "ei arvioitu"}`,
+    priceImpactDisclaimer
   ].filter(Boolean).join("\n");
 }
 
@@ -289,6 +319,8 @@ function optionalPersonalCondition(key) {
 function flowLabel(flowType) {
   return {
     solution_package: "Ratkaisupaketti",
+    risk_area_discussion: "Riskialuekartoitus",
+    direct_expert_contact: "Suora asiantuntijaohjaus",
     personal_solution_package: "Elämäntilannepaketti"
   }[flowType] || flowType;
 }
