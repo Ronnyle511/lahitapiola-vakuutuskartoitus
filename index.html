@@ -4935,6 +4935,56 @@ details.source-details summary {
   }
 }
 
+/* Aiemmin valitut kuvat; kartoituksen muu rakenne pysyy ennallaan. */
+.hero-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 480px);
+  gap: 48px;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.hero-media,
+.intro-media,
+.contact-media {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #dcecf3;
+}
+
+.hero-media {
+  box-shadow: 0 18px 42px rgba(0, 31, 62, 0.16);
+}
+
+.hero-media img,
+.intro-media img,
+.contact-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.intro-media,
+.contact-media {
+  max-width: 760px;
+  margin-top: 22px;
+}
+
+@media (max-width: 760px) {
+  .hero-content-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .hero-media,
+  .intro-media,
+  .contact-media {
+    border-radius: 14px;
+  }
+}
 </style>
 </head>
 <body>
@@ -4982,11 +5032,17 @@ details.source-details summary {
           </div>
         </div>
 
-        <h1 id="heroTitle"></h1>
-        <p class="lead" id="heroLead"></p>
-
-        <div class="hero-actions">
-          <button class="btn btn-primary" id="startAssessment" type="button">Aloita vakuutuskartoitus</button>
+        <div class="hero-content-grid">
+          <div>
+            <h1 id="heroTitle"></h1>
+            <p class="lead" id="heroLead"></p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" id="startAssessment" type="button">Aloita vakuutuskartoitus</button>
+            </div>
+          </div>
+          <figure class="hero-media">
+            <img id="heroImage" src="./assets/images/kartoitus-henkilo-1200.webp" srcset="./assets/images/kartoitus-henkilo-640.webp 640w, ./assets/images/kartoitus-henkilo-1200.webp 1200w" sizes="(max-width: 760px) 100vw, 480px" width="1200" height="675" alt="Pariskunta kotinsa pihalla." fetchpriority="high" decoding="async">
+          </figure>
         </div>
 
         <div class="resume-notice hidden" id="resumeNotice" role="status">
@@ -5042,6 +5098,9 @@ details.source-details summary {
           <div id="introView">
             <h3 id="introTitle"></h3>
             <p class="muted" id="introText"></p>
+            <figure class="intro-media">
+              <img id="introImage" src="./assets/images/kartoitus-perhe-800.webp" width="800" height="450" alt="Kaksi lasta leikkii kotona." loading="lazy" decoding="async">
+            </figure>
             <div class="intro-grid quiet-intro">
               <div class="intro-box"><h4>Perustiedot</h4><p id="shortText"></p><div class="chip-row" id="shortChips"></div></div>
               <div class="intro-box"><h4>Tarkentava kartoitus</h4><p id="detailText"></p><div class="chip-row" id="detailChips"></div></div>
@@ -5123,6 +5182,9 @@ details.source-details summary {
           <div id="contactView" class="hidden">
             <h3>Vapaaehtoinen yhteydenotto</h3>
             <p class="muted">Voit käyttää kartoitusta ja nähdä oman yhteenvedon myös ilman yhteystietojen antamista. Täytä tämä osio vain, jos haluat valmistella yhteydenottopyynnön.</p>
+            <figure class="contact-media">
+              <img src="./assets/images/kartoitus-yhteydenotto-800.webp" width="800" height="450" alt="Asiantuntija ja asiakas käyvät yhdessä läpi kartoituksen tietoja." loading="lazy" decoding="async">
+            </figure>
             <div id="contactPriceSummary"></div>
             <h4 class="contact-subtitle">Mistä haluat keskustella?</h4>
             <div class="contact-list" id="contactChoices"></div>
@@ -8780,6 +8842,21 @@ function renderShellTexts() {
   const p = profile();
   $("heroTitle").textContent = p.heroTitle;
   $("heroLead").textContent = p.heroLead;
+  const heroImage = $("heroImage");
+  const introImage = $("introImage");
+  if (mode === "business") {
+    heroImage.src = "./assets/images/kartoitus-yritys-1200.webp";
+    heroImage.srcset = "./assets/images/kartoitus-yritys-640.webp 640w, ./assets/images/kartoitus-yritys-1200.webp 1200w";
+    heroImage.alt = "Pienen yrityksen työntekijät suunnittelevat työtä yhdessä.";
+    introImage.src = "./assets/images/kartoitus-yrittaja-800.webp";
+    introImage.alt = "Sähköalan pienyrittäjä työskentelee asiakkaan kodissa.";
+  } else {
+    heroImage.src = "./assets/images/kartoitus-henkilo-1200.webp";
+    heroImage.srcset = "./assets/images/kartoitus-henkilo-640.webp 640w, ./assets/images/kartoitus-henkilo-1200.webp 1200w";
+    heroImage.alt = "Pariskunta kotinsa pihalla.";
+    introImage.src = "./assets/images/kartoitus-perhe-800.webp";
+    introImage.alt = "Kaksi lasta leikkii kotona.";
+  }
   $("modeLabel").textContent = p.label;
   $("headerModeLabel").textContent = p.label;
   $("appTitle").textContent = `${p.label}: vakuutuskartoitus`;
