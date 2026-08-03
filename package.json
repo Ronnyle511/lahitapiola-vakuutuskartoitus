@@ -7,6 +7,12 @@
     "build": "node scripts/build-standalone.mjs",
     "serve": "node server.mjs",
     "test": "node tests/smoke.test.mjs && node tests/solution-engine.test.mjs",
+    "test:ui": "node tests/ui.test.mjs",
+    "check:syntax": "node --check src/app.js && node --check src/data.js && node --check src/detailResults.js && node --check src/scoring.js && node --check src/solutionData.js && node --check src/solutionEngine.js",
     "check:links": "node tests/link-check.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.3",
+    "jsdom": "^26.1.0"
   }
 }

@@ -28,7 +28,9 @@ const standalone = html
   .replace('<link rel="stylesheet" href="./src/styles.css">', `<style>\n${css}\n</style>`)
   .replace('<script type="module" src="./src/app.js"></script>', `<script>\n${bundledJs}\n</script>`);
 
+const previewStandalone = standalone.replaceAll("./assets/images/", "../assets/images/");
+
 mkdirSync(join(root, "dist"), { recursive: true });
 writeFileSync(join(root, "index.html"), standalone, "utf8");
-writeFileSync(join(root, "dist", "preview.html"), standalone, "utf8");
+writeFileSync(join(root, "dist", "preview.html"), previewStandalone, "utf8");
 console.log("index.html and dist/preview.html created");
