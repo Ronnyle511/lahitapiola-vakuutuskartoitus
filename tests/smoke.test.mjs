@@ -92,7 +92,7 @@ assert.match(
 );
 assert.match(appSource, /traffic: businessImages\.traffic/);
 assert.match(appSource, /vehicle: businessImages\.vehicle/);
-assert.match(appSource, /home: .*HA_vakuutukset_paritalo/);
+assert.match(appSource, /home: .*LT_kotivakuutus_nuoretsohvalla_3/);
 assert.match(appSource, /travel: businessImages\.travel/);
 assert.match(appSource, /health: businessImages\.people/);
 assert.match(appSource, /life: businessImages\.groupLife/);
