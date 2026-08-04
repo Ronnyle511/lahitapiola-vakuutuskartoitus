@@ -10516,20 +10516,21 @@ function officialBusinessImages() {
 }
 
 function officialPersonalImages() {
+  const businessImages = officialBusinessImages();
   return {
-    traffic: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/sdsJ51GVhR5c4BPSxrgnE/ecf830b215542e6d8c941ab9f6cbc129/maksuturva.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
-    vehicle: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/11WvdKvDAYoHQpK3BEf6V7/b4a4b7851c40394072a2fb4161f104f7/LT_autovakuutus_hauskaa_1920x1080.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
-    home: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/5W26Cy9oPSG85wKX1sgG5/8b5b259c5777aa2ca319d0a415e4865b/HA_vakuutukset_paritalo.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
-    travel: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/68z5ZeSaFPdunznAWUnv1K/0178ee0b188283f67c7de119c5ec0b70/HA_matkavakuutus2025_hotellihuoneessa_19201080.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
-    health: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/53WXWL5Cy8n5hSyMlv5zxM/2e6011d64c32d2bd808999ec72547bc8/lapset.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
+    traffic: businessImages.traffic,
+    vehicle: businessImages.vehicle,
+    home: businessImages.property,
+    travel: businessImages.travel,
+    health: businessImages.people,
     pet: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/YlEQVbrzeP2rtwyBZoXe8/3c3661691858811c0e0607f24db2e098/kissavakuutus_1920x1080.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
     horse: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/4fiteFRyhGzYAfuHYWywny/57e735979904e26a91dd568eb1fc077e/LT_asiointi_aiti_isovanhempi_kotipihalla_1038.jpg?w=692&h=389&q=50&fm=webp",
     forest: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/33Pq44KkUXDfQc40jzNNKv/98af3b7ebad268f69207e746615dbb0c/HA_vakuutukset_metsa.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
     boat: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/6MczcvuftbM8xjOj5S0pS8/0d2bfcbe3eade06f375a219aade700e0/kotimaanmatka_mostphotos_16518801.webp?w=692&h=389&fl=progressive&q=50&fm=jpg",
     advice: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/35lX4KDaZg33cKqmdlCUKN/c4ff5f1cd8a83d77c87a36e24d6b10f1/yritta__ja__na__.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
-    life: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/2Yqs3y2eipTTzcKLN1HYl0/e9dec6a1c9ceef063f23750125dce1c7/HA_henkivakuutus_1920x1080.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
-    cottage: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/25Otx0XoyRWHuvJhiL0urr/428cc0de52e5279683c6e3ea20893394/pariskunta.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
-    liability: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/1IzJUZdW1JHGngxB8d0mQS/3c7230a47b82f47ca30227baf03c23cf/puhelin_1920x1080.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
+    life: businessImages.groupLife,
+    cottage: businessImages.realEstate,
+    liability: businessImages.liability,
     baby: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/3Y4viBDqiUlppPAoAMSyfT/3d21b9f19c4f5ed2d2955f7ddc83b485/17906902-close-up-of-young-father-holding-his-newborn-baby-son.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
     child: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/69qpGfP00csr00HHWcTZhZ/aa7dc86c93b3b3ee555b5b7bf7f1aad6/vauva_2.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg"
   };
