@@ -117,12 +117,14 @@ export const insuranceTypes = {
       title: "Hevosvakuutus",
       area: "Eläimet",
       desc: "Hevosen hoitoon ja eläinriskeihin liittyvä vakuutustarve.",
+      detailFlow: "horse",
       materials: [m("Materiaalilista", MATERIAL_PAGES.personal, "page")]
     },
     boat: {
       title: "Venevakuutus",
       area: "Veneily",
       desc: "Veneen, varusteiden ja veneilyyn liittyvien vahinkojen turva.",
+      detailFlow: "boat",
       materials: [m("Tuoteseloste", "https://core-public.editaprima.fi/lahitapiola/download/1034/10"), m("Materiaalilista", MATERIAL_PAGES.personal, "page")]
     },
     apartment: {
@@ -135,24 +137,28 @@ export const insuranceTypes = {
       title: "Metsävakuutus",
       area: "Metsä",
       desc: "Metsäomaisuuden myrsky-, palo-, lumi- ja hyönteisriskien tarkistus.",
+      detailFlow: "forest",
       materials: [m("Materiaalilista", MATERIAL_PAGES.personal, "page")]
     },
     pregnancy: {
       title: "Raskausajan turva",
       area: "Perhe ja lapsi",
       desc: "Raskauden aikainen turva ja syntyvän lapsen vakuutustarpeen selvitys.",
+      detailFlow: "pregnancy",
       materials: [m("Tuoteseloste ja ehdot", "https://core-public.editaprima.fi/lahitapiola/download/6466/10"), m("Materiaalilista", MATERIAL_PAGES.personal, "page")]
     },
     childSerious: {
       title: "Lapsen vakavan sairauden turva",
       area: "Perhe ja lapsi",
       desc: "Lapsen vakavan sairauden varalle suunnattu taloudellinen turva.",
+      detailFlow: "childSerious",
       materials: [m("Avaintieto / materiaali", "https://core-public.editaprima.fi/lahitapiola/download/3205/10"), m("Materiaalilista", MATERIAL_PAGES.personal, "page")]
     },
     investment: {
       title: "Sijoitusvakuutus",
       area: "Sijoittaminen",
       desc: "Sijoitusvakuutus ja varallisuuden suunnittelu.",
+      detailFlow: "investment",
       materials: [
         m("Tuoteseloste", "https://public.egate.fi/lahitapiola/lahitapiola/fi/tiedostot/192142/"),
         m("Avaintietoasiakirja", "https://core-public.editaprima.fi/lahitapiola/download/7072/10"),
@@ -1252,12 +1258,26 @@ export const coverageModels = {
     vehicle: {
       label: "Ajoneuvon laajuus: Liikennevakuutus, Suppea Vakuutus, Laaja Vakuutus",
       title: "Ajoneuvovakuutuksen laajuuksien vertailu",
-      notice: defaultNotice,
+      notice: "Sisällöt perustuvat LähiTapiolan autovakuutuksen julkaistuun vertailuun. Lopullinen sisältö ja soveltuvuus varmistetaan vakuutusehdoista.",
+      sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/ajoneuvovakuutukset/autovakuutus/mita-autovakuutus-korvaa/",
+      sourceLabel: "LähiTapiolan autovakuutuksen turvavertailu",
       calculatorAction: "Siirry ajoneuvovakuutuksen hinta-arvioon, kun laskuri-integraatio on käytössä",
       options: [
         option("liikenne", "Liikennevakuutus", "Lakisääteinen vähimmäinen", "Pakollinen vakuutus liikenteessä käytettävälle ajoneuvolle.", "Kun halutaan vain lakisääteinen turva eikä oman ajoneuvon vahinkoja haluta vakuuttaa.", "Henkilövahinkoja ja syyttömän osapuolen omaisuusvahinkoja lain mukaan.", "Ei kata oman ajoneuvon vaurioita, varkautta, lasia tai kolarointia."),
         option("suppea", "Suppea Vakuutus", "Suppeampi vapaaehtoinen kasko", "Liikennevakuutusta täydentävä rajatumpi vapaaehtoinen ajoneuvovakuutus.", "Vanhemmalle tai pienemmän arvon ajoneuvolle, kun halutaan suojaa tyypillisiin riskeihin ilman laajaa kolarointiturvaa.", "Esimerkiksi palo-, varkaus-, ilkivalta-, eläin- ja luonnonilmiöriskejä sekä lisäturvia valinnan mukaan.", "Ei kata yhtä laajasti oman ajoneuvon kolarointi- tai pysäköintivahinkoja kuin Laaja Vakuutus."),
         option("laaja", "Laaja Vakuutus", "Laajempi kasko", "Liikennevakuutus ja kattavampi vapaaehtoinen ajoneuvoturva.", "Uudemmalle, rahoitetulle, leasingissä olevalle tai taloudellisesti merkittävälle ajoneuvolle.", "Kolarointi-, pysäköinti-, lasi-, varkaus-, palo-, ilkivalta- ja luonnonilmiöriskejä valittujen turvien mukaan.", "Omavastuut, lisäturvat ja ajoneuvokohtaiset rajaukset pitää tarkistaa laskurissa.")
+      ],
+      featureRows: [
+        { key: "traffic", label: "Liikennevahingon henkilövahingot", description: "Liikennevakuutus korvaa liikennevahingossa syntyneitä henkilövahinkoja lain mukaisesti.", values: { liikenne: "Sisältyy", suppea: "Sisältyy", laaja: "Sisältyy" } },
+        { key: "otherProperty", label: "Syyttömän osapuolen omaisuus", description: "Liikennevakuutus korvaa syyttömän osapuolen omaisuusvahinkoja lain mukaisesti.", values: { liikenne: "Sisältyy", suppea: "Sisältyy", laaja: "Sisältyy" } },
+        { key: "fire", label: "Palo", description: "Turva koskee oman ajoneuvon tulipalovahinkoja vakuutusehtojen mukaisesti.", values: { liikenne: "Ei sisälly", suppea: "Sisältyy", laaja: "Sisältyy" } },
+        { key: "theft", label: "Varkaus", description: "Turva koskee oman ajoneuvon varkausvahinkoja vakuutusehtojen mukaisesti.", values: { liikenne: "Ei sisälly", suppea: "Sisältyy", laaja: "Sisältyy" } },
+        { key: "vandalism", label: "Ilkivalta", description: "Turva koskee oman ajoneuvon tahallista vahingoittamista vakuutusehtojen mukaisesti.", values: { liikenne: "Ei sisälly", suppea: "Sisältyy", laaja: "Sisältyy" } },
+        { key: "roadside", label: "Matkan jatkuminen ja hinaus", description: "Turva auttaa, jos ajoneuvo jää teknisen vian tai vahingon vuoksi tien varteen.", values: { liikenne: "Ei sisälly", suppea: "Sisältyy", laaja: "Sisältyy" } },
+        { key: "collision", label: "Kolarointi", description: "Turva koskee oman ajoneuvon törmäys- ja tieltä suistumisvahinkoja ehtojen mukaisesti.", values: { liikenne: "Ei sisälly", suppea: "Ei sisälly", laaja: "Sisältyy" } },
+        { key: "parking", label: "Pysäköintivahinko", description: "Turva koskee pysäköityyn ajoneuvoon tuntemattoman ajoneuvon aiheuttamaa vahinkoa ehtojen mukaisesti.", values: { liikenne: "Ei sisälly", suppea: "Ei sisälly", laaja: "Sisältyy" } },
+        { key: "glass", label: "Lasiturva", description: "Valinnainen turva koskee ajoneuvon lasivahinkoja vakuutusehtojen mukaisesti.", values: { liikenne: "Ei sisälly", suppea: "Valinnainen", laaja: "Valinnainen" } },
+        { key: "replacement", label: "Sijaisauto", description: "Valinnainen lisäturva voi auttaa sijaisauton järjestämisessä korvattavan vahingon ajaksi.", values: { liikenne: "Ei sisälly", suppea: "Ei sisälly", laaja: "Valinnainen" } }
       ]
     },
     travel: {
@@ -1307,6 +1327,105 @@ export const coverageModels = {
         option("henki", "Eläimen henkivakuutus", "Eläimen arvon turva", "Korvaa eläimen menetykseen liittyvää taloudellista arvoa ehtojen mukaan.", "Kun eläimen hankintahinta, jalostusarvo tai käyttöarvo on merkittävä.", "Sovittu vakuutusmäärä ehtojen mukaisessa kuolema- tai menetystilanteessa.", "Ei korvaa hoitokuluja ilman erillistä eläinlääkärikuluturvaa."),
         option("kaytto", "Käyttöominaisuusturva", "Käyttötarkoituksen turva", "Turvaa eläimen käyttötarkoitukseen liittyvää menetystä.", "Työ-, harrastus-, kilpailu- tai jalostuskäytössä olevalle eläimelle.", "Käyttöominaisuuden menetykseen liittyviä tilanteita ehtojen mukaan.", "Ei ole tarpeen tavalliselle kotilemmikille ilman erityistä käyttötarkoitusta."),
         option("koiranVastuu", "Koiran vastuuvakuutus", "Koiran aiheuttamien vahinkojen varalle", "Turvaa koiran ulkopuolisille aiheuttamia vahinkoja.", "Koiranomistajalle, jos vastuutilanteet mietityttävät.", "Henkilö- tai esinevahinkoja ehtojen mukaan.", "Koskee koiraa, ei kissaa.")
+      ]
+    },
+    horse: {
+      label: "Eläinlääkärikuluturvat ja täydentävät turvat",
+      title: "Hevosvakuutuksen turvien vertailu",
+      notice: "Sisällöt perustuvat LähiTapiolan hevosvakuutuksen verkkosivuun. Korvattavuus, omavastuut ja voimassaolo määräytyvät vakuutusehtojen mukaan.",
+      sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/elainvakuutukset/hevosvakuutus/",
+      sourceLabel: "LähiTapiolan hevosvakuutuksen turvat",
+      options: [
+        option("laaja", "Laaja eläinlääkärikuluvakuutus", "Sairauksien ja tapaturmien laajempi hoitoturva", "Korvaa vakuutusaikana alkaneiden sairauksien ja tapaturmien tutkimus- ja hoitokuluja ehtojen mukaan.", "Hevoselle, jolle halutaan laajempi eläinlääkärikulujen turva.", "Sairauksien ja tapaturmien hoitokuluja ehtojen mukaan.", "Rajoitukset, omavastuu, vakuutusmäärä ja myöntämisikä tarkistetaan ehdoista."),
+        option("suppea", "Suppea eläinlääkärikuluvakuutus", "Rajattu hoitoturva", "Korvaa julkaistut äkilliset ähky-, tukos-, murtuma- ja haavavammat ehtojen mukaan.", "Hevoselle, jolle halutaan rajattu turva nimettyihin tilanteisiin.", "Rajattuja äkillisiä sairauksia ja tapaturmavammoja ehtojen mukaan.", "Muut sairaudet eivät kuulu turvaan samalla tavalla kuin Laajassa.")
+      ],
+      featureRows: [
+        { key: "colic", label: "Akuutti ähky ja ruokatorven tukkeuma", description: "Tutkimus ja hoito kuuluvat julkaistun sisällön mukaan molempiin eläinlääkärikuluturviin.", values: { laaja: "Sisältyy", suppea: "Sisältyy" } },
+        { key: "fracture", label: "Tapaturmainen murtuma ja haavavamma", description: "Tapaturman aiheuttamien murtumien ja haavojen tutkimus ja hoito kuuluvat molempiin turviin ehtojen mukaisesti.", values: { laaja: "Sisältyy", suppea: "Sisältyy" } },
+        { key: "illness", label: "Muut vakuutusaikana alkaneet sairaudet", description: "Laaja turva kattaa ehtojen mukaan myös muita vakuutusaikana alkaneita sairauksia.", values: { laaja: "Sisältyy", suppea: "Ei sisälly" } },
+        { key: "life", label: "Hevosen henkivakuutus", description: "Erillinen turva hevosen menetyksen varalle; sisältö ja vakuutusmäärä tarkistetaan ehdoista.", values: { laaja: "Valinnainen", suppea: "Valinnainen" } },
+        { key: "liability", label: "Hevosen vastuuvakuutus", description: "Erillinen turva ulkopuoliselle aiheutettujen henkilö- ja esinevahinkojen varalle.", values: { laaja: "Valinnainen", suppea: "Valinnainen" } }
+      ]
+    },
+    boat: {
+      label: "Turvatasot: Laaja ja Perus",
+      title: "Venevakuutuksen turvatasojen vertailu",
+      notice: "Sisällöt perustuvat LähiTapiolan venevakuutuksen verkkosivuun. Lopullinen korvattavuus määräytyy vakuutusehtojen mukaan.",
+      sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/ajoneuvovakuutukset/venevakuutus/",
+      sourceLabel: "LähiTapiolan venevakuutuksen turvavertailu",
+      options: [
+        option("laaja", "Laaja venevakuutus", "Kattavampi veneturva", "Perusturvien lisäksi turvaa muun muassa törmäys- ja luonnonilmiövahinkoihin ehtojen mukaan.", "Veneelle, jonka vahingot olisivat merkittäviä tai jota käytetään ja kuljetetaan aktiivisesti.", "Palo-, varkaus-, ilkivalta-, säilytys-, kuljetus-, myrsky- ja törmäysvahinkoja ehtojen mukaan.", "Omavastuut, veneen arvo, varusteet ja käyttöalue tarkistetaan ehdoista."),
+        option("perus", "Perus venevakuutus", "Veneilyn perusturva", "Turvaa etenkin palo-, varkaus- ja ilkivaltavahinkoja ehtojen mukaan.", "Veneelle, jolle halutaan rajatumpi perusturva.", "Palo-, varkaus- ja ilkivaltavahinkoja ehtojen mukaan.", "Myrsky- ja törmäysvahingot eivät kuulu samalla tavalla kuin Laajaan.")
+      ],
+      featureRows: [
+        { key: "fire", label: "Palo", description: "Turva koskee tulipalon, noen, savun, räjähdyksen tai suoran salamaniskun vahinkoja ehtojen mukaan.", values: { laaja: "Sisältyy", perus: "Sisältyy" } },
+        { key: "theft", label: "Varkaus ja ilkivalta", description: "Turva koskee varkautta, sen yritystä ja tahallista vahingontekoa ehtojen mukaan.", values: { laaja: "Sisältyy", perus: "Sisältyy" } },
+        { key: "storage", label: "Säilytys ja kuljetus", description: "Turva koskee julkaistuja nosto-, lasku-, säilytys- ja kuljetustörmäyksiä ehtojen mukaan.", values: { laaja: "Sisältyy", perus: "Valinnainen" } },
+        { key: "storm", label: "Myrsky ja luonnonilmiö", description: "Turva koskee julkaistuja myrsky- ja poikkeuksellisen rankkasateen vahinkoja ehtojen mukaan.", values: { laaja: "Sisältyy", perus: "Ei sisälly" } },
+        { key: "collision", label: "Törmäys, karilleajo ja pohjakosketus", description: "Laaja turva kattaa näitä veneelle aiheutuvia vahinkoja vakuutusehtojen mukaisesti.", values: { laaja: "Sisältyy", perus: "Ei sisälly" } }
+      ]
+    },
+    forest: {
+      label: "Metsän turvat vakuutettavan omaisuuden mukaan",
+      title: "Metsävakuutuksen turvien vertailu",
+      notice: "Paloturva on aina mukana. Muita turvia lisättäessä myrskyturva valitaan ennen muita julkaistun tuoterakenteen mukaisesti.",
+      sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/metsavakuutus/",
+      sourceLabel: "LähiTapiolan metsävakuutuksen turvavertailu",
+      options: [
+        option("puusto", "Puusto", "Kasvava puusto", "Turvien sisältyvyys puustolle.", "Metsätilan kasvavan puuston vakuuttamiseen.", "Valittuja metsä- ja luonnonvahinkoja ehtojen mukaan.", "Paloturva on aina mukana; muut valinnat tehdään tuoterakenteen mukaisesti."),
+        option("taimikko", "Taimikko", "Taimikon turva", "Turvien sisältyvyys taimikolle.", "Metsätilan taimikon vakuuttamiseen.", "Valittuja metsä- ja luonnonvahinkoja ehtojen mukaan.", "Paloturva on aina mukana; muut valinnat tehdään tuoterakenteen mukaisesti."),
+        option("puutavara", "Puutavara", "Hakatun puutavaran turva", "Turvien sisältyvyys puutavaralle.", "Metsätilalla säilytettävän puutavaran vakuuttamiseen.", "Valittuja vahinkoja ehtojen mukaan.", "Kaikki metsäluonnon vahingot eivät koske puutavaraa."),
+        option("bioenergia", "Bioenergia", "Bioenergiapuun turva", "Turvien sisältyvyys bioenergialle.", "Metsätilan bioenergiaomaisuuden vakuuttamiseen.", "Palo-, varkaus- ja vahingontekoturvia ehtojen mukaan.", "Luonnontuhot eivät sisälly samalla tavalla kuin puustolle."),
+        option("taimet", "Taimet", "Taimien turva", "Turvien sisältyvyys taimille.", "Metsätilan taimien vakuuttamiseen.", "Valittuja vahinkoja ehtojen mukaan.", "Kaikki luonnontuhot eivät koske taimia."),
+        option("lannoitteet", "Lannoitteet", "Lannoitteiden turva", "Turvien sisältyvyys lannoitteille.", "Metsätilan lannoitteiden vakuuttamiseen.", "Valittuja vahinkoja ehtojen mukaan.", "Kaikki luonnontuhot eivät koske lannoitteita.")
+      ],
+      featureRows: [
+        { key: "fire", label: "Palo", description: "Paloturva on metsävakuutuksen aina mukana oleva lähtöturva.", values: { puusto: "Sisältyy", taimikko: "Sisältyy", puutavara: "Sisältyy", bioenergia: "Sisältyy", taimet: "Sisältyy", lannoitteet: "Sisältyy" } },
+        { key: "storm", label: "Myrsky", description: "Myrskyturva valitaan ennen muita vapaaehtoisia lisäturvia julkaistun tuoterakenteen mukaisesti.", values: { puusto: "Sisältyy", taimikko: "Sisältyy", puutavara: "Sisältyy", bioenergia: "Ei sisälly", taimet: "Sisältyy", lannoitteet: "Sisältyy" } },
+        { key: "snow", label: "Lumituho", description: "Turva koskee lumen puustolle tai taimikolle aiheuttamia vahinkoja ehtojen mukaan.", values: { puusto: "Sisältyy", taimikko: "Sisältyy", puutavara: "Ei sisälly", bioenergia: "Ei sisälly", taimet: "Ei sisälly", lannoitteet: "Ei sisälly" } },
+        { key: "insects", label: "Hyönteistuho", description: "Turva koskee hyönteisten puustolle tai taimikolle aiheuttamia vahinkoja ehtojen mukaan.", values: { puusto: "Sisältyy", taimikko: "Sisältyy", puutavara: "Ei sisälly", bioenergia: "Ei sisälly", taimet: "Ei sisälly", lannoitteet: "Ei sisälly" } },
+        { key: "flood", label: "Tulva", description: "Turva koskee tulvan aiheuttamia vahinkoja vakuutetulle omaisuudelle julkaistun vertailun mukaisesti.", values: { puusto: "Sisältyy", taimikko: "Sisältyy", puutavara: "Sisältyy", bioenergia: "Ei sisälly", taimet: "Sisältyy", lannoitteet: "Sisältyy" } },
+        { key: "fungus", label: "Sienituho", description: "Turva koskee sienitautien aiheuttamia vahinkoja julkaistun vertailun mukaisesti.", values: { puusto: "Sisältyy", taimikko: "Sisältyy", puutavara: "Sisältyy", bioenergia: "Ei sisälly", taimet: "Ei sisälly", lannoitteet: "Ei sisälly" } },
+        { key: "animals", label: "Eläintuho", description: "Turva koskee eläinten aiheuttamia vahinkoja julkaistun vertailun mukaisesti.", values: { puusto: "Sisältyy", taimikko: "Sisältyy", puutavara: "Sisältyy", bioenergia: "Ei sisälly", taimet: "Sisältyy", lannoitteet: "Sisältyy" } },
+        { key: "theft", label: "Varkaus", description: "Turva koskee vakuutetun metsäomaisuuden varkautta ehtojen mukaan.", values: { puusto: "Sisältyy", taimikko: "Sisältyy", puutavara: "Sisältyy", bioenergia: "Sisältyy", taimet: "Sisältyy", lannoitteet: "Sisältyy" } },
+        { key: "vandalism", label: "Vahingonteko", description: "Turva koskee vakuutettuun metsäomaisuuteen kohdistuvaa vahingontekoa ehtojen mukaan.", values: { puusto: "Sisältyy", taimikko: "Sisältyy", puutavara: "Sisältyy", bioenergia: "Sisältyy", taimet: "Sisältyy", lannoitteet: "Sisältyy" } }
+      ]
+    },
+    pregnancy: {
+      label: "Vauvavakuutuksen sairauden hoitoturva",
+      title: "Vauvavakuutuksen turvien sisältö",
+      notice: "Sisällöt perustuvat LähiTapiolan vauvavakuutuksen verkkosivuun. Lopullinen korvattavuus ja mahdolliset rajoitukset määräytyvät vakuutusehdoista.",
+      sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/terveysvakuutukset/vauvavakuutus/",
+      sourceLabel: "LähiTapiolan vauvavakuutuksen turvat",
+      options: [
+        option("sairaus", "Sairauden hoitoturva", "Sairauden ja tapaturman hoitokulut", "Vauvan sairauden ja tapaturman tutkimus- ja hoitokulujen turva ehtojen mukaan.", "Syntyvälle lapselle jo raskausaikana haettavaan vakuutukseen.", "Lääkäri-, tutkimus-, hoito-, toimenpide- ja lääkekuluja ehtojen mukaan.", "Hakuaika, terveysselvitys, omavastuut ja korvausrajat tarkistetaan ehdoista.")
+      ],
+      featureRows: [
+        { key: "healthcare", label: "Yksityisen ja julkisen terveydenhuollon kulut", description: "Turva kattaa tutkimus- ja hoitokuluja yksityisessä ja julkisessa terveydenhuollossa ehtojen mukaan.", values: { sairaus: "Sisältyy" } },
+        { key: "publicFees", label: "Julkisen terveydenhuollon maksut", description: "Turva kattaa julkaistuja terveyskeskus-, poliklinikka- ja sairaalan hoitopäivämaksuja ehtojen mukaan.", values: { sairaus: "Sisältyy" } },
+        { key: "general", label: "Yleislääkäri", description: "Yleislääkärikäyntejä korvataan vakuutusehtojen mukaisesti.", values: { sairaus: "Sisältyy" } },
+        { key: "specialist", label: "Erikoislääkäri", description: "Erikoislääkärikäyntejä korvataan vakuutusehtojen mukaisesti.", values: { sairaus: "Sisältyy" } },
+        { key: "tests", label: "Tutkimukset", description: "Lääkärin määräämiä tutkimuksia korvataan vakuutusehtojen mukaisesti.", values: { sairaus: "Sisältyy" } },
+        { key: "medicines", label: "Lääkkeet", description: "Lääkärin määräämiä lääkkeitä korvataan vakuutusehtojen mukaisesti.", values: { sairaus: "Sisältyy" } },
+        { key: "procedures", label: "Toimenpiteet", description: "Lääkärin määräämiä hoitotoimenpiteitä korvataan vakuutusehtojen mukaisesti.", values: { sairaus: "Sisältyy" } },
+        { key: "privateHospital", label: "Yksityisen sairaalan hoitopäivämaksut", description: "Yksityisen sairaalan hoitopäivämaksuja korvataan vakuutusehtojen mukaisesti.", values: { sairaus: "Sisältyy" } },
+        { key: "pregnancy", label: "Raskausajan turva", description: "Raskausajan turva kuuluu julkaistuun vauvavakuutuksen sisältöön ehtojen mukaisesti.", values: { sairaus: "Sisältyy" } }
+      ]
+    },
+    childSerious: {
+      label: "Vakavan sairauden turva",
+      title: "Lapsen vakavan sairauden turvan sisältö",
+      notice: "Tälle turvalle ei esitetä keinotekoisia laajuustasoja. Tarkka sisältö tarkistetaan LähiTapiolan tuoteaineistosta.",
+      options: [
+        option("benefit", "Vakavan sairauden turva", "Taloudellinen kertakorvausturva", "Turva voi maksaa kertakorvauksen vakuutusehdoissa määritellyn vakavan sairauden tilanteessa.", "Perheelle, joka haluaa taloudellista liikkumavaraa lapsen vakavan sairastumisen varalle.", "Vakuutusehdoissa nimetyn sairauden perusteella maksettava turva.", "Korvattavat sairaudet, edellytykset, rajoitukset ja vakuutusmäärä tarkistetaan aina tuoteaineistosta.")
+      ]
+    },
+    investment: {
+      label: "Sijoitusvakuutuksen rakenne",
+      title: "Sijoitusvakuutuksen keskeiset tarkistuskohdat",
+      notice: "Sijoitusvakuutus ei ole vahinkovakuutuksen turvataso. Tiedot ovat tuotteen rakenteen yleiskuva, ja sijoitusvalinnat sekä kulut tarkistetaan tuoteaineistosta.",
+      options: [
+        option("investment", "Sijoitusvakuutus", "Säästämisen ja sijoittamisen vakuutuskuori", "Sopimukseen valitaan sijoituskohteita tuotteen sääntöjen ja valikoiman mukaan.", "Pitkäjänteiseen säästämiseen ja varallisuuden suunnitteluun tuotteen soveltuvuusarvion perusteella.", "Sijoitussopimuksen rakenne ja valitut sijoituskohteet.", "Tuottoa ei taata; riskit, kulut, verotus ja nostoehdot tarkistetaan tuoteaineistosta.")
       ]
     },
     apartment: {
