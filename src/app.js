@@ -1084,7 +1084,7 @@ function mandatoryCardMeta(item) {
       imageUrl: businessImages.tyel,
       imagePosition: "center 58%",
       coverText: "TyEL-vakuutuksella huolehditaan yrityksen tyontekijoiden lakisaateisesta elaketurvasta.",
-      lead: "Työntekijöiden eläketurvan lakisääteinen tarkistus."
+      lead: "Turvaa työntekijän vanhuuden, työkyvyttömyyden ja perheenhuoltajan kuoleman varalta sekä mahdollistaa ammatillisen kuntoutuksen."
     },
     workers_comp: {
       title: "Työtapaturmavakuutus",
@@ -1093,7 +1093,7 @@ function mandatoryCardMeta(item) {
       imageUrl: businessImages.workAccident,
       imagePosition: "center 58%",
       coverText: "Tyotapaturmavakuutus turvaa tyontekijoita tyossa sattuvien tapaturmien ja ammattitautien varalta.",
-      lead: "Työssä sattuvien tapaturmien ja ammattitautien vakuuttamisen tarkistus."
+      lead: "Korvaa työntekijälle työssä sattuneita tapaturmia ja ammattitauteja lakisääteisen turvan mukaisesti."
     },
     traffic: {
       title: "Liikennevakuutus",
@@ -1104,7 +1104,7 @@ function mandatoryCardMeta(item) {
       imageUrl: mode === "personal" ? personalImages.traffic : businessImages.traffic,
       imagePosition: "center 55%",
       coverText: "Liikennevakuutus on liikenteessa kaytettavan ajoneuvon lakisaateinen perusturva.",
-      lead: "Liikenteessä käytettävän ajoneuvon lakisääteinen vakuutus."
+      lead: "Korvaa liikenteessä sattuneita henkilövahinkoja ja syyttömän osapuolen omaisuusvahinkoja. Oman ajoneuvon vahingot kuuluvat kaskoon."
     },
     patient: {
       title: "Potilasvakuutus",
@@ -1112,7 +1112,7 @@ function mandatoryCardMeta(item) {
       url: "https://www.lahitapiola.fi/yritys/vakuutukset/",
       imageUrl: businessImages.patient,
       imagePosition: "center 58%",
-      lead: "Terveyden- ja sairaanhoitotoiminnan potilasvahinkoriskien tarkistus."
+      lead: "Korvaa potilaalle terveyden- tai sairaanhoidon yhteydessä aiheutuneita henkilövahinkoja potilasvakuutuslain mukaisesti."
     },
     group_life: {
       title: "Ryhmähenkivakuutus",
@@ -1120,7 +1120,7 @@ function mandatoryCardMeta(item) {
       url: "https://www.lahitapiola.fi/yritys/vakuutukset/henkilovakuutukset/",
       imageUrl: businessImages.groupLife,
       imagePosition: "center 52%",
-      lead: "Työntekijöihin liittyvän ryhmähenkiturvan tarkistus sopimusalakohtaisesti."
+      lead: "Maksaa työntekijän kuoleman jälkeen kertakorvauksen vakuutuksen ehtoihin kuuluville edunsaajille."
     }
   };
   return {
@@ -1736,182 +1736,182 @@ function productCardCatalog() {
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/kotivakuutus/",
       imageUrl: personalImages.home,
       imagePosition: "center 52%",
-      lead: "Kodin, irtaimiston, vastuiden ja asumiseen liittyvien vahinkojen turvan tarkistus."
+      lead: "Korvaa valitun laajuuden mukaan esimerkiksi kodin rikkoutumis-, vuoto-, palo-, myrsky- ja varkausvahinkoja sekä vastuu- ja oikeusturvatilanteita."
     },
     vehicle: {
       visual: "vehicle",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/ajoneuvovakuutukset/",
       imageUrl: personalImages.vehicle,
       imagePosition: "center 55%",
-      lead: "Vapaaehtoisen kaskon ja ajoneuvon lisäturvien tarkistus liikennevakuutuksen rinnalle."
+      lead: "Korvaa oman ajoneuvon vahinkoja, kuten kolarointi-, pysäköinti-, lasi-, varkaus- ja luonnonilmiövahinkoja valitun kaskon mukaan."
     },
     travel: {
       visual: "travel",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/terveysvakuutukset/matkavakuutus/",
       imageUrl: personalImages.travel,
       imagePosition: "center 50%",
-      lead: "Matkustajan, matkatavaroiden ja matkan muutostilanteiden turvan tarkistus."
+      lead: "Korvaa matkalla sattuvia sairauksia ja tapaturmia sekä valintojen mukaan matkan peruuntumista, keskeytymistä ja matkatavaravahinkoja."
     },
     health: {
       visual: "health",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/terveysvakuutukset/",
       imageUrl: personalImages.health,
       imagePosition: "center 48%",
-      lead: "Sairauden, tapaturman ja nopean hoitoon pääsyn turvan tarkistus."
+      lead: "Korvaa valitun turvan mukaan sairauden tai tapaturman tutkimus- ja hoitokuluja ja auttaa pääsemään hoitoon nopeasti."
     },
     life: {
       visual: "life",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/henkivakuutus/",
       imageUrl: personalImages.life,
       imagePosition: "center 52%",
-      lead: "Läheisten taloudellisen turvan tarkistus kuoleman tai vakavan sairauden varalle."
+      lead: "Maksaa sovitun kertakorvauksen edunsaajille vakuutetun kuollessa ja auttaa turvaamaan läheisten taloutta."
     },
     pet: {
       visual: "pet",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/lemmikkivakuutus/",
       imageUrl: personalImages.pet,
       imagePosition: "center 52%",
-      lead: "Koiran tai kissan eläinlääkärikulujen ja lisäturvien tarkistus."
+      lead: "Korvaa koiran tai kissan sairauden ja tapaturman tutkimus- ja hoitokuluja valitun turvan mukaan."
     },
     horse: {
       visual: "pet",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/lemmikkivakuutus/",
       imageUrl: personalImages.horse,
       imagePosition: "center 52%",
-      lead: "Hevosen hoitoon ja eläinriskeihin liittyvän vakuutustarpeen tarkistus."
+      lead: "Korvaa hevosen sairauden tai tapaturman eläinlääkärikuluja sekä valintojen mukaan eläimen menetykseen liittyviä riskejä."
     },
     boat: {
       visual: "vehicle",
-      sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/ajoneuvovakuutukset/vene/",
+      sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/ajoneuvovakuutukset/venevakuutus/",
       imageUrl: personalImages.boat,
       imagePosition: "center 52%",
-      lead: "Veneen, varusteiden ja veneilyyn liittyvien vahinkojen turvan tarkistus."
+      lead: "Korvaa veneelle ja varusteille esimerkiksi karilleajosta, törmäyksestä, varkaudesta, palosta tai luonnonilmiöstä aiheutuvia vahinkoja valitun turvan mukaan."
     },
     apartment: {
       visual: "property",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/kotivakuutus/",
       imageUrl: personalImages.cottage,
       imagePosition: "center 52%",
-      lead: "Vapaa-ajan asunnon tai huoneiston rakennuksen ja irtaimiston turvan tarkistus."
+      lead: "Korvaa vapaa-ajan asunnon rakennukselle ja irtaimistolle esimerkiksi palosta, vuodosta, varkaudesta tai luonnonilmiöstä aiheutuvia vahinkoja valitun turvan mukaan."
     },
     liability: {
       visual: "liability",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/kotivakuutus/",
       imageUrl: personalImages.liability,
       imagePosition: "center 52%",
-      lead: "Arjen vastuu- ja oikeusturvan tarkistus osana kodin vakuutustarvetta."
+      lead: "Vastuuvakuutus korvaa toiselle aiheutettuja henkilö- ja esinevahinkoja. Oikeusturva auttaa yksityiselämän riita- ja rikosasioiden lakimieskuluissa."
     },
     forest: {
       visual: "property",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/metsavakuutus/",
       imageUrl: personalImages.forest,
       imagePosition: "center 50%",
-      lead: "Metsäomaisuuden myrsky-, palo-, lumi- ja hyönteisriskien tarkistus."
+      lead: "Korvaa metsälle esimerkiksi myrskystä, lumesta, palosta tai hyönteisistä aiheutuvia vahinkoja valitun turvan mukaan."
     },
     pregnancy: {
       visual: "health",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/terveysvakuutukset/vauvavakuutus/",
       imageUrl: personalImages.baby,
       imagePosition: "center 48%",
-      lead: "Raskauden ja syntyvän lapsen vakuutustarpeen tarkistus."
+      lead: "Korvaa syntyvän lapsen sairauden tai tapaturman tutkimus- ja hoitokuluja vakuutuksen ehtojen ja valitun turvan mukaan."
     },
     childSerious: {
       visual: "health",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/terveysvakuutukset/lapsivakuutus/",
       imageUrl: personalImages.child,
       imagePosition: "center 48%",
-      lead: "Lapsen vakavan sairauden ja perheen taloudellisen turvan tarkistus."
+      lead: "Maksaa kertakorvauksen, jos lapsi sairastuu vakuutusehdoissa määriteltyyn vakavaan sairauteen."
     },
     investment: {
       visual: "life",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/sijoittaminen/",
       imageUrl: personalImages.advice,
       imagePosition: "center 50%",
-      lead: "Varallisuuden, säästämisen ja sijoitusvakuutuksen tarpeen tarkistus."
+      lead: "Yhdistää vakuutussopimuksen ja valittavat sijoituskohteet pitkäaikaiseen säästämiseen ja varallisuuden suunnitteluun."
     },
     bizProperty: {
       visual: "assets",
       sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/omaisuusvakuutukset/yritysvakuutus/",
       imageUrl: businessImages.property,
       imagePosition: "center 45%",
-      lead: "Toimitilojen, koneiden, laitteiden, varaston ja muun omaisuuden turvan tarkistus."
+      lead: "Korvaa yrityksen koneille, laitteille, kalusteille, varastolle tai toimitilalle esimerkiksi palosta, vuodosta, rikkoutumisesta tai varkaudesta aiheutuvia vahinkoja."
     },
     bizLiability: {
       visual: "liability",
       sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/omaisuusvakuutukset/vastuuvakuutus/",
       imageUrl: businessImages.liability,
       imagePosition: "center 50%",
-      lead: "Yrityksen toiminnasta, palveluista tai tuotteista syntyvien vastuiden tarkistus."
+      lead: "Korvaa yrityksen toiminnasta ulkopuoliselle aiheutettuja henkilö- ja esinevahinkoja sekä valitun vastuuturvan mukaan varallisuusvahinkoja."
     },
     bizInterruption: {
       visual: "interruption",
-      sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/",
+      sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/omaisuusvakuutukset/keskeytysvakuutus/",
       imageUrl: businessImages.interruption,
       imagePosition: "center 45%",
-      lead: "Toiminnan keskeytymisen taloudellisten vaikutusten tarkistus."
+      lead: "Korvaa liiketoiminnan keskeytymisestä syntyvää katemenetystä ja ylimääräisiä kuluja, kun keskeytys johtuu vakuutuksesta korvattavasta vahingosta."
     },
     bizCyber: {
       visual: "cyber",
-      sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/",
+      sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/omaisuusvakuutukset/kybervakuutus/",
       imageUrl: businessImages.cyber,
       imagePosition: "center 58%",
-      lead: "Tietoturvapoikkeamien, järjestelmäkatkojen ja asiantuntija-avun turvan tarkistus."
+      lead: "Korvaa tietoturvaloukkauksen selvitys- ja palautumiskuluja sekä sisältää keskeytys- ja vastuuvakuutuksen kybervahinkoihin."
     },
     bizVehicle: {
       visual: "vehicle",
       sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/ajoneuvovakuutukset/yrityksen-ajoneuvovakuutukset/",
       imageUrl: businessImages.vehicle,
       imagePosition: "center 55%",
-      lead: "Yrityksen ajoneuvojen vapaaehtoisen kaskon ja lisäturvien tarkistus."
+      lead: "Korvaa yrityksen oman ajoneuvon vahinkoja, kuten kolarointi-, lasi-, varkaus-, palo- ja luonnonilmiövahinkoja valitun kaskon mukaan."
     },
     bizPeople: {
       visual: "people",
       sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/henkilovakuutukset/",
       imageUrl: businessImages.people,
       imagePosition: "center 58%",
-      lead: "Lakisääteisten vakuutusten rinnalle harkittavien yrittäjän, työntekijöiden ja avainhenkilöiden turvien tarkistus."
+      lead: "Täydentää yrittäjän ja työntekijöiden turvaa sairauden, tapaturman, työkyvyttömyyden tai kuoleman varalta valittujen vakuutusten mukaan."
     },
     bizTravel: {
       visual: "travel",
       sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/",
       imageUrl: businessImages.travel,
       imagePosition: "center 50%",
-      lead: "Työmatkoihin, komennuksiin ja matkustaviin henkilöihin liittyvän turvan tarkistus."
+      lead: "Korvaa työmatkalla sattuvia sairauksia ja tapaturmia sekä valintojen mukaan matkatavaroita, peruuntumisia ja matkan keskeytymisiä."
     },
     bizCargo: {
       visual: "vehicle",
       sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/",
       imageUrl: businessImages.cargo,
       imagePosition: "center 55%",
-      lead: "Kuljetettavan tavaran ja kuljetusvastuiden turvan tarkistus."
+      lead: "Korvaa kuljetettavalle tavaralle kuljetuksen aikana aiheutuvia vahinkoja tai rahdinkuljettajan vastuuta asiakkaan tavarasta valitun turvan mukaan."
     },
     bizLegal: {
       visual: "liability",
-      sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/",
+      sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/omaisuusvakuutukset/yrityksen-oikeusturvavakuutus/",
       imageUrl: businessImages.legal,
       imagePosition: "center 50%",
-      lead: "Sopimus-, asiakas- ja työriitoihin liittyvien oikeudenkäyntikulujen tarkistus."
+      lead: "Korvaa yrityksen asianajo- ja oikeudenkäyntikuluja vakuutusehtojen mukaisissa riita- ja rikosasioissa."
     },
     bizRealEstate: {
       visual: "premises",
-      sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/",
+      sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/omaisuusvakuutukset/kiinteistovakuutus/",
       imageUrl: businessImages.realEstate,
       imagePosition: "center 45%",
-      lead: "Yrityksen omistamien rakennusten, kiinteistöjen ja vuokratuoton turvan tarkistus."
+      lead: "Korvaa rakennukselle palosta, luonnonilmiöstä, vuodosta, murrosta, ilkivallasta tai talotekniikan rikkoutumisesta aiheutuvia vahinkoja valitun turvan mukaan."
     },
     bizPatient: {
       visual: "health",
       sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/",
       imageUrl: businessImages.patientCare,
       imagePosition: "center 58%",
-      lead: "Terveydenhuollon ja hoivapalvelujen potilasvahinkoriskien tarkistus."
+      lead: "Korvaa potilaalle terveyden- tai sairaanhoidon yhteydessä aiheutuneita henkilövahinkoja potilasvakuutuslain mukaisesti."
     },
     bizConstruction: {
       visual: "premises",
       sourceUrl: "https://www.lahitapiola.fi/yritys/vakuutukset/",
       imageUrl: businessImages.construction,
       imagePosition: "center 50%",
-      lead: "Rakennus-, asennus- ja korjaustöiden kohteiden turvan tarkistus."
+      lead: "Korvaa rakennus- tai asennustyön kohteelle, materiaaleille ja työmaalla käytettävälle omaisuudelle äkillisiä vahinkoja valitun turvan mukaan."
     }
   };
 }
@@ -2197,12 +2197,21 @@ function renderCoverageComparison(comparison, detailKey = "") {
   const selectedOption = selectedCoverageOption(detailKey, comparison);
   const selectedLabel = selectedOption?.title || recommendedLabels;
   const selectionMatchesRecommendation = comparison.recommendedKeys.includes(selectedKey);
-  const tableRows = [
-    ["Kenelle sopii", (option) => option.fit],
-    ["Mitä turva painottaa", (option) => option.covers],
-    ["Mitä kannattaa tarkistaa", (option) => option.limits],
-    ["Suuntaa antava hintavaikutus", (option) => indicativePriceSymbol(option.key)]
-  ];
+  const featureRows = comparison.featureRows || [];
+  const tableRows = featureRows.length
+    ? featureRows.map((row) => [row.label, (option) => row.values?.[option.key] || "Ei sisälly", row.description])
+    : [
+        ["Kenelle sopii", (option) => option.fit],
+        ["Mitä turva painottaa", (option) => option.covers],
+        ["Mitä kannattaa tarkistaa", (option) => option.limits]
+      ];
+  const renderComparisonValue = (value) => {
+    const text = String(value || "");
+    if (!featureRows.length) return escapeHtml(text);
+    const statusClass = text === "Sisältyy" ? "included" : text === "Valinnainen" ? "optional" : "excluded";
+    const symbol = statusClass === "included" ? "✓" : statusClass === "optional" ? "○" : "–";
+    return `<span class="coverage-status ${statusClass}"><span aria-hidden="true">${symbol}</span>${escapeHtml(text)}</span>`;
+  };
 
   return `
     <section class="coverage-compare" aria-label="${escapeHtml(comparison.title)}">
@@ -2232,9 +2241,10 @@ function renderCoverageComparison(comparison, detailKey = "") {
         <span>${selectionMatchesRecommendation ? "Valinta vastaa kartoituksen ehdotusta." : "Voit valita myös muun vaihtoehdon. Valintasi tallentuu yhteenvetoon."}</span>
       </div>
 
-      <details class="coverage-details">
-        <summary>Vertaa vaihtoehtojen sisältöjä</summary>
+      <details class="coverage-details" ${featureRows.length ? "open" : ""}>
+        <summary>${featureRows.length ? "Vertaa turvatasojen sisältöjä" : "Vertaa vaihtoehtojen sisältöjä"}</summary>
         <p>${escapeHtml(comparison.notice)}</p>
+        ${comparison.sourceUrl ? `<p class="coverage-source">Lähde: <a href="${escapeHtml(comparison.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(comparison.sourceLabel || "LähiTapiolan vakuutussivu")}</a></p>` : ""}
         <div class="coverage-table-wrap coverage-desktop-table">
           <table class="coverage-table">
             <thead>
@@ -2250,10 +2260,10 @@ function renderCoverageComparison(comparison, detailKey = "") {
               </tr>
             </thead>
             <tbody>
-              ${tableRows.map(([label, getValue]) => `
+              ${tableRows.map(([label, getValue, description]) => `
                 <tr>
-                  <th scope="row">${escapeHtml(label)}</th>
-                  ${comparison.options.map((option) => `<td class="${option.key === selectedKey ? "selected" : ""}">${escapeHtml(getValue(option))}</td>`).join("")}
+                  <th scope="row">${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</th>
+                  ${comparison.options.map((option) => `<td class="${option.key === selectedKey ? "selected" : ""}">${renderComparisonValue(getValue(option))}</td>`).join("")}
                 </tr>
               `).join("")}
             </tbody>
@@ -2268,13 +2278,13 @@ function renderCoverageComparison(comparison, detailKey = "") {
                 ${option.key === selectedKey ? `<span>Valittu</span>` : ""}
               </div>
               <dl>
-                ${tableRows.map(([label, getValue]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(getValue(option))}</dd></div>`).join("")}
+                ${tableRows.map(([label, getValue, description]) => `<div><dt>${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</dt><dd>${renderComparisonValue(getValue(option))}</dd></div>`).join("")}
               </dl>
             </article>
           `).join("")}
         </div>
       </details>
-      <p class="coverage-disclaimer">Suuntaa antavat symbolit eivät ole hinta-arvio. Lopullinen sisältö, hinta ja soveltuvuus varmistetaan vakuutusehdoista, laskurissa tai asiantuntijan kanssa.</p>
+      <p class="coverage-disclaimer">Vertailu on yleiskuva. Lopullinen sisältö, korvattavuus ja soveltuvuus varmistetaan vakuutusehdoista tai asiantuntijan kanssa.</p>
     </section>
   `;
 }
