@@ -347,6 +347,7 @@ function hasCompleteBaseInfo() {
 }
 
 function hasCompletedIntake() {
+  if (!activeIntakeQuestions().length) return true;
   return Boolean(
     toArray(st().quickAnswers.currentInsuranceAreas).length
     && toArray(st().quickAnswers.reviewGoal).length
@@ -524,7 +525,8 @@ function currentQuickFlowQuestions() {
 }
 
 function activeIntakeQuestions() {
-  return intakeQuestions();
+  // Nykyisiä vakuutuksia tai kartoituksen tavoitetta ei kysytä.
+  return [];
 }
 
 function baseFlowQuestions() {
@@ -1025,7 +1027,7 @@ function renderRecommendationContext(assessment) {
         <h4>${escapeHtml(assessment.title)}</h4>
         <p>${escapeHtml(assessment.summary)}</p>
       </div>
-      ${hasCompletedIntake() ? `
+      ${activeIntakeQuestions().length && hasCompletedIntake() ? `
         <div class="context-facts" aria-label="Nykytilanne">
           <span>${escapeHtml(goal)}</span>
           ${currentLabels.slice(0, 5).map((label) => `<em>${escapeHtml(label)}</em>`).join("")}
@@ -1247,11 +1249,12 @@ function solutionCoverToRecommendation(coverItem, score) {
 }
 
 function currentInsuranceKeys() {
+  if (!activeIntakeQuestions().length) return new Set();
   return new Set(toArray(st().quickAnswers.currentInsuranceAreas).filter((key) => types()[key]));
 }
 
 function renderIntakeSummary() {
-  if (!hasCompletedIntake()) return "";
+  if (!activeIntakeQuestions().length || !hasCompletedIntake()) return "";
   const currentLabels = currentInsuranceLabels();
   const goal = reviewGoalLabel(st().quickAnswers.reviewGoal);
   return `
@@ -2609,7 +2612,8 @@ function renderCustomerSummary() {
     ...covers.map((item) => renderCustomerSummaryCover(item, assessment))
   ].join("");
   const summaryProductCount = (assessment.mandatoryChecks?.length || 0) + covers.length;
-  const hasIntake = hasCompletedIntake()
+  const hasIntake = activeIntakeQuestions().length > 0
+    && hasCompletedIntake()
     && (
       toArray(st().quickAnswers.reviewGoal).some((item) => item !== "unsure")
       || currentInsuranceLabels().some((label) => !label.toLocaleLowerCase("fi-FI").includes("epäselvä"))
@@ -2905,7 +2909,7 @@ function buildCrmSummary(contact) {
     });
   }
 
-  if (hasCompletedIntake()) {
+  if (activeIntakeQuestions().length && hasCompletedIntake()) {
     lines.push("");
     lines.push("Nykytilanne ja tavoite");
     lines.push(`- Nykyiset vakuutukset: ${currentInsuranceLabels().join(", ")}`);
