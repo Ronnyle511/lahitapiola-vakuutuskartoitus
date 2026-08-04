@@ -73,7 +73,7 @@ for (const profileId of ["personal", "business"]) {
 
 const appSource = readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
 const templateSource = readFileSync(new URL("../src/page-template.html", import.meta.url), "utf8");
-assert.match(appSource, /lahitapiola-vakuutuskartoitus-v3/);
+assert.match(appSource, /lahitapiola-vakuutuskartoitus-v4/);
 assert.match(appSource, /function openCustomerSummary/);
 assert.match(appSource, /localStorage\.setItem/);
 assert.doesNotMatch(appSource, /id: "coveragePreference"/);
@@ -82,6 +82,10 @@ assert.match(
   /function activeIntakeQuestions\(\) \{\s*\/\/ Nykyisiä vakuutuksia tai kartoituksen tavoitetta ei kysytä\.\s*return \[\];\s*\}/,
 );
 assert.match(appSource, /if \(!activeIntakeQuestions\(\)\.length\) return true;/);
+assert.doesNotMatch(appSource, /Mitä vakuutuksia sinulla on jo/);
+assert.doesNotMatch(appSource, /Mikä on kartoituksen tavoite/);
+assert.doesNotMatch(appSource, /Mitä vakuutusalueita yrityksellä on jo/);
+assert.doesNotMatch(appSource, /Mitä haluat tehdä yrityksen vakuutuksille/);
 assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
 assert.doesNotMatch(appSource, /function isMandatoryRelatedType/);
 assert.doesNotMatch(appSource, /const isLegal = isMandatoryRelatedType/);
