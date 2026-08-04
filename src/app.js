@@ -69,7 +69,11 @@ function types() {
 }
 
 function flow(key) {
-  return detailFlows[mode]?.[key];
+  return detailFlows[mode]?.[key] || (coverageModels[mode]?.[key] ? {
+    title: types()[key]?.title || key,
+    sourceNote: "Perustuu LähiTapiolan julkaistuihin tuote- ja vakuutustietoihin.",
+    questions: []
+  } : null);
 }
 
 function activeQuickQuestions() {
@@ -1456,69 +1460,6 @@ function renderBucketLegacy(bucket) {
   return `<section class="bucket">${content}</section>`;
 }
 
-function renderRecommendationCardLegacy(item, bucketKey) {
-  const meta = types()[item.key];
-  const reasons = item.reasons.length ? item.reasons : ["tämä vakuutusalue ei noussut vastauksissa vahvasti esiin"];
-  const existing = item.existing ? `<span class="status-pill possible">Nykyinen turva: tarkista riittävyys</span>` : "";
-  const strength = recommendationStrength(item.score);
-  const detailKey = meta.detailFlow || "";
-  const detailResult = detailKey ? st().detailResults[detailKey] : null;
-  const selectedOption = detailResult?.comparison ? selectedCoverageOption(detailKey, detailResult.comparison) : null;
-  const coverageLevel = st().assessmentResult?.selectedCoverageLevels?.[item.key];
-  const reasonText = withoutTrailingPunctuation(capitalize(shortenText(reasons[0], 120)));
-  const refineLabel = detailResult ? "Muokkaa turvatasoa" : "Tarkenna turvataso";
-  const badge = strength ? `<span class="status-pill primary">${escapeHtml(strength)}</span>` : "";
-
-  return `
-    <article class="rec-card target-card ${bucketKey === "primary" ? "priority" : bucketKey === "possible" ? "supporting" : ""} ${detailResult ? "refined" : ""} compact">
-      <details class="rec-disclosure">
-        <summary class="rec-summary">
-          <span class="rec-icon" aria-hidden="true"></span>
-          <div>
-            <h4>${escapeHtml(meta.title)}</h4>
-            <p class="muted rec-desc">${escapeHtml(reasonText)}.</p>
-          </div>
-          ${badge}
-          <span class="rec-chevron" aria-hidden="true">›</span>
-        </summary>
-        <div class="rec-main">
-        <div class="card-why">
-          <strong>Miksi tämä nousi?</strong>
-          <span>${escapeHtml(reasonText)}.</span>
-        </div>
-        ${detailResult && coverageLevel ? `
-          <div class="refined-summary compact">
-            <strong>Valittu laajuus</strong>
-            <span>${escapeHtml(selectedOption?.title || coverageLevel.selectedTitle)}</span>
-          </div>
-        ` : ""}
-        ${existing ? `<div class="chip-row target-meta-row">${existing}</div>` : ""}
-        ${detailKey ? `
-          <div class="card-action-row">
-            <button class="btn btn-secondary btn-small" type="button" data-card-refine="${escapeHtml(detailKey)}">${escapeHtml(refineLabel)}</button>
-            <span>${detailResult ? "Valintaa voi muuttaa milloin vain." : "Muutama kysymys auttaa valitsemaan sopivan laajuuden."}</span>
-          </div>
-        ` : ""}
-        ${renderRecommendationLearn(meta)}
-        </div>
-      </details>
-    </article>
-  `;
-}
-
-function renderRecommendationLearnLegacy(meta) {
-  return `
-    <details class="learn-panel">
-      <summary>Tutustu vakuutukseen</summary>
-      <div class="insurance-plain-summary">
-        <strong>Mitä vakuutus yleisesti tekee?</strong>
-        <p>${escapeHtml(productCovers(meta))}</p>
-      </div>
-      ${renderMaterialDisclosure(meta.materials)}
-    </details>
-  `;
-}
-
 function renderBucket(bucket) {
   const sortedItems = sortBucketItems(bucket.items);
   const visibleItems = bucket.key === "notNow" ? sortedItems.slice(0, 8) : sortedItems;
@@ -1586,14 +1527,6 @@ function renderMandatoryInlineCard(item) {
           </div>
         </summary>
         <div class="product-expanded">
-          <div class="card-why">
-            <strong>Miksi tämä nousi esiin?</strong>
-            <span>${escapeHtml(item.mandatory.text)}</span>
-          </div>
-          <div class="insurance-plain-summary">
-            <strong>Mitä vakuutus yleisesti tekee?</strong>
-            <p>${escapeHtml(card.coverText || card.lead)}</p>
-          </div>
           <a class="product-page-link" href="${escapeHtml(card.url)}" target="_blank" rel="noopener noreferrer">
             Lue lisää LähiTapiolan sivuilla <span aria-hidden="true">›</span>
           </a>
@@ -1617,18 +1550,11 @@ function mandatoryCardsForAssessment(assessment) {
 function renderRecommendationCard(item, bucketKey) {
   const meta = types()[item.key];
   const card = productCardMeta(item.key, meta);
-  const reasons = item.reasons.length ? item.reasons : ["tämä vakuutusalue kannattaa tarkistaa tilanteesi perusteella"];
   const strength = recommendationStrength(item.score);
   const detailKey = meta.detailFlow || "";
-  const detailResult = detailKey ? st().detailResults[detailKey] : null;
-  const selectedOption = detailResult?.comparison ? selectedCoverageOption(detailKey, detailResult.comparison) : null;
-  const coverageLevel = st().assessmentResult?.selectedCoverageLevels?.[item.key];
-  const reasonText = withoutTrailingPunctuation(capitalize(shortenText(reasons[0], 130)));
-  const refineLabel = detailResult ? "Muokkaa vakuutuksen laajuutta" : "Tarkenna vakuutusta";
   const articleClass = [
     "product-rec-card",
     bucketKey === "primary" ? "priority" : "supporting",
-    detailResult ? "refined" : ""
   ].filter(Boolean).join(" ");
 
   return `
@@ -1646,24 +1572,10 @@ function renderRecommendationCard(item, bucketKey) {
           </div>
         </summary>
         <div class="product-expanded">
-          <div class="card-why">
-            <strong>Miksi tämä nousi esiin?</strong>
-            <span>${escapeHtml(reasonText)}.</span>
-          </div>
-          <div class="insurance-plain-summary">
-            <strong>Mitä vakuutus yleisesti tekee?</strong>
-            <p>${escapeHtml(productCovers(meta))}</p>
-          </div>
-        ${detailResult && coverageLevel ? `
-          <div class="refined-summary compact">
-              <strong>Valittu laajuus</strong>
-              <span>${escapeHtml(selectedOption?.title || coverageLevel.selectedTitle)}</span>
-            </div>
-          ` : ""}
           ${detailKey ? `
             <div class="card-action-row product-refine-row">
-              <button class="btn btn-secondary btn-small" type="button" data-card-refine="${escapeHtml(detailKey)}">${escapeHtml(refineLabel)}</button>
-              <span>${detailResult ? "Voit vaihtaa valintaa milloin vain." : "Näet seuraavaksi vakuutuksen laajuudet ja sopivimman vaihtoehdon."}</span>
+              <button class="btn btn-secondary btn-small" type="button" data-card-refine="${escapeHtml(detailKey)}">Vertaa turvia</button>
+              <span>Näet turvien sisällöt ja erot ilman lisäkysymyksiä.</span>
             </div>
           ` : ""}
           ${renderRecommendationLearn(meta, card)}
@@ -2027,9 +1939,8 @@ function openDetail(detailKey) {
   st().detailIndex = 0;
   st().detailAnswers[detailKey] = st().detailAnswers[detailKey] || {};
   seedDetailDefaults(detailKey);
-  renderDetailQuestion();
-  showView("detail");
-  track("detail_started", { mode, detailKey });
+  finishDetail(detailKey);
+  track("coverage_comparison_opened", { mode, detailKey });
 }
 
 function renderDetailQuestion() {
@@ -2101,13 +2012,6 @@ function finishDetail(detailKey) {
   const result = buildDetailResult(mode, detailKey, answers);
   st().detailResults[detailKey] = result;
   st().recommendationRefined = true;
-  st().selectedCoverage[detailKey] = result.comparison?.recommendedKeys?.[0] || result.comparison?.options?.[0]?.key || "";
-  const typeKey = typeKeyFromDetail(detailKey);
-  if (typeKey) {
-    st().selectedContact[typeKey] = true;
-    st().selectedPrice[typeKey] = true;
-    st().priceEstimateInterest = true;
-  }
   refreshAssessmentResult();
   renderDetailResult(detailKey, result);
   showView("detailResult");
@@ -2117,30 +2021,22 @@ function finishDetail(detailKey) {
 function restartDetail() {
   const detailKey = st().activeDetail;
   if (!detailKey) return;
-  st().detailIndex = 0;
-  renderDetailQuestion();
-  showView("detail");
+  finishDetail(detailKey);
 }
 
 function renderDetailResult(detailKey, result) {
   const typeKey = Object.keys(types()).find((key) => types()[key].detailFlow === detailKey) || detailKey;
   const meta = types()[typeKey];
-  $("detailResultTitle").textContent = `${meta.title}: tarkennettu suositus`;
+  const card = productCardMeta(typeKey, meta);
+  const comparison = result.comparison ? {
+    ...result.comparison,
+    sourceUrl: result.comparison.sourceUrl || card.sourceUrl || meta.materials?.[0]?.url || "",
+    sourceLabel: result.comparison.sourceLabel || `LähiTapiolan ${meta.title.toLocaleLowerCase("fi-FI")} -tiedot`
+  } : null;
+  $("detailResultTitle").textContent = `${meta.title}: turvien vertailu`;
   $("detailResult").innerHTML = `
     <div class="result-hero">
-      <span class="eyebrow compact">${escapeHtml(result.primaryTag)}</span>
-      <span class="big">${escapeHtml(result.title)}</span>
-      ${renderCoverageComparison(result.comparison, detailKey)}
-      <details class="result-details">
-        <summary>Miksi tämä ehdotus syntyi?</summary>
-        <div class="result-grid">
-          ${result.rows.map((row) => `<div class="result-row"><strong>${escapeHtml(row.label)}</strong><span>${escapeHtml(row.value)}</span></div>`).join("")}
-        </div>
-        <div class="reason-list">
-          ${result.reasons.map((reason) => `<div class="reason">${escapeHtml(capitalize(reason))}.</div>`).join("")}
-        </div>
-        ${result.notes.length ? `<div class="notice"><strong>Huomioi jatkossa:</strong><br>${result.notes.map(escapeHtml).join("<br>")}</div>` : ""}
-      </details>
+      ${renderCoverageComparison(comparison, detailKey)}
       ${renderNextDetailPrompt(detailKey)}
       ${renderProductMaterials(meta)}
     </div>
@@ -2173,7 +2069,7 @@ function renderNextDetailPrompt(currentDetailKey = "") {
         <h4>Seuraavaksi: ${escapeHtml(meta.title)}</h4>
         <p>${escapeHtml(meta.desc)}</p>
       </div>
-      <button class="btn btn-primary" type="button" data-next-detail="${escapeHtml(meta.detailFlow)}">Tarkenna seuraava vakuutus</button>
+      <button class="btn btn-primary" type="button" data-next-detail="${escapeHtml(meta.detailFlow)}">Vertaa seuraavan vakuutuksen turvia</button>
     </section>
   `;
 }
@@ -2193,17 +2089,13 @@ function nextDetailCandidate(currentDetailKey = "") {
 function renderCoverageComparison(comparison, detailKey = "") {
   if (!comparison) return "";
   const recommendedLabels = comparison.recommended.map((option) => option.title).join(", ");
-  const selectedKey = selectedCoverageKey(detailKey, comparison);
-  const selectedOption = selectedCoverageOption(detailKey, comparison);
-  const selectedLabel = selectedOption?.title || recommendedLabels;
-  const selectionMatchesRecommendation = comparison.recommendedKeys.includes(selectedKey);
   const featureRows = comparison.featureRows || [];
   const tableRows = featureRows.length
     ? featureRows.map((row) => [row.label, (option) => row.values?.[option.key] || "Ei sisälly", row.description])
     : [
-        ["Kenelle sopii", (option) => option.fit],
-        ["Mitä turva painottaa", (option) => option.covers],
-        ["Mitä kannattaa tarkistaa", (option) => option.limits]
+        ["Kenelle sopii", (option) => option.fit, "Avaa nähdäksesi, millaiseen tilanteeseen vaihtoehto on tarkoitettu."],
+        ["Mitä turva painottaa", (option) => option.covers, "Avaa nähdäksesi, mitä vahinkoja tai tarpeita vaihtoehto painottaa."],
+        ["Mitä kannattaa tarkistaa", (option) => option.limits, "Avaa nähdäksesi rajaukset ja asiat, jotka varmistetaan ehdoista tai asiantuntijalta."]
       ];
   const renderComparisonValue = (value) => {
     const text = String(value || "");
@@ -2216,32 +2108,11 @@ function renderCoverageComparison(comparison, detailKey = "") {
   return `
     <section class="coverage-compare" aria-label="${escapeHtml(comparison.title)}">
       <div class="coverage-recommendation">
-        <p class="eyebrow compact">Vastauksiisi sopiva lähtökohta</p>
+        <p class="eyebrow compact">Kartoituksen lähtökohta</p>
         <h4>${escapeHtml(recommendedLabels)}</h4>
         <p>${escapeHtml(shortenText(comparison.basis, 220))}</p>
       </div>
-
-      <div class="coverage-choice-grid" aria-label="Valitse vakuutusvaihtoehto">
-        ${comparison.options.map((option) => `
-          <button class="coverage-option-card ${option.key === selectedKey ? "selected" : ""}" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${option.key === selectedKey ? "true" : "false"}">
-            <span class="radio-dot" aria-hidden="true"></span>
-            <span class="coverage-option-heading">
-              <strong>${escapeHtml(option.title)}</strong>
-              ${comparison.recommendedKeys.includes(option.key) ? `<em>Suositus</em>` : ""}
-            </span>
-            <span>${escapeHtml(option.level)}</span>
-            <small>${escapeHtml(option.fit)}</small>
-            <b>${option.key === selectedKey ? "Valittu" : "Valitse"}</b>
-          </button>
-        `).join("")}
-      </div>
-
-      <div class="coverage-selection-note">
-        <strong>Valintasi: ${escapeHtml(selectedLabel)}</strong>
-        <span>${selectionMatchesRecommendation ? "Valinta vastaa kartoituksen ehdotusta." : "Voit valita myös muun vaihtoehdon. Valintasi tallentuu yhteenvetoon."}</span>
-      </div>
-
-      <details class="coverage-details" ${featureRows.length ? "open" : ""}>
+      <details class="coverage-details" open>
         <summary>${featureRows.length ? "Vertaa turvatasojen sisältöjä" : "Vertaa vaihtoehtojen sisältöjä"}</summary>
         <p>${escapeHtml(comparison.notice)}</p>
         ${comparison.sourceUrl ? `<p class="coverage-source">Lähde: <a href="${escapeHtml(comparison.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(comparison.sourceLabel || "LähiTapiolan vakuutussivu")}</a></p>` : ""}
@@ -2251,10 +2122,9 @@ function renderCoverageComparison(comparison, detailKey = "") {
               <tr>
                 <th>Vertailukohta</th>
                 ${comparison.options.map((option) => `
-                  <th class="${option.key === selectedKey ? "selected" : ""}">
+                  <th>
                     <strong>${escapeHtml(option.title)}</strong>
                     ${comparison.recommendedKeys.includes(option.key) ? `<span class="recommend-badge">Suositus</span>` : ""}
-                    ${option.key === selectedKey ? `<span class="selected-badge">Valittu</span>` : ""}
                   </th>
                 `).join("")}
               </tr>
@@ -2263,7 +2133,7 @@ function renderCoverageComparison(comparison, detailKey = "") {
               ${tableRows.map(([label, getValue, description]) => `
                 <tr>
                   <th scope="row">${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</th>
-                  ${comparison.options.map((option) => `<td class="${option.key === selectedKey ? "selected" : ""}">${renderComparisonValue(getValue(option))}</td>`).join("")}
+                  ${comparison.options.map((option) => `<td>${renderComparisonValue(getValue(option))}</td>`).join("")}
                 </tr>
               `).join("")}
             </tbody>
@@ -2271,11 +2141,10 @@ function renderCoverageComparison(comparison, detailKey = "") {
         </div>
         <div class="coverage-detail-list">
           ${comparison.options.map((option) => `
-            <article class="coverage-detail-item ${option.key === selectedKey ? "selected" : ""}">
+            <article class="coverage-detail-item">
               <div>
                 <strong>${escapeHtml(option.title)}</strong>
                 ${comparison.recommendedKeys.includes(option.key) ? `<span>Suositus</span>` : ""}
-                ${option.key === selectedKey ? `<span>Valittu</span>` : ""}
               </div>
               <dl>
                 ${tableRows.map(([label, getValue, description]) => `<div><dt>${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</dt><dd>${renderComparisonValue(getValue(option))}</dd></div>`).join("")}
@@ -2390,12 +2259,8 @@ function renderProductMaterials(meta = {}) {
       <details>
         <summary>
           <span>Tutustu vakuutukseen</span>
-          <small>Lyhyt selitys ja vakuutusselosteet</small>
+          <small>Vakuutusselosteet ja ehdot</small>
         </summary>
-        <div class="insurance-plain-summary">
-          <strong>Mitä vakuutus yleisesti tekee?</strong>
-          <p>${escapeHtml(productCovers(meta))}</p>
-        </div>
         ${renderMaterialDisclosure(materials)}
       </details>
     </section>
@@ -2693,7 +2558,7 @@ function renderCustomerSummaryRiskCard(item) {
         <h5>${escapeHtml(title)}</h5>
         <p>${escapeHtml(shortenText(item.description || item.card.lead, 150))}</p>
         ${item.typeKey && item.meta.detailFlow ? `
-          <button class="summary-card-link as-button" type="button" data-card-refine="${escapeHtml(item.meta.detailFlow)}">Tarkenna vakuutusta <span aria-hidden="true">›</span></button>
+          <button class="summary-card-link as-button" type="button" data-card-refine="${escapeHtml(item.meta.detailFlow)}">Vertaa turvia <span aria-hidden="true">›</span></button>
         ` : ""}
       </div>
     </article>
@@ -2734,22 +2599,22 @@ function renderCustomerSummaryCover(item, assessment) {
         <div class="summary-product-tags">
           <span>${escapeHtml(item.active === false ? "Mahdollinen" : "Suositeltu")}</span>
           ${productScopeTag(item.key) ? `<span>${escapeHtml(productScopeTag(item.key))}</span>` : ""}
-          ${refined ? `<span>Tarkennettu</span>` : ""}
+          ${refined ? `<span>Vertailtu</span>` : ""}
         </div>
         <h5>${escapeHtml(meta.title)}</h5>
         <p>${escapeHtml(shortenText(item.reason || item.condition || card.lead || productSummary(meta), 150))}</p>
         ${refined && level ? `
           <div class="summary-coverage-level">
-            <span>Valittu laajuus</span>
+            <span>Kartoituksen lähtökohta</span>
             <strong>${escapeHtml(level.selectedTitle)}</strong>
           </div>
         ` : detailKey ? `
           <div class="summary-coverage-level pending">
-            <span>Turvataso on vielä alustava</span>
+            <span>Turvien vertailua ei ole vielä avattu</span>
           </div>
         ` : ""}
         ${detailKey ? `
-          <button class="summary-card-link as-button" type="button" data-card-refine="${escapeHtml(detailKey)}">${escapeHtml(refined ? "Muokkaa laajuutta" : "Tarkenna vakuutusta")} <span aria-hidden="true">›</span></button>
+          <button class="summary-card-link as-button" type="button" data-card-refine="${escapeHtml(detailKey)}">Vertaa turvia <span aria-hidden="true">›</span></button>
         ` : ""}
       </div>
     </article>
@@ -2870,11 +2735,10 @@ function buildCrmSummary(contact) {
   const coverageLevels = Object.entries(assessment.selectedCoverageLevels || {}).filter(([, level]) => level.refined);
   if (coverageLevels.length) {
     lines.push("");
-    lines.push("Valitut turvatasot");
+    lines.push("Tarkastellut turvavaihtoehdot");
     coverageLevels.forEach(([key, level]) => {
-      lines.push(`- ${types()[key]?.title || key}: ${level.selectedTitle}`);
-      lines.push(`  - Koneen ehdotus: ${level.machineTitle}`);
-      lines.push(`  - Koneen ehdotuksen peruste: ${level.basis}`);
+      lines.push(`- ${types()[key]?.title || key}: kartoituksen lähtökohta ${level.machineTitle}`);
+      lines.push(`  - Peruste: ${level.basis}`);
     });
   }
 
@@ -3097,9 +2961,8 @@ function buildChatAnswer(question) {
   if (lowered.includes("ero") || lowered.includes("turva") || lowered.includes("laaja") || lowered.includes("suppea")) {
     const detail = context.activeDetail ? st().detailResults[context.activeDetail] : null;
     if (detail?.comparison) {
-      const selected = selectedCoverageOption(context.activeDetail, detail.comparison);
       const recommended = detail.comparison.recommended.map((option) => option.title).join(", ");
-      return `Koneen ehdotus on ${recommended}. Valitsemasi vaihtoehto on ${selected?.title || recommended}. Erot kannattaa lukea vertailutaulukosta: siellä näkyy, mitä taso tarkoittaa, kenelle se sopii, mitä se voi kattaa ja mitä rajoituksia pitää tarkistaa.`;
+      return `Kartoituksen lähtökohta on ${recommended}. Erot kannattaa lukea vertailutaulukosta: siellä näkyy, mitä taso tarkoittaa, kenelle se sopii, mitä se voi kattaa ja mitä rajoituksia pitää tarkistaa.`;
     }
     return "Turvatasojen erot näkyvät tarkennusvaiheessa vakuutuskohtaisesti. En pakota samaa mallia kaikkiin vakuutuksiin, vaan esimerkiksi matkavakuutuksessa vertaillaan jatkuvaa ja matkakohtaista ratkaisua.";
   }
@@ -3148,7 +3011,7 @@ function calculatorContext() {
     const recommended = selectedOption?.title || result.comparison?.recommended?.map((option) => option.title).join(", ") || result.primaryTag;
     return {
       title: meta?.title || result.title,
-      subtitle: selectedOption ? `${result.primaryTag}: valittu ${selectedOption.title}` : result.title,
+      subtitle: selectedOption ? `Vertailun lähtökohta: ${selectedOption.title}` : result.title,
       recommended,
       nextStep: "Hinta-arvio",
       detailKey,
@@ -3175,7 +3038,7 @@ function calculatorContext() {
       title: meta.title,
       subtitle: item.reason || meta.desc,
       recommended: level?.refined ? level.selectedTitle : "Turvatasoa ei ole vielä arvioitu",
-      nextStep: meta.detailFlow ? "Vastaa ensin tarkentaviin kysymyksiin" : "Asiantuntijan arvio",
+      nextStep: meta.detailFlow ? "Avaa vakuutuksen turvien vertailu" : "Asiantuntijan arvio",
       detailKey: meta.detailFlow || "",
       typeKey: item.key
     };
