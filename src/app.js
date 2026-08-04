@@ -1944,7 +1944,7 @@ function officialPersonalImages() {
   return {
     traffic: businessImages.traffic,
     vehicle: businessImages.vehicle,
-    home: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/5W26Cy9oPSG85wKX1sgG5/8b5b259c5777aa2ca319d0a415e4865b/HA_vakuutukset_paritalo.jpg?w=692&h=389&q=50&fm=webp",
+    home: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/70uQF12ttwhzYxJvBIyA7g/bb30236689691084dc568d090cc442ea/LT_kotivakuutus_nuoretsohvalla_3.jpg?w=692&h=389&q=50&fm=webp",
     travel: businessImages.travel,
     health: businessImages.people,
     pet: "https://www.lahitapiola.fi/assets/images/uvkjjs8ajvb6/YlEQVbrzeP2rtwyBZoXe8/3c3661691858811c0e0607f24db2e098/kissavakuutus_1920x1080.jpg?w=692&h=389&fl=progressive&q=50&fm=jpg",
