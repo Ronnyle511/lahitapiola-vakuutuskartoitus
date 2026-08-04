@@ -33,7 +33,10 @@ const homeResult = buildDetailResult("personal", "home", {
 
 assert.match(homeResult.title, /Laaja/);
 assert.ok(homeResult.rows.some((row) => row.value.includes("Rakennus ja irtaimisto")));
-assert.ok(homeResult.comparison.recommended.some((option) => option.title === "LaajaPlus"));
+assert.ok(homeResult.comparison.recommended.some((option) => option.title === "Laaja"));
+assert.deepEqual(homeResult.comparison.options.map((option) => option.title), ["Laaja", "Perus", "Suppea"]);
+assert.equal(homeResult.comparison.featureRows.length, 11);
+assert.equal(homeResult.comparison.featureRows.find((row) => row.key === "breakage").values.laaja, "Sisältyy");
 
 const business = calculateScores("business", {
   premises: "yes",
@@ -99,6 +102,9 @@ assert.match(appSource, /life: businessImages\.groupLife/);
 assert.match(appSource, /cottage: businessImages\.realEstate/);
 assert.match(appSource, /liability: businessImages\.liability/);
 assert.match(appSource, /boat: .*HA_vakuutukset_vene/);
+assert.match(appSource, /Vertaa turvatasojen sisältöjä/);
+assert.match(appSource, /coverage-feature-detail/);
+assert.doesNotMatch(appSource, /Suuntaa antava hintavaikutus/);
 assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
 assert.doesNotMatch(appSource, /function isMandatoryRelatedType/);
 assert.doesNotMatch(appSource, /const isLegal = isMandatoryRelatedType/);
