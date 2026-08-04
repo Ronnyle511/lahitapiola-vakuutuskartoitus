@@ -1211,6 +1211,7 @@ function renderIntakeSummary() {
 }
 
 function currentInsuranceLabels() {
+  if (!activeIntakeQuestions().length) return [];
   const selected = toArray(st().quickAnswers.currentInsuranceAreas);
   if (selected.includes("none")) return ["Ei vielä voimassa olevaa kokonaisuutta"];
   if (selected.includes("unsure")) return ["Nykyinen vakuutusturva epäselvä"];
