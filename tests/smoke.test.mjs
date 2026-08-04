@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { baseQuestions, detailFlows, insuranceTypes, quickQuestions } from "../src/data.js";
+import { baseQuestions, coverageModels, detailFlows, insuranceTypes, quickQuestions } from "../src/data.js";
 import { buildDetailResult } from "../src/detailResults.js";
 import { calculateScores } from "../src/scoring.js";
 
@@ -38,6 +38,21 @@ assert.deepEqual(homeResult.comparison.options.map((option) => option.title), ["
 assert.equal(homeResult.comparison.featureRows.length, 11);
 assert.equal(homeResult.comparison.featureRows.find((row) => row.key === "breakage").values.laaja, "Sisältyy");
 
+const boatResult = buildDetailResult("personal", "boat", {});
+assert.deepEqual(boatResult.comparison.options.map((option) => option.title), ["Laaja venevakuutus", "Perus venevakuutus"]);
+assert.equal(boatResult.comparison.featureRows.find((row) => row.key === "storm").values.perus, "Ei sisälly");
+
+const forestResult = buildDetailResult("personal", "forest", {});
+assert.equal(forestResult.comparison.featureRows.length, 9);
+assert.equal(forestResult.comparison.featureRows.find((row) => row.key === "fire").values.bioenergia, "Sisältyy");
+
+const horseResult = buildDetailResult("personal", "horse", {});
+assert.equal(horseResult.comparison.featureRows.find((row) => row.key === "illness").values.suppea, "Ei sisälly");
+
+const babyResult = buildDetailResult("personal", "pregnancy", {});
+assert.equal(babyResult.comparison.options.length, 1);
+assert.ok(babyResult.comparison.featureRows.every((row) => row.values.sairaus === "Sisältyy"));
+
 const business = calculateScores("business", {
   premises: "yes",
   assets: "yes",
@@ -72,6 +87,12 @@ for (const profileId of ["personal", "business"]) {
   assert.ok(baseQuestions[profileId].length >= 2);
   assert.ok(quickQuestions[profileId].length >= 7);
   assert.ok(Object.keys(detailFlows[profileId]).length >= 6);
+  for (const [typeKey, meta] of Object.entries(insuranceTypes[profileId])) {
+    assert.ok(meta.detailFlow, `${profileId}.${typeKey} needs a direct comparison flow`);
+    assert.ok(coverageModels[profileId][meta.detailFlow], `${profileId}.${typeKey} needs a coverage model`);
+    const directResult = buildDetailResult(profileId, meta.detailFlow, {});
+    assert.ok(directResult.comparison?.options?.length, `${profileId}.${typeKey} direct comparison must render without answers`);
+  }
 }
 
 const appSource = readFileSync(new URL("../src/app.js", import.meta.url), "utf8");
@@ -104,6 +125,12 @@ assert.match(appSource, /liability: businessImages\.liability/);
 assert.match(appSource, /boat: .*HA_vakuutukset_vene/);
 assert.match(appSource, /Vertaa turvatasojen sisältöjä/);
 assert.match(appSource, /coverage-feature-detail/);
+assert.match(appSource, /function openDetail[\s\S]*?finishDetail\(detailKey\);/);
+assert.doesNotMatch(appSource, /Miksi tämä nousi esiin/);
+assert.doesNotMatch(appSource, /Mitä vakuutus yleisesti tekee/);
+assert.doesNotMatch(appSource, /Miksi tämä ehdotus syntyi/);
+assert.doesNotMatch(appSource, /coverage-choice-grid/);
+assert.doesNotMatch(appSource, /coverage-selection-note/);
 assert.doesNotMatch(appSource, /Suuntaa antava hintavaikutus/);
 assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
 assert.doesNotMatch(appSource, /function isMandatoryRelatedType/);
