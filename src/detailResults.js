@@ -645,7 +645,7 @@ function chooseCoverageKeys(flowKey, a) {
   const concerns = toArray(a.vehicleConcerns || a.travelConcerns || a.healthNeeds || a.petNeeds || []);
   switch (flowKey) {
     case "home": {
-      if (a.plusNeed === "yes") return picked(["laajaPlus"], "LaajaPlus voisi sopia, koska halusit vahvemman irtaimistoturvan Laajan kotivakuutuksen yhteyteen.");
+      if (a.plusNeed === "yes") return picked(["laaja"], "Laaja voisi sopia, koska halusit sen yhteyteen saatavan Laaja Plus -lisäturvan irtaimistolle.");
       if (["suppea", "perus", "laaja"].includes(a.coverLevel)) return picked([a.coverLevel], `${labelLevel(a.coverLevel)} vastaa valitsemaasi turvatasoa, mutta sisältö kannattaa vielä verrata muihin tasoihin.`);
       if (["house_owner", "owner_occupier", "tenant"].includes(a.role)) return picked(["laaja"], "Laaja voisi sopia, koska kodin irtaimisto, rakennus tai vastuutilanteet voivat aiheuttaa taloudellisesti merkittäviä vahinkoja.");
       return picked(["perus"], "Perus voi olla vaihtoehto, jos haluat rajatummin keskeisiä kotiin liittyviä vahinkoja.");
