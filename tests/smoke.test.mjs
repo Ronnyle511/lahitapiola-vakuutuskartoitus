@@ -86,6 +86,10 @@ assert.doesNotMatch(appSource, /Mitä vakuutuksia sinulla on jo/);
 assert.doesNotMatch(appSource, /Mikä on kartoituksen tavoite/);
 assert.doesNotMatch(appSource, /Mitä vakuutusalueita yrityksellä on jo/);
 assert.doesNotMatch(appSource, /Mitä haluat tehdä yrityksen vakuutuksille/);
+assert.match(
+  appSource,
+  /function currentInsuranceLabels\(\) \{\s*if \(!activeIntakeQuestions\(\)\.length\) return \[\];/,
+);
 assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
 assert.doesNotMatch(appSource, /function isMandatoryRelatedType/);
 assert.doesNotMatch(appSource, /const isLegal = isMandatoryRelatedType/);
