@@ -92,12 +92,13 @@ assert.match(
 );
 assert.match(appSource, /traffic: businessImages\.traffic/);
 assert.match(appSource, /vehicle: businessImages\.vehicle/);
-assert.match(appSource, /home: businessImages\.property/);
+assert.match(appSource, /home: .*HA_vakuutukset_paritalo/);
 assert.match(appSource, /travel: businessImages\.travel/);
 assert.match(appSource, /health: businessImages\.people/);
 assert.match(appSource, /life: businessImages\.groupLife/);
 assert.match(appSource, /cottage: businessImages\.realEstate/);
 assert.match(appSource, /liability: businessImages\.liability/);
+assert.match(appSource, /boat: .*HA_vakuutukset_vene/);
 assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
 assert.doesNotMatch(appSource, /function isMandatoryRelatedType/);
 assert.doesNotMatch(appSource, /const isLegal = isMandatoryRelatedType/);
