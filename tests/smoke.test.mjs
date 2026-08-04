@@ -76,9 +76,12 @@ const templateSource = readFileSync(new URL("../src/page-template.html", import.
 assert.match(appSource, /lahitapiola-vakuutuskartoitus-v3/);
 assert.match(appSource, /function openCustomerSummary/);
 assert.match(appSource, /localStorage\.setItem/);
-assert.match(appSource, /id: "reviewGoal"[\s\S]*?multi: true/);
 assert.doesNotMatch(appSource, /id: "coveragePreference"/);
-assert.match(appSource, /function activeIntakeQuestions\(\) \{\s*return intakeQuestions\(\);\s*\}/);
+assert.match(
+  appSource,
+  /function activeIntakeQuestions\(\) \{\s*\/\/ Nykyisiä vakuutuksia tai kartoituksen tavoitetta ei kysytä\.\s*return \[\];\s*\}/,
+);
+assert.match(appSource, /if \(!activeIntakeQuestions\(\)\.length\) return true;/);
 assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
 assert.doesNotMatch(appSource, /function isMandatoryRelatedType/);
 assert.doesNotMatch(appSource, /const isLegal = isMandatoryRelatedType/);
