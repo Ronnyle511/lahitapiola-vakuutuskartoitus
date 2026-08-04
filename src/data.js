@@ -1211,8 +1211,7 @@ export const detailFlows = {
   }
 };
 
-const priceNote = "Hinta-arvio saatavilla laskuri-integraation kautta";
-const defaultNotice = "Turvan sisältö vaihtelee vakuutustuotteittain. Lopullinen sisältö, hinta ja soveltuvuus varmistetaan LähiTapiolan laskurissa tai asiantuntijan kanssa.";
+const defaultNotice = "Turvan sisältö vaihtelee vakuutustuotteittain. Lopullinen sisältö ja soveltuvuus varmistetaan vakuutusehdoista tai asiantuntijan kanssa.";
 const option = (key, title, level, means, fit, covers, limits) => ({
   key,
   title,
@@ -1220,22 +1219,34 @@ const option = (key, title, level, means, fit, covers, limits) => ({
   means,
   fit,
   covers,
-  limits,
-  priceNote
+  limits
 });
 
 export const coverageModels = {
   personal: {
     home: {
-      label: "Turvatasot: Suppea, Perus, Laaja, LaajaPlus",
+      label: "Turvatasot: Laaja, Perus ja Suppea",
       title: "Kotivakuutuksen turvatasojen vertailu",
-      notice: defaultNotice,
-      calculatorAction: "Siirry kotivakuutuksen hinta-arvioon, kun laskuri-integraatio on käytössä",
+      notice: "Turvatasot ja sisältyvyydet perustuvat LähiTapiolan kotivakuutuksen verkkosivuun. Lopullinen korvattavuus määräytyy vakuutusehtojen ja valintojesi mukaan.",
+      sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/kotivakuutus/",
+      sourceLabel: "LähiTapiolan kotivakuutuksen turvatasot",
       options: [
-        option("suppea", "Suppea", "Rajattu turva", "Varautuminen ensisijaisesti vakavimpiin palo- ja luonnonilmiövahinkoihin.", "Kohteeseen, jossa halutaan varautua vain pahimpiin vahinkoihin, kuten ulkorakennukseen tai vähäriskiseen mökkikohteeseen.", "Tyypillisesti palo, myrsky, raesade ja salamanisku tuotekohtaisten ehtojen mukaan.", "Ei yleensä sovi, jos haluat rikkoutumis-, vuoto-, varkaus- tai laajaa irtaimistoturvaa."),
-        option("perus", "Perus", "Perustason kotiturva", "Laajaa rajatumpi kotivakuutus ilman rikkoutumissuojaa.", "Tilanteeseen, jossa halutaan varautua keskeisiin koti- ja irtaimistovahinkoihin, mutta ei painoteta äkillistä rikkoutumista.", "Esimerkiksi palo-, myrsky-, rae-, vuoto-, varkaus- ja ilkivaltavahinkoja ehtojen mukaan.", "Ei tyypillisesti kata tavaroiden äkillisiä rikkoutumisvahinkoja samalla tavalla kuin Laaja."),
-        option("laaja", "Laaja", "Laajin perusturvataso", "Kattavin kotivakuutuksen päätaso, joka huomioi myös rikkoutumisvahinkoja.", "Useimmille vakituisen kodin irtaimiston tai rakennuksen vakuuttajille, kun iso vahinko olisi vaikea maksaa itse.", "Äkillisiä ja ennalta arvaamattomia vahinkoja sekä rikkoutumisvahinkoja tuotekohtaisten ehtojen mukaan.", "Ei tarkoita, että kaikki vahingot korvataan; rajoitukset, omavastuut ja ikävähennykset pitää tarkistaa."),
-        option("laajaPlus", "LaajaPlus", "Lisätaso Laajan yhteyteen", "Laajan kotivakuutuksen lisäturva koti-irtaimistolle.", "Kun irtaimiston arvo, elektroniikka, kiinteät sisustukset tai tilapäisasuminen korostuvat.", "Parempia irtaimiston ikävähennyksiä, tiedostojen palautusturvaa ja laajempaa kiinteiden sisustusten turvaa tuotetietojen mukaan.", "Saatavilla vain Laajan kotivakuutuksen yhteydessä ja tuotekohtaisten ehtojen mukaan.")
+        option("laaja", "Laaja", "Kattavin päätaso", "Kattavin kotivakuutuksen päätaso, joka huomioi myös rikkoutumisvahinkoja.", "Useimmille vakituisen kodin irtaimiston tai rakennuksen vakuuttajille, kun iso vahinko olisi vaikea maksaa itse.", "Rikkoutumis-, vuoto-, tulva-, varkaus-, luonnonilmiö- ja palovahinkoja tuotekohtaisten ehtojen mukaan.", "Kaikki vahingot eivät silti kuulu turvaan; rajoitukset, omavastuut ja ikävähennykset tarkistetaan ehdoista."),
+        option("perus", "Perus", "Perustason kotiturva", "Suppeaa laajempi turva, johon kuuluvat myös vuoto- ja poikkeukselliset tulvavahingot.", "Tilanteeseen, jossa halutaan keskeiset koti- ja irtaimistoturvat ilman rikkoutumisturvaa.", "Palo-, vuoto-, tulva-, varkaus- ja luonnonilmiövahinkoja ehtojen mukaan.", "Ei sisällä tavaroiden äkillistä rikkoutumista samalla tavalla kuin Laaja."),
+        option("suppea", "Suppea", "Rajattu kotiturva", "Turvaa vakavimpien vahinkojen, kuten tulipalon, varalta ja sisältää vastuu- sekä oikeusturvan.", "Kohteeseen, jossa halutaan rajattu turva suurimpien vahinkojen varalle.", "Palo- ja tilapäisen asumisen vahinkoja sekä vastuu- ja oikeusturvaa ehtojen mukaan.", "Vuoto, tulva ja rikkoutuminen eivät sisälly; osa muista turvista on valinnainen.")
+      ],
+      featureRows: [
+        { key: "laajaPlus", label: "Laaja Plus irtaimistolle", description: "Laajan valinnainen lisäturva parantaa irtaimiston ikävähennyksiä ja täydentää tiedostojen, tilapäisasumisen sekä kiinteiden sisustusten turvaa.", values: { laaja: "Valinnainen", perus: "Ei sisälly", suppea: "Ei sisälly" } },
+        { key: "breakage", label: "Rikkoutuminen", description: "Korvaa koti-irtaimiston äkillisiä ja ennalta arvaamattomia rikkoutumisvahinkoja vakuutusehtojen mukaisesti.", values: { laaja: "Sisältyy", perus: "Ei sisälly", suppea: "Ei sisälly" } },
+        { key: "leak", label: "Vuoto", description: "Korvaa kiinteistä putkistoista, käyttölaitteista, säiliöistä tai akvaariosta aiheutuvia vuotovahinkoja ehtojen mukaisesti.", values: { laaja: "Sisältyy", perus: "Sisältyy", suppea: "Ei sisälly" } },
+        { key: "flood", label: "Poikkeuksellinen tulva", description: "Korvaa poikkeuksellisen maanpintatulvan rakennukselle tai irtaimistolle aiheuttamia vahinkoja ehtojen mukaisesti.", values: { laaja: "Sisältyy", perus: "Sisältyy", suppea: "Ei sisälly" } },
+        { key: "theft", label: "Varkaus, murto, ilkivalta", description: "Korvaa varkaudesta, murrosta, ilkivallasta tai niiden yrityksestä aiheutuvia vahinkoja ehtojen mukaisesti.", values: { laaja: "Sisältyy", perus: "Sisältyy", suppea: "Valinnainen" } },
+        { key: "nature", label: "Luonnonilmiö", description: "Korvaa esimerkiksi raesateen, myrskyn tai suoran salamaniskun aiheuttamia vahinkoja ehtojen mukaisesti.", values: { laaja: "Sisältyy", perus: "Sisältyy", suppea: "Valinnainen" } },
+        { key: "fire", label: "Tulipalo, noki, savu tai räjähdys", description: "Korvaa irti päässeen tulen sekä äkillisen noen, savun tai räjähdyksen aiheuttamia vahinkoja ehtojen mukaisesti.", values: { laaja: "Sisältyy", perus: "Sisältyy", suppea: "Sisältyy" } },
+        { key: "temporaryHousing", label: "Tilapäisen asumisen kulut", description: "Korvaa tilapäisen asumisen kustannuksia, jos kodista on muutettava vakuutuksesta korvattavan vahingon korjaustöiden ajaksi.", values: { laaja: "Sisältyy", perus: "Sisältyy", suppea: "Sisältyy" } },
+        { key: "liability", label: "Vastuuvakuutus", description: "Korvaa ulkopuoliselle aiheutettuja henkilö- ja esinevahinkoja, joista vakuutettu on lain mukaan korvausvelvollinen.", values: { laaja: "Sisältyy", perus: "Sisältyy", suppea: "Sisältyy" } },
+        { key: "legal", label: "Oikeusturvavakuutus", description: "Korvaa lakimiesavun kustannuksia yksityiselämään liittyvissä vakuutusehtojen mukaisissa rikos-, hakemus- ja riita-asioissa.", values: { laaja: "Sisältyy", perus: "Sisältyy", suppea: "Sisältyy" } },
+        { key: "luggage", label: "Matkatavaraturva ulkomaanmatkoilla", description: "Valinnainen lisäturva korvaa ulkomaanmatkalla mukana oleville tavaroille sattuvia vahinkoja ehtojen mukaisesti.", values: { laaja: "Valinnainen", perus: "Valinnainen", suppea: "Valinnainen" } }
       ]
     },
     vehicle: {
