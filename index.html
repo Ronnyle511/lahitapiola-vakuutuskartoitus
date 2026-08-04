@@ -8569,7 +8569,7 @@ function track(event, payload = {}) {
 const $ = (id) => document.getElementById(id);
 const views = ["introView", "baseInfoView", "questionView", "resultsView", "detailView", "detailResultView", "contactView", "summaryView"];
 const steps = ["step1", "step2", "step3", "step4"];
-const STORAGE_KEY = "lahitapiola-vakuutuskartoitus-v3";
+const STORAGE_KEY = "lahitapiola-vakuutuskartoitus-v4";
 const STORAGE_VERSION = 1;
 const recommendationAreaOrder = {
   personal: ["home", "health", "life", "vehicle", "travel", "pet", "horse", "apartment", "liability", "boat", "forest", "pregnancy", "childSerious", "investment"],
@@ -9189,67 +9189,6 @@ function relevantNeedsQuestion() {
       label: item.label
     }))
   };
-}
-
-function intakeQuestions() {
-  return [
-    {
-      id: "currentInsuranceAreas",
-      title: mode === "business"
-        ? "Mitä vakuutusalueita yrityksellä on jo?"
-        : "Mitä vakuutuksia sinulla on jo?",
-      desc: "Valitse kaikki, joista olet melko varma. Näin erotamme, mitä kannattaa tarkistaa ja mitä voi puuttua.",
-      multi: true,
-      options: currentInsuranceOptions(mode)
-    },
-    {
-      id: "reviewGoal",
-      title: mode === "business"
-        ? "Mitä haluat tehdä yrityksen vakuutuksille?"
-        : "Mikä on kartoituksen tavoite?",
-      desc: "Valitse kaikki olennaiset. Voit samaan aikaan tarkistaa nykyiset vakuutukset, vertailla vaihtoehtoja ja selvittää puuttuvat turvat.",
-      multi: true,
-      options: [
-        { value: "check", label: "Tarkistaa nykyisen turvan riittävyys" },
-        { value: "compare", label: "Vertailla tai kilpailuttaa vakuutuksia" },
-        { value: "new_or_missing", label: "Selvittää puuttuvat vakuutukset" },
-        { value: "understand", label: "Ymmärtää, mitä kannattaa harkita" },
-        { value: "unsure", label: "En osaa sanoa" }
-      ]
-    }
-  ];
-}
-
-function currentInsuranceOptions(profileId) {
-  const shared = [
-    { value: "none", label: "Ei vielä vakuutuksia tai kokonaisuus on vasta alussa" },
-    { value: "unsure", label: "En ole varma, mitä vakuutuksia on voimassa" }
-  ];
-
-  if (profileId === "business") {
-    return [
-      { value: "bizPeople", label: "Henkilöstö" },
-      { value: "bizProperty", label: "Irtaimisto ja toimitila" },
-      { value: "bizVehicle", label: "Ajoneuvot" },
-      { value: "bizCyber", label: "Kyber" },
-      { value: "bizLiability", label: "Vastuu ja oikeusturva" },
-      { value: "bizInterruption", label: "Keskeytys ja jatkuvuus" },
-      { value: "bizTravel", label: "Yrityksen matkustaminen" },
-      ...shared
-    ];
-  }
-
-  return [
-    { value: "home", label: "Koti ja irtaimisto" },
-    { value: "vehicle", label: "Ajoneuvot" },
-    { value: "travel", label: "Matkustaminen" },
-    { value: "health", label: "Henkilövakuutukset" },
-    { value: "life", label: "Läheisten taloudellinen turva" },
-    { value: "pet", label: "Lemmikit" },
-    { value: "apartment", label: "Vapaa-ajan asunto" },
-    { value: "liability", label: "Vastuu ja oikeusturva" },
-    ...shared
-  ];
 }
 
 function setAnswer(question, targetAnswers, value) {
