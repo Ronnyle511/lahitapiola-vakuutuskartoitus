@@ -4165,6 +4165,27 @@ details.source-details summary {
   text-underline-offset: 3px;
 }
 
+.coverage-current-selection {
+  display: grid;
+  gap: 3px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid #abd4e6;
+  border-radius: 8px;
+  color: #315b78;
+  background: #ffffff;
+  font-size: 13px;
+}
+
+.coverage-current-selection strong {
+  color: var(--blue-950);
+}
+
+.coverage-current-selection.has-selection {
+  border-color: #6ab89e;
+  background: #effaf6;
+}
+
 .coverage-table {
   min-width: 760px;
 }
@@ -4190,9 +4211,50 @@ details.source-details summary {
   margin-bottom: 7px;
 }
 
+.coverage-select-button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 9px;
+  border: 1px solid var(--blue-700);
+  border-radius: 999px;
+  color: var(--blue-800);
+  background: #ffffff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.coverage-select-button:hover {
+  color: #ffffff;
+  background: var(--blue-800);
+}
+
+.coverage-select-button[aria-pressed="true"] {
+  color: #ffffff;
+  border-color: #16765a;
+  background: #16765a;
+}
+
+.coverage-select-button:focus-visible {
+  outline: 3px solid #f3bd31;
+  outline-offset: 2px;
+}
+
+.coverage-select-button.mobile {
+  margin-top: 15px;
+}
+
 .coverage-table td {
   font-size: 13px;
   cursor: default;
+}
+
+.coverage-table th.selected,
+.coverage-table td.selected {
+  background: var(--blue-050);
 }
 
 .coverage-feature-detail {
@@ -8489,6 +8551,7 @@ function buildCoverageLevelRecommendations(result, detailResults = {}, selectedC
     if (!model?.options?.length) return;
     const detailComparison = detailResults[detailKey]?.comparison;
     const refined = Boolean(detailComparison);
+    const chosen = Boolean(selectedCoverage[detailKey] && model.options.some((option) => option.key === selectedCoverage[detailKey]));
     const machineKey = detailComparison?.recommendedKeys?.[0]
       || findCoverageKey(model.options, coverItem.defaultCoverageKey)
       || model.options[0].key;
@@ -8505,7 +8568,8 @@ function buildCoverageLevelRecommendations(result, detailResults = {}, selectedC
       selectedTitle: selectedOption.title,
       basis: detailComparison?.basis || coverItem.reason || "Ehdotus perustuu asiakasprofiiliin ja valittuihin tilanteisiin.",
       priceImpactSymbol: indicativePriceSymbol(selectedKey),
-      refined
+      refined,
+      chosen
     };
   });
   return levels;
@@ -8517,7 +8581,7 @@ function buildPricingPayload(result) {
     ...(result.optionalCovers || []).filter((item) => item.active)
   ]).map((item) => item.key);
   const refinedCoverageLevels = Object.fromEntries(
-    Object.entries(result.selectedCoverageLevels || {}).filter(([, item]) => item.refined)
+    Object.entries(result.selectedCoverageLevels || {}).filter(([, item]) => item.chosen)
   );
   const symbols = Object.values(refinedCoverageLevels).map((item) => item.priceImpactSymbol);
   const priceImpactSymbol = symbols.includes("€€€") ? "€€€" : symbols.includes("€€") ? "€€" : symbols.length ? "€" : "";
@@ -10798,6 +10862,8 @@ function nextDetailCandidate(currentDetailKey = "") {
 function renderCoverageComparison(comparison, detailKey = "") {
   if (!comparison) return "";
   const recommendedLabels = comparison.recommended.map((option) => option.title).join(", ");
+  const explicitlySelectedKey = st().selectedCoverage[detailKey] || "";
+  const explicitlySelectedOption = comparison.options.find((option) => option.key === explicitlySelectedKey);
   const featureRows = comparison.featureRows || [];
   const tableRows = featureRows.length
     ? featureRows.map((row) => [row.label, (option) => row.values?.[option.key] || "Ei sisälly", row.description])
@@ -10820,6 +10886,10 @@ function renderCoverageComparison(comparison, detailKey = "") {
         <p class="eyebrow compact">Kartoituksen lähtökohta</p>
         <h4>${escapeHtml(recommendedLabels)}</h4>
         <p>${escapeHtml(shortenText(comparison.basis, 220))}</p>
+        <div class="coverage-current-selection ${explicitlySelectedOption ? "has-selection" : ""}" aria-live="polite">
+          <strong>${explicitlySelectedOption ? "Valitsemasi vaihtoehto" : "Valitse vertailun jälkeen sopiva vaihtoehto"}</strong>
+          <span>${explicitlySelectedOption ? escapeHtml(explicitlySelectedOption.title) : "Valinta tallentuu yhteenvetoon ja välitetään yhteydenottopyynnön mukana asiantuntijalle."}</span>
+        </div>
       </div>
       <details class="coverage-details" open>
         <summary>${featureRows.length ? "Vertaa turvatasojen sisältöjä" : "Vertaa vaihtoehtojen sisältöjä"}</summary>
@@ -10831,9 +10901,12 @@ function renderCoverageComparison(comparison, detailKey = "") {
               <tr>
                 <th>Vertailukohta</th>
                 ${comparison.options.map((option) => `
-                  <th>
+                  <th class="${option.key === explicitlySelectedKey ? "selected" : ""}">
                     <strong>${escapeHtml(option.title)}</strong>
                     ${comparison.recommendedKeys.includes(option.key) ? `<span class="recommend-badge">Suositus</span>` : ""}
+                    <button class="coverage-select-button" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${option.key === explicitlySelectedKey ? "true" : "false"}">
+                      ${option.key === explicitlySelectedKey ? "✓ Valittu" : "Valitse tämä"}
+                    </button>
                   </th>
                 `).join("")}
               </tr>
@@ -10842,7 +10915,7 @@ function renderCoverageComparison(comparison, detailKey = "") {
               ${tableRows.map(([label, getValue, description]) => `
                 <tr>
                   <th scope="row">${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</th>
-                  ${comparison.options.map((option) => `<td>${renderComparisonValue(getValue(option))}</td>`).join("")}
+                  ${comparison.options.map((option) => `<td class="${option.key === explicitlySelectedKey ? "selected" : ""}">${renderComparisonValue(getValue(option))}</td>`).join("")}
                 </tr>
               `).join("")}
             </tbody>
@@ -10850,14 +10923,18 @@ function renderCoverageComparison(comparison, detailKey = "") {
         </div>
         <div class="coverage-detail-list">
           ${comparison.options.map((option) => `
-            <article class="coverage-detail-item">
+            <article class="coverage-detail-item ${option.key === explicitlySelectedKey ? "selected" : ""}">
               <div>
                 <strong>${escapeHtml(option.title)}</strong>
                 ${comparison.recommendedKeys.includes(option.key) ? `<span>Suositus</span>` : ""}
+                ${option.key === explicitlySelectedKey ? `<span>Valittu</span>` : ""}
               </div>
               <dl>
                 ${tableRows.map(([label, getValue, description]) => `<div><dt>${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</dt><dd>${renderComparisonValue(getValue(option))}</dd></div>`).join("")}
               </dl>
+              <button class="coverage-select-button mobile" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${option.key === explicitlySelectedKey ? "true" : "false"}">
+                ${option.key === explicitlySelectedKey ? "✓ Valittu vaihtoehto" : "Valitse tämä vaihtoehto"}
+              </button>
             </article>
           `).join("")}
         </div>
@@ -10953,6 +11030,7 @@ function selectCoverageOption(detailKey, coverageKey) {
     st().priceEstimateInterest = true;
   }
   refreshAssessmentResult();
+  persistAssessment();
   renderDetailResult(detailKey, result);
   renderCalculatorPanel();
   renderChatPanel();
@@ -11058,7 +11136,10 @@ function renderContact() {
   $("contactChoices").innerHTML = candidateKeys.length ? candidateKeys.map((key) => {
     const meta = types()[key];
     const checked = st().selectedContact[key] ? "checked" : "";
-    const detailBadge = st().detailResults[meta.detailFlow] ? "Tarkennettu" : "";
+    const selectedOption = st().selectedCoverage[meta.detailFlow]
+      ? coverageModels[mode]?.[meta.detailFlow]?.options?.find((option) => option.key === st().selectedCoverage[meta.detailFlow])
+      : null;
+    const detailBadge = selectedOption ? `Valittu: ${selectedOption.title}` : st().detailResults[meta.detailFlow] ? "Vertailtu · ei valintaa" : "";
     const priceBadge = st().selectedPrice[key] ? "Valittu" : "";
     const badges = [meta.area, detailBadge, priceBadge].filter(Boolean).join(" · ");
     return `
@@ -11087,7 +11168,8 @@ function renderContactPriceSummary() {
   const shownItems = selectedAreas.map((key) => ({
     key,
     title: types()[key].title,
-    detail: st().detailResults[types()[key].detailFlow] ? "Tarkennettu" : "Suositeltu"
+    selectedTitle: assessmentSelectedTitle(key),
+    compared: Boolean(st().detailResults[types()[key].detailFlow])
   }));
 
   return `
@@ -11099,11 +11181,17 @@ function renderContactPriceSummary() {
       </div>
       ${shownItems.length ? `
         <div class="contact-context-tags">
-          ${shownItems.map((item) => `<span>${escapeHtml(item.title)}${item.detail === "Tarkennettu" ? " · tarkennettu" : ""}</span>`).join("")}
+          ${shownItems.map((item) => `<span>${escapeHtml(item.title)}${item.selectedTitle ? ` · ${escapeHtml(item.selectedTitle)}` : item.compared ? " · ei valittua vaihtoehtoa" : ""}</span>`).join("")}
         </div>
       ` : `<p class="muted small">Valitse keskusteluaiheet alla.</p>`}
     </section>
   `;
+}
+
+function assessmentSelectedTitle(typeKey) {
+  const detailKey = types()[typeKey]?.detailFlow;
+  const selectedKey = detailKey ? st().selectedCoverage[detailKey] : "";
+  return coverageModels[mode]?.[detailKey]?.options?.find((option) => option.key === selectedKey)?.title || "";
 }
 
 function openCustomerSummary(showCrm = false) {
@@ -11312,10 +11400,14 @@ function renderCustomerSummaryCover(item, assessment) {
         </div>
         <h5>${escapeHtml(meta.title)}</h5>
         <p>${escapeHtml(shortenText(item.reason || item.condition || card.lead || productSummary(meta), 150))}</p>
-        ${refined && level ? `
+        ${level?.chosen ? `
           <div class="summary-coverage-level">
-            <span>Kartoituksen lähtökohta</span>
+            <span>Asiakkaan valitsema vaihtoehto</span>
             <strong>${escapeHtml(level.selectedTitle)}</strong>
+          </div>
+        ` : detailKey && refined ? `
+          <div class="summary-coverage-level pending">
+            <span>Vertailtu – vaihtoehtoa ei ole vielä valittu</span>
           </div>
         ` : detailKey ? `
           <div class="summary-coverage-level pending">
@@ -11441,13 +11533,13 @@ function buildCrmSummary(contact) {
     lines.push(`- Tavoite: ${reviewGoalLabel(st().quickAnswers.reviewGoal)}`);
   }
 
-  const coverageLevels = Object.entries(assessment.selectedCoverageLevels || {}).filter(([, level]) => level.refined);
+  const coverageLevels = Object.entries(assessment.selectedCoverageLevels || {}).filter(([, level]) => level.chosen);
   if (coverageLevels.length) {
     lines.push("");
-    lines.push("Tarkastellut turvavaihtoehdot");
+    lines.push("Asiakkaan valitsemat vakuutusvaihtoehdot");
     coverageLevels.forEach(([key, level]) => {
-      lines.push(`- ${types()[key]?.title || key}: kartoituksen lähtökohta ${level.machineTitle}`);
-      lines.push(`  - Peruste: ${level.basis}`);
+      lines.push(`- ${types()[key]?.title || key}: ${level.selectedTitle}`);
+      lines.push(`  - Kartoituksen lähtökohta: ${level.machineTitle}`);
     });
   }
 
