@@ -4158,6 +4158,27 @@ details.source-details summary {
   text-underline-offset: 3px;
 }
 
+.coverage-current-selection {
+  display: grid;
+  gap: 3px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid #abd4e6;
+  border-radius: 8px;
+  color: #315b78;
+  background: #ffffff;
+  font-size: 13px;
+}
+
+.coverage-current-selection strong {
+  color: var(--blue-950);
+}
+
+.coverage-current-selection.has-selection {
+  border-color: #6ab89e;
+  background: #effaf6;
+}
+
 .coverage-table {
   min-width: 760px;
 }
@@ -4183,9 +4204,50 @@ details.source-details summary {
   margin-bottom: 7px;
 }
 
+.coverage-select-button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 9px;
+  border: 1px solid var(--blue-700);
+  border-radius: 999px;
+  color: var(--blue-800);
+  background: #ffffff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.coverage-select-button:hover {
+  color: #ffffff;
+  background: var(--blue-800);
+}
+
+.coverage-select-button[aria-pressed="true"] {
+  color: #ffffff;
+  border-color: #16765a;
+  background: #16765a;
+}
+
+.coverage-select-button:focus-visible {
+  outline: 3px solid #f3bd31;
+  outline-offset: 2px;
+}
+
+.coverage-select-button.mobile {
+  margin-top: 15px;
+}
+
 .coverage-table td {
   font-size: 13px;
   cursor: default;
+}
+
+.coverage-table th.selected,
+.coverage-table td.selected {
+  background: var(--blue-050);
 }
 
 .coverage-feature-detail {
