@@ -19,6 +19,8 @@ assert.match(css, /\.app-shell\[data-view="results"\][\s\S]*max-width:\s*1224px/
 assert.match(css, /@media \(min-width: 1180px\)[\s\S]*repeat\(4, minmax\(0, 1fr\)\)/);
 assert.match(css, /\.answers\.dense-grid\s*{[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/);
 assert.match(css, /\.hero\s*{[\s\S]*background:\s*#ffffff/);
+assert.match(css, /\.results-sticky-actions\s*{[\s\S]*position:\s*fixed/);
+assert.match(css, /\.coverage-secondary-row\s*{[\s\S]*display:\s*none/);
 
 console.log("UI tests passed: personal and business results, navigation, contact handoff and accessibility");
 
@@ -84,8 +86,10 @@ async function testPersonalResultsAndContact() {
   assert.equal(cards.every((card) => card.querySelector(".product-card-body > p")?.textContent.trim().length > 35), true);
   assert.doesNotMatch(document.querySelector("#resultsView").textContent, /Miksi tämä nousi esiin|Mitä vakuutus yleisesti tekee/);
   assert.ok(document.querySelector(".product-card-actions [data-card-refine]"));
+  assert.ok(document.querySelector(".results-sticky-actions"), "Yhteenvedon jatkotoimintojen pitää näkyä koko tulosnäkymän ajan");
+  assert.equal(document.querySelectorAll("[data-summary-next]").length >= 2, true);
 
-  document.querySelector("[data-expert-contact]").click();
+  document.querySelector(".results-sticky-actions [data-expert-contact]").click();
   assert.equal(isHidden(document, "#contactView"), false);
   assert.match(document.querySelector("#contactHandoffSummary").textContent, /Nämä tiedot välitetään asiantuntijalle/);
   assert.equal(document.querySelectorAll("#contactHandoffSummary .handoff-overview > div").length, 3);
@@ -107,6 +111,11 @@ async function testBusinessResults() {
   assert.equal(document.querySelector("#results-mandatory details"), null);
   assert.ok(document.querySelector("#results-recommended"));
   assert.ok(document.querySelector("#results-optional"));
+  const optionalDisclosure = document.querySelector("#results-optional .optional-product-disclosure");
+  if (!document.querySelector("#results-optional").classList.contains("empty")) {
+    assert.ok(optionalDisclosure);
+    assert.equal(optionalDisclosure.open, false, "Harkittavien lisäturvien pitää olla aluksi tiiviinä");
+  }
   assert.equal(
     document.querySelector("#results-recommended").compareDocumentPosition(document.querySelector("#results-mandatory")) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING,
     dom.window.Node.DOCUMENT_POSITION_FOLLOWING,
@@ -134,6 +143,14 @@ async function testBusinessResults() {
   document.querySelector(`.coverage-desktop-table [data-coverage-choice="${selectedKeys[1]}"]`).click();
   assert.equal(document.querySelectorAll(".coverage-desktop-table .coverage-select-button[aria-pressed='true']").length, 2);
   selectedTitles.forEach((title) => assert.match(document.querySelector(".coverage-current-selection").textContent, new RegExp(title)));
+
+  const rowToggle = document.querySelector("[data-toggle-comparison-rows]");
+  if (rowToggle) {
+    assert.equal(document.querySelectorAll(".coverage-secondary-row").length > 0, true);
+    rowToggle.click();
+    assert.equal(document.querySelector(".coverage-compare").classList.contains("show-all-rows"), true);
+    assert.equal(rowToggle.getAttribute("aria-expanded"), "true");
+  }
 
   document.querySelector("#contactFromDetail").click();
   selectedTitles.forEach((title) => assert.match(document.querySelector("#customerSummaryContent").textContent, new RegExp(title)));

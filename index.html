@@ -3947,7 +3947,7 @@ details.source-details summary {
 
 .recommendation-context,
 .needs-summary {
-  padding: 16px 0;
+  padding: 11px 0;
   border: 0;
   border-bottom: 1px solid var(--line);
   border-radius: 0;
@@ -3960,11 +3960,11 @@ details.source-details summary {
 }
 
 .product-section {
-  margin-top: 28px;
+  margin-top: 22px;
 }
 
 .product-section-head {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .product-section-head h3,
@@ -3977,13 +3977,13 @@ details.source-details summary {
 }
 
 .product-card-media {
-  min-height: 132px;
+  min-height: 104px;
 }
 
 .product-card-body {
-  min-height: 190px;
-  gap: 11px;
-  padding: 18px;
+  min-height: 166px;
+  gap: 8px;
+  padding: 14px;
 }
 
 .product-card-body h4 {
@@ -3991,8 +3991,149 @@ details.source-details summary {
 }
 
 .product-card-body p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   font-size: 14px;
   line-height: 1.45;
+}
+
+.results-sticky-actions {
+  position: fixed;
+  z-index: 45;
+  right: 50%;
+  bottom: 18px;
+  display: flex;
+  width: min(760px, calc(100vw - 40px));
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 13px 11px 18px;
+  transform: translateX(50%);
+  border: 1px solid #8ec8e2;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 12px 34px rgba(0, 48, 87, 0.18);
+  backdrop-filter: blur(8px);
+}
+
+.results-sticky-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.results-sticky-copy strong {
+  color: var(--blue-950);
+  font-size: 14px;
+}
+
+.results-sticky-copy span {
+  color: #315b78;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.results-sticky-buttons {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.results-sticky-buttons .btn {
+  min-height: 40px;
+  padding: 8px 14px;
+  white-space: nowrap;
+}
+
+.app-shell[data-view="results"] .section {
+  padding-bottom: 112px;
+}
+
+.app-shell[data-view="results"] ~ .chat-launcher {
+  bottom: 94px;
+}
+
+.optional-product-disclosure {
+  overflow: hidden;
+  border: 1px solid #b9d8e7;
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.optional-product-disclosure > summary {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  color: var(--blue-950);
+  background: var(--blue-050);
+  cursor: pointer;
+  list-style: none;
+}
+
+.optional-product-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.optional-product-disclosure > summary > span:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.optional-product-disclosure > summary strong {
+  font-size: 20px;
+}
+
+.optional-product-disclosure > summary small {
+  color: #315b78;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.optional-product-count {
+  flex: 0 0 auto;
+  color: var(--blue-800);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.optional-product-count span {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 160ms ease;
+}
+
+.optional-product-disclosure[open] .optional-product-count span {
+  transform: rotate(45deg);
+}
+
+.optional-product-content {
+  padding: 16px;
+}
+
+.coverage-secondary-row {
+  display: none;
+}
+
+.coverage-compare.show-all-rows .coverage-table tr.coverage-secondary-row {
+  display: table-row;
+}
+
+.coverage-compare.show-all-rows .coverage-detail-list .coverage-secondary-row {
+  display: grid;
+}
+
+.coverage-row-toggle {
+  display: block;
+  width: fit-content;
+  margin: 14px auto 0;
+  padding: 8px 12px;
+  font-weight: 700;
 }
 
 .next-step-card {
@@ -4901,12 +5042,66 @@ details.source-details summary {
   }
 
   .product-card-media {
-    min-height: 118px;
+    min-height: 108px;
   }
 
   .product-card-body {
     min-height: 0;
     padding: 16px;
+  }
+
+  .results-sticky-actions {
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    gap: 8px;
+    padding: 9px 12px calc(9px + env(safe-area-inset-bottom));
+    transform: none;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .results-sticky-copy {
+    display: none;
+  }
+
+  .results-sticky-buttons {
+    width: 100%;
+  }
+
+  .results-sticky-buttons .btn {
+    width: 50%;
+    min-height: 46px;
+    padding: 8px 10px;
+    white-space: normal;
+  }
+
+  .app-shell[data-view="results"] .section {
+    padding-bottom: 104px;
+  }
+
+  .app-shell[data-view="results"] ~ .chat-launcher {
+    bottom: calc(82px + env(safe-area-inset-bottom));
+  }
+
+  .optional-product-disclosure > summary {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .optional-product-disclosure > summary small {
+    display: none;
+  }
+
+  .optional-product-count {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .optional-product-content {
+    padding: 12px;
   }
 
   .product-expanded {
@@ -5131,6 +5326,7 @@ details.source-details summary {
   .support-grid,
   .chat-popup,
   .chat-launcher,
+  .results-sticky-actions,
   .summary-actions,
   .print-button,
   .crm-summary-details {
@@ -9708,11 +9904,17 @@ function renderRecommendations() {
 
   const primaryBuckets = buckets.filter((bucket) => bucket.key === "primary");
   const remainingBuckets = buckets.filter((bucket) => bucket.key !== "primary");
-  $("recommendationBuckets").innerHTML = `${primaryBuckets.map(renderBucket).join("")}${renderMandatoryChecks(assessment.mandatoryChecks)}${remainingBuckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}`;
+  $("recommendationBuckets").innerHTML = `${primaryBuckets.map(renderBucket).join("")}${renderMandatoryChecks(assessment.mandatoryChecks)}${remainingBuckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}${renderResultsStickyActions()}`;
   $("recommendationBuckets").querySelector("[data-refine-recommendations]")?.addEventListener("click", () => refineTopRecommendation());
-  $("recommendationBuckets").querySelector("[data-summary-next]")?.addEventListener("click", () => openCustomerSummary());
-  $("recommendationBuckets").querySelector("[data-expert-contact]")?.addEventListener("click", () => openContact());
-  $("recommendationBuckets").querySelector("[data-restart-results]")?.addEventListener("click", () => resetAssessment("base"));
+  $("recommendationBuckets").querySelectorAll("[data-summary-next]").forEach((button) => {
+    button.addEventListener("click", () => openCustomerSummary());
+  });
+  $("recommendationBuckets").querySelectorAll("[data-expert-contact]").forEach((button) => {
+    button.addEventListener("click", () => openContact());
+  });
+  $("recommendationBuckets").querySelectorAll("[data-restart-results]").forEach((button) => {
+    button.addEventListener("click", () => resetAssessment("base"));
+  });
   $("recommendationBuckets").querySelectorAll("[data-card-refine]").forEach((button) => {
     button.addEventListener("click", () => openDetail(button.dataset.cardRefine || ""));
   });
@@ -10022,6 +10224,21 @@ function renderNextStepPrompt(assessment) {
   `;
 }
 
+function renderResultsStickyActions() {
+  return `
+    <aside class="results-sticky-actions" aria-label="Kartoituksen jatkotoiminnot">
+      <div class="results-sticky-copy">
+        <strong>Kartoituksesi on valmis</strong>
+        <span>Katso yhteenveto tai pyydä asiantuntijaa ottamaan yhteyttä.</span>
+      </div>
+      <div class="results-sticky-buttons">
+        <button class="btn btn-primary" type="button" data-summary-next>Näytä oma yhteenveto</button>
+        <button class="btn btn-secondary" type="button" data-expert-contact>Pyydä yhteydenottoa</button>
+      </div>
+    </aside>
+  `;
+}
+
 function renderRecommendationInsights(recommendation) {
   const relevant = recommendation.items.filter((item) => item.score >= 3 && recommendationAreaOrder[mode].includes(item.key));
   if (!relevant.length) {
@@ -10129,6 +10346,27 @@ function renderBucket(bucket) {
             ? "Vastauksistasi ei noussut tähän ryhmään vakuutuksia. Voit tarkentaa vastauksia tai keskustella asiantuntijan kanssa."
             : "Vastauksistasi ei noussut tällä hetkellä erillisiä harkittavia lisäturvia.")}</p>
         </div>
+      </section>
+    `;
+  }
+  if (bucket.key === "optional") {
+    return `
+      <section class="bucket product-section product-bucket optional" id="${sectionId}">
+        <details class="optional-product-disclosure">
+          <summary>
+            <span>
+              <span class="eyebrow compact">${escapeHtml(eyebrow)}</span>
+              <strong>${escapeHtml(title)}</strong>
+              <small>${escapeHtml(description)}</small>
+            </span>
+            <span class="optional-product-count">${visibleItems.length} vakuutusta <span aria-hidden="true">+</span></span>
+          </summary>
+          <div class="optional-product-content">
+            <div class="product-card-grid">
+              ${visibleItems.map((item) => item.mandatoryOnly ? renderMandatoryInlineCard(item) : renderRecommendationCard(item, bucket.key)).join("")}
+            </div>
+          </div>
+        </details>
       </section>
     `;
   }
@@ -10748,8 +10986,8 @@ function renderCoverageComparison(comparison, detailKey = "") {
               </tr>
             </thead>
             <tbody>
-              ${tableRows.map(([label, getValue, description]) => `
-                <tr>
+              ${tableRows.map(([label, getValue, description], rowIndex) => `
+                <tr class="${rowIndex >= 6 ? "coverage-secondary-row" : ""}">
                   <th scope="row">${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</th>
                   ${comparison.options.map((option) => `<td class="${isSelected(option.key) ? "selected" : ""}">${renderComparisonValue(getValue(option))}</td>`).join("")}
                 </tr>
@@ -10766,7 +11004,7 @@ function renderCoverageComparison(comparison, detailKey = "") {
                 ${isSelected(option.key) ? `<span>Valittu</span>` : ""}
               </div>
               <dl>
-                ${tableRows.map(([label, getValue, description]) => `<div><dt>${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</dt><dd>${renderComparisonValue(getValue(option))}</dd></div>`).join("")}
+                ${tableRows.map(([label, getValue, description], rowIndex) => `<div class="${rowIndex >= 6 ? "coverage-secondary-row" : ""}"><dt>${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</dt><dd>${renderComparisonValue(getValue(option))}</dd></div>`).join("")}
               </dl>
               <button class="coverage-select-button mobile" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${isSelected(option.key) ? "true" : "false"}">
                 ${selectButtonLabel(option.key, true)}
@@ -10774,6 +11012,7 @@ function renderCoverageComparison(comparison, detailKey = "") {
             </article>
           `).join("")}
         </div>
+        ${tableRows.length > 6 ? `<button class="link-button coverage-row-toggle" type="button" data-toggle-comparison-rows aria-expanded="false">Näytä kaikki vertailukohdat (${tableRows.length})</button>` : ""}
       </details>
       <p class="coverage-disclaimer">Vertailu on yleiskuva. Lopullinen sisältö, korvattavuus ja soveltuvuus varmistetaan vakuutusehdoista tai asiantuntijan kanssa.</p>
     </section>
@@ -10798,6 +11037,15 @@ function bindDetailActions(root) {
   });
   root.querySelectorAll("[data-next-detail]").forEach((button) => {
     button.addEventListener("click", () => openDetail(button.dataset.nextDetail || ""));
+  });
+  root.querySelectorAll("[data-toggle-comparison-rows]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const comparison = button.closest(".coverage-compare");
+      if (!comparison) return;
+      const expanded = comparison.classList.toggle("show-all-rows");
+      button.setAttribute("aria-expanded", String(expanded));
+      button.textContent = expanded ? "Näytä vain tärkeimmät" : `Näytä kaikki vertailukohdat (${comparison.querySelectorAll(".coverage-table tbody tr").length})`;
+    });
   });
 }
 

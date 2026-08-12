@@ -53,6 +53,14 @@ assert.equal(document.querySelector(".coverage-choice-grid"), null);
 assert.equal(document.querySelector(".coverage-selection-note"), null);
 assert.doesNotMatch(document.querySelector("#detailResultView").textContent, /Miksi tämä ehdotus syntyi|Mitä vakuutus yleisesti tekee/);
 
+const comparisonRowToggle = document.querySelector("[data-toggle-comparison-rows]");
+if (comparisonRowToggle) {
+  assert.equal(document.querySelectorAll(".coverage-secondary-row").length > 0, true);
+  comparisonRowToggle.click();
+  assert.equal(comparisonRowToggle.getAttribute("aria-expanded"), "true");
+  assert.match(comparisonRowToggle.textContent, /Näytä vain tärkeimmät/);
+}
+
 const selectionButton = document.querySelector(".coverage-select-button");
 assert.ok(selectionButton, "Jokaisella vertailuvaihtoehdolla pitää olla valintapainike");
 const selectedTitle = selectionButton.closest("th").querySelector("strong").textContent.trim();

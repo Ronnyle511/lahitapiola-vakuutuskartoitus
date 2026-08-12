@@ -877,11 +877,17 @@ function renderRecommendations() {
 
   const primaryBuckets = buckets.filter((bucket) => bucket.key === "primary");
   const remainingBuckets = buckets.filter((bucket) => bucket.key !== "primary");
-  $("recommendationBuckets").innerHTML = `${primaryBuckets.map(renderBucket).join("")}${renderMandatoryChecks(assessment.mandatoryChecks)}${remainingBuckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}`;
+  $("recommendationBuckets").innerHTML = `${primaryBuckets.map(renderBucket).join("")}${renderMandatoryChecks(assessment.mandatoryChecks)}${remainingBuckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}${renderResultsStickyActions()}`;
   $("recommendationBuckets").querySelector("[data-refine-recommendations]")?.addEventListener("click", () => refineTopRecommendation());
-  $("recommendationBuckets").querySelector("[data-summary-next]")?.addEventListener("click", () => openCustomerSummary());
-  $("recommendationBuckets").querySelector("[data-expert-contact]")?.addEventListener("click", () => openContact());
-  $("recommendationBuckets").querySelector("[data-restart-results]")?.addEventListener("click", () => resetAssessment("base"));
+  $("recommendationBuckets").querySelectorAll("[data-summary-next]").forEach((button) => {
+    button.addEventListener("click", () => openCustomerSummary());
+  });
+  $("recommendationBuckets").querySelectorAll("[data-expert-contact]").forEach((button) => {
+    button.addEventListener("click", () => openContact());
+  });
+  $("recommendationBuckets").querySelectorAll("[data-restart-results]").forEach((button) => {
+    button.addEventListener("click", () => resetAssessment("base"));
+  });
   $("recommendationBuckets").querySelectorAll("[data-card-refine]").forEach((button) => {
     button.addEventListener("click", () => openDetail(button.dataset.cardRefine || ""));
   });
@@ -1191,6 +1197,21 @@ function renderNextStepPrompt(assessment) {
   `;
 }
 
+function renderResultsStickyActions() {
+  return `
+    <aside class="results-sticky-actions" aria-label="Kartoituksen jatkotoiminnot">
+      <div class="results-sticky-copy">
+        <strong>Kartoituksesi on valmis</strong>
+        <span>Katso yhteenveto tai pyydä asiantuntijaa ottamaan yhteyttä.</span>
+      </div>
+      <div class="results-sticky-buttons">
+        <button class="btn btn-primary" type="button" data-summary-next>Näytä oma yhteenveto</button>
+        <button class="btn btn-secondary" type="button" data-expert-contact>Pyydä yhteydenottoa</button>
+      </div>
+    </aside>
+  `;
+}
+
 function renderRecommendationInsights(recommendation) {
   const relevant = recommendation.items.filter((item) => item.score >= 3 && recommendationAreaOrder[mode].includes(item.key));
   if (!relevant.length) {
@@ -1298,6 +1319,27 @@ function renderBucket(bucket) {
             ? "Vastauksistasi ei noussut tähän ryhmään vakuutuksia. Voit tarkentaa vastauksia tai keskustella asiantuntijan kanssa."
             : "Vastauksistasi ei noussut tällä hetkellä erillisiä harkittavia lisäturvia.")}</p>
         </div>
+      </section>
+    `;
+  }
+  if (bucket.key === "optional") {
+    return `
+      <section class="bucket product-section product-bucket optional" id="${sectionId}">
+        <details class="optional-product-disclosure">
+          <summary>
+            <span>
+              <span class="eyebrow compact">${escapeHtml(eyebrow)}</span>
+              <strong>${escapeHtml(title)}</strong>
+              <small>${escapeHtml(description)}</small>
+            </span>
+            <span class="optional-product-count">${visibleItems.length} vakuutusta <span aria-hidden="true">+</span></span>
+          </summary>
+          <div class="optional-product-content">
+            <div class="product-card-grid">
+              ${visibleItems.map((item) => item.mandatoryOnly ? renderMandatoryInlineCard(item) : renderRecommendationCard(item, bucket.key)).join("")}
+            </div>
+          </div>
+        </details>
       </section>
     `;
   }
@@ -1917,8 +1959,8 @@ function renderCoverageComparison(comparison, detailKey = "") {
               </tr>
             </thead>
             <tbody>
-              ${tableRows.map(([label, getValue, description]) => `
-                <tr>
+              ${tableRows.map(([label, getValue, description], rowIndex) => `
+                <tr class="${rowIndex >= 6 ? "coverage-secondary-row" : ""}">
                   <th scope="row">${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</th>
                   ${comparison.options.map((option) => `<td class="${isSelected(option.key) ? "selected" : ""}">${renderComparisonValue(getValue(option))}</td>`).join("")}
                 </tr>
@@ -1935,7 +1977,7 @@ function renderCoverageComparison(comparison, detailKey = "") {
                 ${isSelected(option.key) ? `<span>Valittu</span>` : ""}
               </div>
               <dl>
-                ${tableRows.map(([label, getValue, description]) => `<div><dt>${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</dt><dd>${renderComparisonValue(getValue(option))}</dd></div>`).join("")}
+                ${tableRows.map(([label, getValue, description], rowIndex) => `<div class="${rowIndex >= 6 ? "coverage-secondary-row" : ""}"><dt>${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</dt><dd>${renderComparisonValue(getValue(option))}</dd></div>`).join("")}
               </dl>
               <button class="coverage-select-button mobile" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${isSelected(option.key) ? "true" : "false"}">
                 ${selectButtonLabel(option.key, true)}
@@ -1943,6 +1985,7 @@ function renderCoverageComparison(comparison, detailKey = "") {
             </article>
           `).join("")}
         </div>
+        ${tableRows.length > 6 ? `<button class="link-button coverage-row-toggle" type="button" data-toggle-comparison-rows aria-expanded="false">Näytä kaikki vertailukohdat (${tableRows.length})</button>` : ""}
       </details>
       <p class="coverage-disclaimer">Vertailu on yleiskuva. Lopullinen sisältö, korvattavuus ja soveltuvuus varmistetaan vakuutusehdoista tai asiantuntijan kanssa.</p>
     </section>
@@ -1967,6 +2010,15 @@ function bindDetailActions(root) {
   });
   root.querySelectorAll("[data-next-detail]").forEach((button) => {
     button.addEventListener("click", () => openDetail(button.dataset.nextDetail || ""));
+  });
+  root.querySelectorAll("[data-toggle-comparison-rows]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const comparison = button.closest(".coverage-compare");
+      if (!comparison) return;
+      const expanded = comparison.classList.toggle("show-all-rows");
+      button.setAttribute("aria-expanded", String(expanded));
+      button.textContent = expanded ? "Näytä vain tärkeimmät" : `Näytä kaikki vertailukohdat (${comparison.querySelectorAll(".coverage-table tbody tr").length})`;
+    });
   });
 }
 
