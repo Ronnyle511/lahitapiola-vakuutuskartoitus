@@ -83,9 +83,17 @@ async function testPersonalResultsAndContact() {
 
   const cards = [...document.querySelectorAll(".product-rec-card")];
   assert.equal(cards.length > 0, true, "Tuloksissa pitää olla vakuutuskortteja");
-  assert.equal(cards.every((card) => card.querySelector(".product-card-body > p")?.textContent.trim().length > 35), true);
+  assert.equal(cards.every((card) => card.querySelector(".product-media-explanation > p")?.textContent.trim().length > 35), true);
+  assert.equal(cards.every((card) => !card.querySelector(".product-card-body > p")), true, "Kortin väliteksti ei saa näkyä oletusnäkymässä");
   assert.doesNotMatch(document.querySelector("#resultsView").textContent, /Miksi tämä nousi esiin|Mitä vakuutus yleisesti tekee/);
   assert.ok(document.querySelector(".product-card-actions [data-card-refine]"));
+  const firstExplanation = document.querySelector(".product-bucket .product-media-disclosure");
+  assert.ok(firstExplanation);
+  assert.equal(firstExplanation.open, false);
+  firstExplanation.querySelector(".product-media-summary").click();
+  assert.equal(firstExplanation.open, true, "Kuvan painamisen pitää avata vakuutuksen sisältöselitys");
+  assert.match(firstExplanation.querySelector(".product-media-summary").getAttribute("aria-label"), /Piilota vakuutuksen/);
+  assert.match(firstExplanation.textContent, /Mitä vakuutus tekee\?/);
   assert.ok(document.querySelector(".results-sticky-actions"), "Yhteenvedon jatkotoimintojen pitää näkyä koko tulosnäkymän ajan");
   assert.equal(document.querySelectorAll("[data-summary-next]").length >= 2, true);
 
@@ -108,7 +116,9 @@ async function testBusinessResults() {
 
   assert.ok(document.querySelector("#results-mandatory"));
   assert.ok(document.querySelector("#results-mandatory .mandatory-product-card"));
-  assert.equal(document.querySelector("#results-mandatory details"), null);
+  assert.equal(document.querySelector("#results-mandatory .product-disclosure"), null);
+  assert.ok(document.querySelector("#results-mandatory .product-media-disclosure"));
+  assert.equal(document.querySelector("#results-mandatory .product-media-disclosure").open, false);
   assert.ok(document.querySelector("#results-recommended"));
   assert.ok(document.querySelector("#results-optional"));
   const optionalDisclosure = document.querySelector("#results-optional .optional-product-disclosure");

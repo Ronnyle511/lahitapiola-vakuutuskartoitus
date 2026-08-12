@@ -891,6 +891,7 @@ function renderRecommendations() {
   $("recommendationBuckets").querySelectorAll("[data-card-refine]").forEach((button) => {
     button.addEventListener("click", () => openDetail(button.dataset.cardRefine || ""));
   });
+  bindProductMediaDisclosures($("recommendationBuckets"));
 }
 
 function resultsTitleFor(assessment) {
@@ -1005,16 +1006,20 @@ function renderMandatoryProductCard(item) {
   const badgeLabel = item.badgeLabel || "Lakisääteisesti tarkistettava";
   return `
     <article class="product-rec-card mandatory-product-card obligation-${escapeHtml(item.obligationKind || "statutory")}">
-      ${renderProductMedia(card.visual, card.title, card.imageUrl, card.imagePosition)}
+      ${renderProductMediaDisclosure({
+        visual: card.visual,
+        title: card.title,
+        imageUrl: card.imageUrl,
+        imagePosition: card.imagePosition,
+        lead: card.lead,
+        noteLabel: "Milloin tämä pitää tarkistaa?",
+        note: item.text,
+        learnMoreUrl: card.url
+      })}
       <div class="product-card-body">
         <h4>${escapeHtml(card.title)}</h4>
-        <p>${escapeHtml(card.lead)}</p>
         <div class="product-card-tags">
           <span>${escapeHtml(badgeLabel)}</span>
-        </div>
-        <p class="mandatory-card-note">${escapeHtml(item.text)}</p>
-        <div class="product-card-actions">
-          <a class="product-page-link" href="${escapeHtml(card.url)}" target="_blank" rel="noopener noreferrer">Lue lisää <span aria-hidden="true">›</span></a>
         </div>
       </div>
     </article>
@@ -1387,24 +1392,23 @@ function renderMandatoryInlineCard(item) {
   const badgeLabel = item.mandatory.badgeLabel || "Lakisääteisesti tarkistettava";
   return `
     <article class="product-rec-card priority mandatory-inline-card obligation-${escapeHtml(item.mandatory.obligationKind || "statutory")}">
-      <details class="product-disclosure">
-        <summary class="product-card-summary">
-          ${renderProductMedia(card.visual, card.title, card.imageUrl, card.imagePosition)}
-          <div class="product-card-body">
-            <h4>${escapeHtml(card.title)} <span aria-hidden="true">›</span></h4>
-            <p>${escapeHtml(card.lead)}</p>
-            <div class="product-card-tags">
-              <span>Tarkista ensin</span>
-              <span>${escapeHtml(badgeLabel)}</span>
-            </div>
-          </div>
-        </summary>
-        <div class="product-expanded">
-          <a class="product-page-link" href="${escapeHtml(card.url)}" target="_blank" rel="noopener noreferrer">
-            Lue lisää LähiTapiolan sivuilla <span aria-hidden="true">›</span>
-          </a>
+      ${renderProductMediaDisclosure({
+        visual: card.visual,
+        title: card.title,
+        imageUrl: card.imageUrl,
+        imagePosition: card.imagePosition,
+        lead: card.lead,
+        noteLabel: "Milloin tämä pitää tarkistaa?",
+        note: item.mandatory.text,
+        learnMoreUrl: card.url
+      })}
+      <div class="product-card-body">
+        <h4>${escapeHtml(card.title)}</h4>
+        <div class="product-card-tags">
+          <span>Tarkista ensin</span>
+          <span>${escapeHtml(badgeLabel)}</span>
         </div>
-      </details>
+      </div>
     </article>
   `;
 }
@@ -1423,10 +1427,16 @@ function renderRecommendationCard(item, bucketKey) {
 
   return `
     <article class="${articleClass}">
-      ${renderProductMedia(card.visual, meta.title, card.imageUrl, card.imagePosition)}
+      ${renderProductMediaDisclosure({
+        visual: card.visual,
+        title: meta.title,
+        imageUrl: card.imageUrl,
+        imagePosition: card.imagePosition,
+        lead: card.lead,
+        learnMoreUrl
+      })}
       <div class="product-card-body">
         <h4>${escapeHtml(meta.title)}</h4>
-        <p>${escapeHtml(card.lead)}</p>
         <div class="product-card-tags">
           ${renderProductTags(item, bucketKey, strength)}
           ${productScopeTag(item.key) ? `<span>${escapeHtml(productScopeTag(item.key))}</span>` : ""}
@@ -1437,13 +1447,42 @@ function renderRecommendationCard(item, bucketKey) {
             <strong>${escapeHtml(selectedTitle)}</strong>
           </div>
         ` : ""}
-        <div class="product-card-actions">
-          ${detailKey ? `<button class="btn btn-primary btn-small" type="button" data-card-refine="${escapeHtml(detailKey)}">${selectedTitle ? "Muuta turvavalintaa" : "Vertaile ja valitse turva"}</button>` : ""}
-          ${learnMoreUrl ? `<a class="product-page-link" href="${escapeHtml(learnMoreUrl)}" target="_blank" rel="noopener noreferrer">Lue lisää <span aria-hidden="true">›</span></a>` : ""}
-        </div>
+        ${detailKey ? `<div class="product-card-actions"><button class="btn btn-primary btn-small" type="button" data-card-refine="${escapeHtml(detailKey)}">${selectedTitle ? "Muuta turvavalintaa" : "Vertaile ja valitse turva"}</button></div>` : ""}
       </div>
     </article>
   `;
+}
+
+function renderProductMediaDisclosure({ visual, title, imageUrl = "", imagePosition = "", lead, noteLabel = "", note = "", learnMoreUrl = "" }) {
+  return `
+    <details class="product-media-disclosure">
+      <summary class="product-media-summary" data-product-title="${escapeHtml(title)}" aria-label="Näytä vakuutuksen ${escapeHtml(title)} sisältö">
+        ${renderProductMedia(visual, title, imageUrl, imagePosition)}
+        <span class="product-media-toggle">
+          <span class="product-media-toggle-open">Näytä sisältö</span>
+          <span class="product-media-toggle-close">Piilota sisältö</span>
+          <span class="product-media-toggle-icon" aria-hidden="true">+</span>
+        </span>
+      </summary>
+      <div class="product-media-explanation">
+        <strong>Mitä vakuutus tekee?</strong>
+        <p>${escapeHtml(lead)}</p>
+        ${note ? `<p class="product-media-note"><strong>${escapeHtml(noteLabel)}</strong><span>${escapeHtml(note)}</span></p>` : ""}
+        ${learnMoreUrl ? `<a class="product-page-link" href="${escapeHtml(learnMoreUrl)}" target="_blank" rel="noopener noreferrer">Lue lisää LähiTapiolan sivuilla <span aria-hidden="true">›</span></a>` : ""}
+      </div>
+    </details>
+  `;
+}
+
+function bindProductMediaDisclosures(root) {
+  root.querySelectorAll(".product-media-disclosure").forEach((disclosure) => {
+    const summary = disclosure.querySelector(".product-media-summary");
+    if (!summary) return;
+    summary.addEventListener("click", () => {
+      const action = disclosure.open ? "Näytä" : "Piilota";
+      summary.setAttribute("aria-label", `${action} vakuutuksen ${summary.dataset.productTitle || ""} sisältö`);
+    });
+  });
 }
 
 function renderProductTags(item, bucketKey, strength) {
@@ -1467,9 +1506,9 @@ function renderProductMedia(visual, title, imageUrl = "", imagePosition = "") {
   if (imagePosition) styleParts.push(`background-position: ${escapeHtml(imagePosition)}`);
   const imageStyle = styleParts.length ? ` style="${styleParts.join("; ")}"` : "";
   return `
-    <div class="product-card-media product-visual-${escapeHtml(visual || "property")}${imageUrl ? " has-image" : ""}"${imageStyle} aria-hidden="true">
+    <span class="product-card-media product-visual-${escapeHtml(visual || "property")}${imageUrl ? " has-image" : ""}"${imageStyle} aria-hidden="true">
       ${imageUrl ? "" : `<span>${renderOptionIcon(visual || "property")}</span>`}
-    </div>
+    </span>
   `;
 }
 
