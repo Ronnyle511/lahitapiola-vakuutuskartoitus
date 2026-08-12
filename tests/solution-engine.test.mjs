@@ -156,4 +156,23 @@ assert.equal(familyPerus.selectedCoverageLevels.home.chosen, true);
 assert.equal(familyPerus.aiContext.selectedCoverageLevels.home.selectedKey, "perus");
 assert.equal(Object.hasOwn(familyPerus, "pricingPayload"), false);
 
+const professionalWithTwoLiabilityCovers = buildAssessmentResult("business", state({
+  industry: "professional",
+  employeeCount: "1_10"
+}, [], { bizLiability: ["operations", "professional"] }, {
+  bizLiability: {
+    comparison: {
+      recommendedKeys: ["professional"],
+      basis: "Asiantuntijatyössä voidaan tarvita useampaa toisiaan täydentävää vastuuvakuutusta."
+    }
+  }
+}));
+assert.deepEqual(
+  professionalWithTwoLiabilityCovers.selectedCoverageLevels.bizLiability.selectedKeys,
+  ["operations", "professional"]
+);
+assert.match(professionalWithTwoLiabilityCovers.selectedCoverageLevels.bizLiability.selectedTitle, /Toiminnan vastuuvakuutus/);
+assert.match(professionalWithTwoLiabilityCovers.selectedCoverageLevels.bizLiability.selectedTitle, /Varallisuus- tai konsultin vastuu/);
+assert.equal(professionalWithTwoLiabilityCovers.selectedCoverageLevels.bizLiability.chosen, true);
+
 console.log("Solution engine tests passed");

@@ -15,8 +15,10 @@ assert.doesNotMatch(css, /results-snapshot|results-section-nav|results-primary-a
 assert.match(css, /@media \(max-width: 720px\)[\s\S]*\.handoff-overview,[\s\S]*grid-template-columns: 1fr/);
 assert.doesNotMatch(css, /calculator-|contact-price|#laskuri/);
 assert.match(css, /\.site-brand\.demo-brand small\s*{[\s\S]*color:\s*#d00000/);
-assert.match(css, /\.app-shell\[data-view="results"\][\s\S]*max-width:\s*1320px/);
+assert.match(css, /\.app-shell\[data-view="results"\][\s\S]*max-width:\s*1224px/);
 assert.match(css, /@media \(min-width: 1180px\)[\s\S]*repeat\(4, minmax\(0, 1fr\)\)/);
+assert.match(css, /\.answers\.dense-grid\s*{[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/);
+assert.match(css, /\.hero\s*{[\s\S]*background:\s*#ffffff/);
 
 console.log("UI tests passed: personal and business results, navigation, contact handoff and accessibility");
 
@@ -118,10 +120,26 @@ async function testBusinessResults() {
   assert.match(document.querySelector("#resultsView").textContent, /Lakisääteiset ja sopimusperusteiset vakuutukset/);
   assert.match(document.querySelector("#resultsView").textContent, /Suositellut vakuutukset/);
 
-  const contactButton = document.querySelector("[data-expert-contact]");
-  assert.ok(contactButton);
-  contactButton.click();
+  const compareButton = document.querySelector('[data-card-refine="bizLiability"]');
+  assert.ok(compareButton, "Vastuuvakuutusten vertailun pitää löytyä yritystuloksista");
+  compareButton.click();
+  assert.equal(isHidden(document, "#detailResultView"), false);
+  assert.match(document.querySelector(".coverage-current-selection").textContent, /Voit valita useamman vakuutuksen/);
+
+  const initialButtons = [...document.querySelectorAll(".coverage-desktop-table .coverage-select-button")];
+  assert.equal(initialButtons.length >= 2, true);
+  const selectedKeys = initialButtons.slice(0, 2).map((button) => button.dataset.coverageChoice);
+  const selectedTitles = initialButtons.slice(0, 2).map((button) => button.closest("th").querySelector("strong").textContent.trim());
+  document.querySelector(`[data-coverage-choice="${selectedKeys[0]}"]`).click();
+  document.querySelector(`.coverage-desktop-table [data-coverage-choice="${selectedKeys[1]}"]`).click();
+  assert.equal(document.querySelectorAll(".coverage-desktop-table .coverage-select-button[aria-pressed='true']").length, 2);
+  selectedTitles.forEach((title) => assert.match(document.querySelector(".coverage-current-selection").textContent, new RegExp(title)));
+
+  document.querySelector("#contactFromDetail").click();
+  selectedTitles.forEach((title) => assert.match(document.querySelector("#customerSummaryContent").textContent, new RegExp(title)));
+  document.querySelector("#summaryContact").click();
   assert.match(document.querySelector("#contactHandoffSummary").textContent, /Asiakastyyppi/);
+  selectedTitles.forEach((title) => assert.match(document.querySelector("#contactHandoffSummary").textContent, new RegExp(title)));
   assert.ok(document.querySelector("#editAnswersFromContact"));
 
   dom.window.close();

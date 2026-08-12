@@ -463,6 +463,7 @@ function renderQuestion() {
   const isBase = st().quickPhase === "base";
   const meta = questionProgressMeta(questions);
   const hasPromptCard = question.layout === "icon-question" && question.icon;
+  if ($("appShell")) $("appShell").dataset.question = question.id;
   $("questionCount").textContent = meta.label;
   $("questionTitle").textContent = hasPromptCard
     ? mode === "business" ? "Muutama kysymys yritystoiminnastasi" : "Muutama kysymys arjestasi"
@@ -658,6 +659,7 @@ function renderAnswerOptions(containerId, question, answerBag, onSelect) {
   container.innerHTML = "";
   container.classList.toggle("icon-grid", question.layout === "icon-grid");
   container.classList.toggle("compact-choice", question.layout === "icon-question");
+  container.classList.toggle("dense-grid", question.id === "industry" && question.options.length > 8);
 
   question.options.forEach((option) => {
     const button = document.createElement("button");
@@ -1855,8 +1857,15 @@ function nextDetailCandidate(currentDetailKey = "") {
 function renderCoverageComparison(comparison, detailKey = "") {
   if (!comparison) return "";
   const recommendedLabels = comparison.recommended.map((option) => option.title).join(", ");
-  const explicitlySelectedKey = st().selectedCoverage[detailKey] || "";
-  const explicitlySelectedOption = comparison.options.find((option) => option.key === explicitlySelectedKey);
+  const multipleSelection = comparison.selectionMode === "multiple";
+  const explicitlySelectedKeys = explicitCoverageKeys(detailKey, comparison);
+  const explicitlySelectedOptions = comparison.options.filter((option) => explicitlySelectedKeys.includes(option.key));
+  const selectedTitles = explicitlySelectedOptions.map((option) => option.title).join(", ");
+  const isSelected = (optionKey) => explicitlySelectedKeys.includes(optionKey);
+  const selectButtonLabel = (optionKey, mobile = false) => {
+    if (isSelected(optionKey)) return multipleSelection ? "✓ Valittu · poista" : mobile ? "✓ Valittu vaihtoehto" : "✓ Valittu";
+    return multipleSelection ? "Lisää valintaan" : mobile ? "Valitse tämä vaihtoehto" : "Valitse tämä";
+  };
   const featureRows = comparison.featureRows || [];
   const tableRows = featureRows.length
     ? featureRows.map((row) => [row.label, (option) => row.values?.[option.key] || "Ei sisälly", row.description])
@@ -1874,14 +1883,15 @@ function renderCoverageComparison(comparison, detailKey = "") {
   };
 
   return `
-    <section class="coverage-compare" aria-label="${escapeHtml(comparison.title)}">
+    <section class="coverage-compare ${multipleSelection ? "multiple-choice" : "single-choice"}" aria-label="${escapeHtml(comparison.title)}">
       <div class="coverage-recommendation">
         <p class="eyebrow compact">Kartoituksen lähtökohta</p>
         <h4>${escapeHtml(recommendedLabels)}</h4>
         <p>${escapeHtml(shortenText(comparison.basis, 220))}</p>
-        <div class="coverage-current-selection ${explicitlySelectedOption ? "has-selection" : ""}" aria-live="polite">
-          <strong>${explicitlySelectedOption ? "Valitsemasi vaihtoehto" : "Valitse vertailun jälkeen sopiva vaihtoehto"}</strong>
-          <span>${explicitlySelectedOption ? escapeHtml(explicitlySelectedOption.title) : "Valinta tallentuu yhteenvetoon ja välitetään yhteydenottopyynnön mukana asiantuntijalle."}</span>
+        <div class="coverage-current-selection ${explicitlySelectedOptions.length ? "has-selection" : ""}" aria-live="polite">
+          <strong>${explicitlySelectedOptions.length ? (multipleSelection ? "Valitsemasi vakuutukset" : "Valitsemasi vaihtoehto") : (multipleSelection ? "Valitse yksi tai useampi sopiva vakuutus" : "Valitse vertailun jälkeen sopiva vaihtoehto")}</strong>
+          <span>${explicitlySelectedOptions.length ? escapeHtml(selectedTitles) : "Valintasi tallentuvat yhteenvetoon ja välitetään yhteydenottopyynnön mukana asiantuntijalle."}</span>
+          ${multipleSelection ? `<small>Voit valita useamman vakuutuksen, koska nämä vaihtoehdot voivat täydentää toisiaan.</small>` : ""}
         </div>
       </div>
       <details class="coverage-details" open>
@@ -1894,12 +1904,14 @@ function renderCoverageComparison(comparison, detailKey = "") {
               <tr>
                 <th>Vertailukohta</th>
                 ${comparison.options.map((option) => `
-                  <th class="${option.key === explicitlySelectedKey ? "selected" : ""}">
-                    <strong>${escapeHtml(option.title)}</strong>
-                    ${comparison.recommendedKeys.includes(option.key) ? `<span class="recommend-badge">Suositus</span>` : ""}
-                    <button class="coverage-select-button" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${option.key === explicitlySelectedKey ? "true" : "false"}">
-                      ${option.key === explicitlySelectedKey ? "✓ Valittu" : "Valitse tämä"}
-                    </button>
+                  <th class="${isSelected(option.key) ? "selected" : ""}">
+                    <div class="coverage-option-head">
+                      <div class="coverage-option-title"><strong>${escapeHtml(option.title)}</strong></div>
+                      <div class="coverage-option-meta">${comparison.recommendedKeys.includes(option.key) ? `<span class="recommend-badge">Suositus</span>` : ""}</div>
+                      <button class="coverage-select-button" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${isSelected(option.key) ? "true" : "false"}">
+                        ${selectButtonLabel(option.key)}
+                      </button>
+                    </div>
                   </th>
                 `).join("")}
               </tr>
@@ -1908,7 +1920,7 @@ function renderCoverageComparison(comparison, detailKey = "") {
               ${tableRows.map(([label, getValue, description]) => `
                 <tr>
                   <th scope="row">${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</th>
-                  ${comparison.options.map((option) => `<td class="${option.key === explicitlySelectedKey ? "selected" : ""}">${renderComparisonValue(getValue(option))}</td>`).join("")}
+                  ${comparison.options.map((option) => `<td class="${isSelected(option.key) ? "selected" : ""}">${renderComparisonValue(getValue(option))}</td>`).join("")}
                 </tr>
               `).join("")}
             </tbody>
@@ -1916,17 +1928,17 @@ function renderCoverageComparison(comparison, detailKey = "") {
         </div>
         <div class="coverage-detail-list">
           ${comparison.options.map((option) => `
-            <article class="coverage-detail-item ${option.key === explicitlySelectedKey ? "selected" : ""}">
+            <article class="coverage-detail-item ${isSelected(option.key) ? "selected" : ""}">
               <div>
                 <strong>${escapeHtml(option.title)}</strong>
                 ${comparison.recommendedKeys.includes(option.key) ? `<span>Suositus</span>` : ""}
-                ${option.key === explicitlySelectedKey ? `<span>Valittu</span>` : ""}
+                ${isSelected(option.key) ? `<span>Valittu</span>` : ""}
               </div>
               <dl>
                 ${tableRows.map(([label, getValue, description]) => `<div><dt>${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</dt><dd>${renderComparisonValue(getValue(option))}</dd></div>`).join("")}
               </dl>
-              <button class="coverage-select-button mobile" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${option.key === explicitlySelectedKey ? "true" : "false"}">
-                ${option.key === explicitlySelectedKey ? "✓ Valittu vaihtoehto" : "Valitse tämä vaihtoehto"}
+              <button class="coverage-select-button mobile" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${isSelected(option.key) ? "true" : "false"}">
+                ${selectButtonLabel(option.key, true)}
               </button>
             </article>
           `).join("")}
@@ -1962,9 +1974,15 @@ function typeKeyFromDetail(detailKey) {
   return Object.keys(types()).find((key) => types()[key].detailFlow === detailKey) || "";
 }
 
-function selectedCoverageKey(detailKey, comparison) {
+function explicitCoverageKeys(detailKey, comparison) {
   const saved = st().selectedCoverage[detailKey];
-  if (saved && comparison.options.some((option) => option.key === saved)) return saved;
+  const values = Array.isArray(saved) ? saved : saved ? [saved] : [];
+  return [...new Set(values)].filter((key) => comparison?.options?.some((option) => option.key === key));
+}
+
+function selectedCoverageKey(detailKey, comparison) {
+  const saved = explicitCoverageKeys(detailKey, comparison);
+  if (saved.length) return saved[0];
   return comparison.recommendedKeys[0] || comparison.options[0]?.key || "";
 }
 
@@ -1977,7 +1995,17 @@ function selectCoverageOption(detailKey, coverageKey) {
   if (!detailKey || !coverageKey) return;
   const result = st().detailResults[detailKey];
   if (!result?.comparison?.options?.some((option) => option.key === coverageKey)) return;
-  st().selectedCoverage[detailKey] = coverageKey;
+  const multipleSelection = result.comparison.selectionMode === "multiple";
+  const current = explicitCoverageKeys(detailKey, result.comparison);
+  if (multipleSelection) {
+    const next = current.includes(coverageKey)
+      ? current.filter((key) => key !== coverageKey)
+      : [...current, coverageKey];
+    if (next.length) st().selectedCoverage[detailKey] = next;
+    else delete st().selectedCoverage[detailKey];
+  } else {
+    st().selectedCoverage[detailKey] = coverageKey;
+  }
   const typeKey = typeKeyFromDetail(detailKey);
   if (typeKey) {
     st().selectedContact[typeKey] = true;
@@ -1987,7 +2015,7 @@ function selectCoverageOption(detailKey, coverageKey) {
   renderDetailResult(detailKey, result);
   renderChatPanel();
   renderSummaryList();
-  track("coverage_option_selected", { mode, detailKey, coverageKey });
+  track("coverage_option_selected", { mode, detailKey, coverageKey, multipleSelection });
 }
 
 function renderProductMaterials(meta = {}) {
@@ -2087,10 +2115,8 @@ function renderContact() {
   $("contactChoices").innerHTML = candidateKeys.length ? candidateKeys.map((key) => {
     const meta = types()[key];
     const checked = st().selectedContact[key] ? "checked" : "";
-    const selectedOption = st().selectedCoverage[meta.detailFlow]
-      ? coverageModels[mode]?.[meta.detailFlow]?.options?.find((option) => option.key === st().selectedCoverage[meta.detailFlow])
-      : null;
-    const detailBadge = selectedOption ? `Valittu: ${selectedOption.title}` : st().detailResults[meta.detailFlow] ? "Vertailtu · ei valintaa" : "";
+    const selectedTitle = assessmentSelectedTitle(key);
+    const detailBadge = selectedTitle ? `Valittu: ${selectedTitle}` : st().detailResults[meta.detailFlow] ? "Vertailtu · ei valintaa" : "";
     const badges = [meta.area, detailBadge].filter(Boolean).join(" · ");
     return `
       <label class="check-card">
@@ -2197,8 +2223,12 @@ function renderContactHandoffSummary() {
 
 function assessmentSelectedTitle(typeKey) {
   const detailKey = types()[typeKey]?.detailFlow;
-  const selectedKey = detailKey ? st().selectedCoverage[detailKey] : "";
-  return coverageModels[mode]?.[detailKey]?.options?.find((option) => option.key === selectedKey)?.title || "";
+  const model = coverageModels[mode]?.[detailKey];
+  if (!model) return "";
+  return explicitCoverageKeys(detailKey, model)
+    .map((selectedKey) => model.options.find((option) => option.key === selectedKey)?.title)
+    .filter(Boolean)
+    .join(", ");
 }
 
 function openCustomerSummary(showCrm = false) {
@@ -2786,7 +2816,10 @@ function showView(next) {
   document.body.classList.toggle("assessment-active", !$("appShell").classList.contains("hidden"));
   const focusOnly = ["intro", "base", "quick", "results", "detail", "detailResult", "contact", "summary"].includes(next);
   $("appShell")?.classList.toggle("flow-only", focusOnly);
-  if ($("appShell")) $("appShell").dataset.view = next;
+  if ($("appShell")) {
+    $("appShell").dataset.view = next;
+    if (next !== "quick") delete $("appShell").dataset.question;
+  }
   updateSteps(next);
   renderSummaryList();
   renderChatPanel();

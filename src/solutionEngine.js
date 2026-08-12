@@ -249,21 +249,32 @@ export function buildCoverageLevelRecommendations(result, detailResults = {}, se
     if (!model?.options?.length) return;
     const detailComparison = detailResults[detailKey]?.comparison;
     const refined = Boolean(detailComparison);
-    const chosen = Boolean(selectedCoverage[detailKey] && model.options.some((option) => option.key === selectedCoverage[detailKey]));
+    const rawSelectedKeys = Array.isArray(selectedCoverage[detailKey])
+      ? selectedCoverage[detailKey]
+      : selectedCoverage[detailKey]
+        ? [selectedCoverage[detailKey]]
+        : [];
+    const validSelectedKeys = [...new Set(rawSelectedKeys)]
+      .filter((key) => model.options.some((option) => option.key === key));
+    const chosenKeys = model.selectionMode === "multiple" ? validSelectedKeys : validSelectedKeys.slice(0, 1);
+    const chosen = chosenKeys.length > 0;
     const machineKey = detailComparison?.recommendedKeys?.[0]
       || findCoverageKey(model.options, coverItem.defaultCoverageKey)
       || model.options[0].key;
-    const selectedKey = selectedCoverage[detailKey] && model.options.some((option) => option.key === selectedCoverage[detailKey])
-      ? selectedCoverage[detailKey]
-      : machineKey;
+    const selectedKey = chosenKeys[0] || machineKey;
     const selectedOption = model.options.find((option) => option.key === selectedKey) || model.options[0];
+    const selectedOptions = chosenKeys
+      .map((key) => model.options.find((option) => option.key === key))
+      .filter(Boolean);
     const machineOption = model.options.find((option) => option.key === machineKey) || model.options[0];
     levels[coverItem.key] = {
       detailKey,
       machineKey,
       machineTitle: machineOption.title,
       selectedKey,
-      selectedTitle: selectedOption.title,
+      selectedKeys: chosen ? chosenKeys : [selectedKey],
+      selectedTitle: chosen ? selectedOptions.map((option) => option.title).join(", ") : selectedOption.title,
+      selectedTitles: chosen ? selectedOptions.map((option) => option.title) : [selectedOption.title],
       basis: detailComparison?.basis || coverItem.reason || "Ehdotus perustuu asiakasprofiiliin ja valittuihin tilanteisiin.",
       refined,
       chosen

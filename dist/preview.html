@@ -235,8 +235,7 @@ body:not(.assessment-active) .header-home-button {
 .hero {
   min-height: auto;
   padding: 32px 24px 34px;
-  background:
-    linear-gradient(180deg, #ffffff 0%, #ffffff 42%, var(--blue-050) 42%, var(--blue-050) 100%);
+  background: #ffffff;
 }
 
 .hero-inner {
@@ -467,8 +466,8 @@ body:not(.assessment-active) .header-home-button {
 .app-shell[data-view="detailResult"],
 .app-shell[data-view="contact"],
 .app-shell[data-view="summary"] {
-  grid-template-columns: minmax(0, 1240px);
-  max-width: 1320px;
+  grid-template-columns: minmax(0, 1160px);
+  max-width: 1224px;
 }
 
 .app-shell .support-grid,
@@ -743,6 +742,16 @@ h4 {
 .answers.icon-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px 18px;
+}
+
+.answers.dense-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 12px;
+}
+
+.answers.dense-grid .answer-option {
+  min-height: 44px;
+  padding: 8px 12px;
 }
 
 .answers.compact-choice {
@@ -4167,6 +4176,12 @@ details.source-details summary {
   color: var(--blue-950);
 }
 
+.coverage-current-selection small {
+  margin-top: 3px;
+  color: #315b78;
+  font-size: 12px;
+}
+
 .coverage-current-selection.has-selection {
   border-color: #6ab89e;
   background: #effaf6;
@@ -4192,15 +4207,29 @@ details.source-details summary {
   font-size: 13px;
 }
 
-.coverage-table thead th strong {
+.coverage-option-head {
+  display: grid;
+  grid-template-rows: minmax(56px, auto) 26px auto;
+  align-content: start;
+  height: 100%;
+}
+
+.coverage-option-title strong {
   display: block;
-  margin-bottom: 7px;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.coverage-option-meta {
+  display: flex;
+  align-items: flex-start;
+  min-height: 26px;
 }
 
 .coverage-select-button {
   display: block;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 6px;
   padding: 8px 9px;
   border: 1px solid var(--blue-700);
   border-radius: 999px;
@@ -4533,6 +4562,33 @@ details.source-details summary {
   }
 }
 
+@media (min-width: 721px) {
+  .app-shell[data-question="industry"] .section {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .app-shell[data-question="industry"] .clean-nav {
+    padding-bottom: 12px;
+  }
+
+  .app-shell[data-question="industry"] .flow-progress {
+    margin: 14px 0 16px;
+  }
+
+  .app-shell[data-question="industry"] .question-count {
+    min-height: 24px;
+  }
+
+  .app-shell[data-question="industry"] .question-desc {
+    margin: 5px 0 10px;
+  }
+
+  .app-shell[data-question="industry"] .progress {
+    margin: 6px 0 13px;
+  }
+}
+
 @media (max-width: 980px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -4717,6 +4773,11 @@ details.source-details summary {
   .answers.compact-choice {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .answers.dense-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .answers.compact-choice .answer-option,
@@ -7170,6 +7231,7 @@ const coverageModels = {
       label: "Rakenne: eläinlääkärikulut, Plus, henki, käyttö ja vastuu",
       title: "Koira- ja kissavakuutuksen rakenneosien vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("elainlaakari", "Eläinlääkärikuluvakuutus", "Keskeinen hoitokuluturva", "Turvaa sairauden tai tapaturman eläinlääkärikuluja.", "Useimmille koiran tai kissan omistajille.", "Tutkimus- ja hoitokuluja vakuutusmäärän, omavastuun ja ehtojen mukaan.", "Ei välttämättä kata kaikkia sairauksia, ennaltaehkäisyä tai aiempia vaivoja."),
         option("hoitoturvaPlus", "Hoitoturva Plus", "Laajentava lisäturva", "Täydentää eläinlääkärikuluturvaa valituilla hoito- ja kuntoutusmenoilla.", "Kun haluat laajemman hoitopolun esimerkiksi fysioterapiaan liittyen.", "Lisähoitoja tuotekohtaisten ehtojen mukaan.", "Saatavuus voi riippua eläimen iästä ja terveydestä."),
@@ -7218,6 +7280,7 @@ const coverageModels = {
       label: "Metsän turvat vakuutettavan omaisuuden mukaan",
       title: "Metsävakuutuksen turvien vertailu",
       notice: "Paloturva on aina mukana. Muita turvia lisättäessä myrskyturva valitaan ennen muita julkaistun tuoterakenteen mukaisesti.",
+      selectionMode: "multiple",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/metsavakuutus/",
       sourceLabel: "LähiTapiolan metsävakuutuksen turvavertailu",
       options: [
@@ -7303,6 +7366,7 @@ const coverageModels = {
       label: "Rakenne: esine-, huoneisto-, kiinteistö- ja projektiturvat",
       title: "Yritysomaisuuden vakuutusrakenteiden vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("esine", "ES1 Esinevakuutus", "Yrityksen irtaimen omaisuuden perusrakenne", "Koneiden, laitteiden, työkalujen ja vaihto-omaisuuden suoja.", "Yritykselle, jolla on toiminnan kannalta tärkeää irtainta omaisuutta.", "Omaisuusvahinkoja sovittujen turvien ja ehtojen mukaan.", "Ei yksin ratkaise keskeytys-, vastuu- tai kiinteistöriskiä."),
         option("huoneisto", "Huoneistoturva", "Vuokratilan ja sisustusten näkökulma", "Vuokratilan muutostöiden ja kiinteiden sisustusten suoja.", "Vuokratilassa toimivalle yritykselle.", "Vuokratilan omaisuuteen ja sisustuksiin liittyviä vahinkoja ehtojen mukaan.", "Ei korvaa rakennuksen omistajan kaikkia vastuita."),
@@ -7314,6 +7378,7 @@ const coverageModels = {
       label: "Rakenne: toiminnan, tuotteen, varallisuuden, IT:n ja hallinnon vastuut",
       title: "Yrityksen vastuuvakuutusten vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("operations", "Toiminnan vastuuvakuutus", "Henkilö- ja esinevahinkojen päävastuu", "Turvaa yrityksen toiminnasta aiheutuvaa korvausvastuuta.", "Useimmille yrityksille, joilla on asiakkaita, tiloja, töitä tai palveluita.", "Henkilö- ja esinevahinkoja ehtojen mukaan.", "Ei kata kaikkia puhtaita varallisuusvahinkoja tai erityisvastuita."),
         option("products", "Tuotevastuuvakuutus", "Tuotteisiin liittyvä vastuu", "Valmistettujen, myytyjen tai maahantuotujen tuotteiden aiheuttamat vahingot.", "Kaupalle, valmistajalle, maahantuojalle ja verkkokaupalle.", "Tuotteen virheellisyydestä aiheutuvia henkilö- tai esinevahinkoja.", "Takaisinveto ja sopimusvastuut vaativat erillisen tarkistuksen."),
@@ -7326,6 +7391,7 @@ const coverageModels = {
       label: "Rakenne: KE1, KE2, KE3 ja KE4",
       title: "Keskeytysvakuutuksen rakenneosien vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("ke1", "KE1 Omaisuuskeskeytys", "Omaisuusvahingon aiheuttama keskeytys", "Turvaa liiketoiminnan katkosta korvattavan esinevahingon jälkeen.", "Yritykselle, jonka tuotanto, myynti tai palvelu riippuu tilasta, koneesta tai varastosta.", "Käyttökatetta, kiinteitä kuluja ja lisäkuluja sovitun rakenteen mukaan.", "Vakuutusmäärä, vastuuaika ja omavastuu pitää laskea kirjanpidosta."),
         option("ke2", "KE2 Henkilökeskeytys", "Avainhenkilön poissaolo", "Turvaa liiketoiminnan katkosta yrittäjän tai nimetyn henkilön työkyvyttömyyden vuoksi.", "Pienyritykselle, asiantuntijayritykselle tai avainhenkilöriippuvaiseen toimintaan.", "Saamatta jäänyttä katetta ehtojen mukaan.", "Terveysselvitys ja henkilön merkitys liiketoiminnalle pitää varmistaa."),
@@ -7356,6 +7422,7 @@ const coverageModels = {
       label: "Rakenne: lakisääteinen, yrittäjä, työkyky ja avainhenkilöt",
       title: "Henkilö- ja työkykyratkaisujen vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("statutory", "Työtapaturma- ja ammattitautivakuutus", "Lakisääteinen työntekijäturva", "Työntekijöiden työtapaturmien ja ammattitautien vakuuttaminen.", "Yritykselle, jolla on työntekijöitä.", "Työtapaturmia ja ammattitauteja lain mukaan.", "Ei yksin kata vapaa-aikaa, yrittäjää tai sairauskuluetuja."),
         option("entrepreneur", "Yrittäjän tapaturmavakuutus", "Yrittäjän oma turva", "Yrittäjän tapaturmariskin turvaaminen.", "Yksinyrittäjälle tai yrittäjälle työntekijöiden rinnalla.", "Yrittäjän tapaturmia valitun turvan mukaan.", "YEL/TyEL-tilanne ja vapaa-ajan tarve pitää varmistaa."),
@@ -7367,6 +7434,7 @@ const coverageModels = {
       label: "Rakenne: työmatka, komennus, tavarat, vastuu ja oikeusturva",
       title: "Yrityksen matkavakuutuksen rakenteiden vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("traveler", "Matkustajavakuutus", "Työmatkan hoitoturva", "Työmatkalla sattuvan sairauden tai tapaturman turva.", "Yritykselle, jossa yrittäjä tai henkilöstö matkustaa työasioissa.", "Sairaus- ja tapaturmakuluja matkalla ehtojen mukaan.", "Matkan kesto, kohdemaa ja vakuutettavat henkilöt pitää tarkistaa."),
         option("posted", "Komennusvakuutus", "Pitkä ulkomaantyö", "Komennukselle tai pitkäaikaiselle ulkomaantyölle suunnattu turva.", "Kun työntekijä tai yrittäjä työskentelee pidempään ulkomailla.", "Komennuksen erityistarpeita valitun ratkaisun mukaan.", "Perheenjäsenet, kohdemaa ja kesto pitää määritellä."),
@@ -7378,6 +7446,7 @@ const coverageModels = {
       label: "Rakenne: oma tavara, asiakkaan tavara ja logistiikkavastuu",
       title: "Kuljetusvakuutusten rakenteiden vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("ownGoods", "Tavarankuljetusvakuutus", "Oman tavaran vakuuttaminen", "Yrityksen oman tavaran kuljetusriskin vakuuttaminen.", "Kun yritys kuljettaa tai lähettää omaa tavaraa.", "Tavaralle kuljetuksen aikana aiheutuvia vahinkoja ehtojen mukaan.", "Kuljetusehdot, arvo ja kuljetusmaat vaikuttavat."),
         option("carrier", "Tiekuljetusvastuu tai autokuljetusvastuu", "Asiakkaan tavaraan liittyvä vastuu", "Rahdinkuljettajan vastuuta asiakkaan tavarasta.", "Kuljetusliikkeelle tai asiakkaan tavaraa kuljettavalle.", "Lain tai sopimuksen mukaista kuljetusvastuuta ehtojen mukaan.", "Ei välttämättä kata tavaran täyttä arvoa ilman tavarankuljetusvakuutusta."),
@@ -7389,6 +7458,7 @@ const coverageModels = {
       label: "Rakenne: OK1 ja OK2",
       title: "Yrityksen oikeusturvan vaihtoehtojen vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("ok1", "OK1 Oikeudenkäyntikuluvakuutus", "Yritystoiminnan riitojen pääratkaisu", "Asianajo- ja oikeudenkäyntikulujen turva yritystoiminnan riidoissa.", "Useimmille yrityksille, joilla on sopimuksia, asiakkaita tai toimittajia.", "Riita- ja hakemusasioiden kuluja ehtojen mukaan.", "Ei kata kaikkia rikos-, sopimus- tai kansainvälisiä tilanteita."),
         option("ok2", "OK2 Immateriaalioikeudet", "IP-riitojen lisäselvitys", "Immateriaalioikeuksiin liittyvien riitojen oikeusturva.", "Yritykselle, jonka toiminnassa brändi, ohjelmisto, malli, patentti tai tekijänoikeus on olennainen.", "IP-riitojen kuluja ehtojen mukaan.", "Tarve, toimialue ja oikeudet pitää kartoittaa erikseen.")
@@ -7398,6 +7468,7 @@ const coverageModels = {
       label: "Rakenne: kiinteistö, vastuu ja vuokratuotto",
       title: "Kiinteistövakuutuksen rakenteiden vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("building", "Kiinteistövakuutus", "Rakennuksen ja kiinteistön turva", "Rakennuksen omaisuusvahinkojen vakuuttaminen.", "Kiinteistön omistajalle tai vuokranantajalle.", "Rakennusvahinkoja valittujen turvien mukaan.", "Käyttötarkoitus, ikä, kunto ja suojeluohjeet vaikuttavat."),
         option("liability", "Kiinteistön vastuuvakuutus", "Omistajan vastuu", "Kiinteistön omistamiseen ja hallintaan liittyvä vastuuriski.", "Kun kiinteistössä on vuokralaisia, kävijöitä tai ulkopuolisia.", "Henkilö- ja esinevahinkoja ehtojen mukaan.", "Ei korvaa rakennuksen omaisuusvahinkoa ilman kiinteistövakuutusta."),
@@ -7408,6 +7479,7 @@ const coverageModels = {
       label: "Rakenne: potilasvakuutus ja toiminnan vastuun tarkistus",
       title: "Potilasvakuutuksen ja vastuun vertailu",
       notice: defaultNotice,
+      selectionMode: "multiple",
       options: [
         option("patient", "Potilasvakuutus", "Potilasvahinkojen lakisääteinen näkökulma", "Terveyden- ja sairaanhoitotoiminnan potilasvahinkoriskien vakuuttaminen.", "Sote-, hoiva-, terapia- tai terveyspalvelutoimijalle, jos toiminta kuuluu potilasvakuutuksen piiriin.", "Potilasvahinkoja lain ja ehtojen mukaan.", "Toiminnan kuuluminen potilasvakuutuksen piiriin pitää varmistaa."),
         option("operations", "Toiminnan vastuuvakuutus", "Muu toiminnan vastuu", "Terveyspalveluun liittyvät muut henkilö- ja esinevahingot.", "Kun toiminnassa on tiloja, asiakkaita, laitteita tai palvelutilanteita.", "Toiminnan aiheuttamia vastuita ehtojen mukaan.", "Ei korvaa potilasvahinkoja, jos ne kuuluvat potilasvakuutuksen piiriin.")
@@ -8587,21 +8659,32 @@ function buildCoverageLevelRecommendations(result, detailResults = {}, selectedC
     if (!model?.options?.length) return;
     const detailComparison = detailResults[detailKey]?.comparison;
     const refined = Boolean(detailComparison);
-    const chosen = Boolean(selectedCoverage[detailKey] && model.options.some((option) => option.key === selectedCoverage[detailKey]));
+    const rawSelectedKeys = Array.isArray(selectedCoverage[detailKey])
+      ? selectedCoverage[detailKey]
+      : selectedCoverage[detailKey]
+        ? [selectedCoverage[detailKey]]
+        : [];
+    const validSelectedKeys = [...new Set(rawSelectedKeys)]
+      .filter((key) => model.options.some((option) => option.key === key));
+    const chosenKeys = model.selectionMode === "multiple" ? validSelectedKeys : validSelectedKeys.slice(0, 1);
+    const chosen = chosenKeys.length > 0;
     const machineKey = detailComparison?.recommendedKeys?.[0]
       || findCoverageKey(model.options, coverItem.defaultCoverageKey)
       || model.options[0].key;
-    const selectedKey = selectedCoverage[detailKey] && model.options.some((option) => option.key === selectedCoverage[detailKey])
-      ? selectedCoverage[detailKey]
-      : machineKey;
+    const selectedKey = chosenKeys[0] || machineKey;
     const selectedOption = model.options.find((option) => option.key === selectedKey) || model.options[0];
+    const selectedOptions = chosenKeys
+      .map((key) => model.options.find((option) => option.key === key))
+      .filter(Boolean);
     const machineOption = model.options.find((option) => option.key === machineKey) || model.options[0];
     levels[coverItem.key] = {
       detailKey,
       machineKey,
       machineTitle: machineOption.title,
       selectedKey,
-      selectedTitle: selectedOption.title,
+      selectedKeys: chosen ? chosenKeys : [selectedKey],
+      selectedTitle: chosen ? selectedOptions.map((option) => option.title).join(", ") : selectedOption.title,
+      selectedTitles: chosen ? selectedOptions.map((option) => option.title) : [selectedOption.title],
       basis: detailComparison?.basis || coverItem.reason || "Ehdotus perustuu asiakasprofiiliin ja valittuihin tilanteisiin.",
       refined,
       chosen
@@ -9211,6 +9294,7 @@ function renderQuestion() {
   const isBase = st().quickPhase === "base";
   const meta = questionProgressMeta(questions);
   const hasPromptCard = question.layout === "icon-question" && question.icon;
+  if ($("appShell")) $("appShell").dataset.question = question.id;
   $("questionCount").textContent = meta.label;
   $("questionTitle").textContent = hasPromptCard
     ? mode === "business" ? "Muutama kysymys yritystoiminnastasi" : "Muutama kysymys arjestasi"
@@ -9406,6 +9490,7 @@ function renderAnswerOptions(containerId, question, answerBag, onSelect) {
   container.innerHTML = "";
   container.classList.toggle("icon-grid", question.layout === "icon-grid");
   container.classList.toggle("compact-choice", question.layout === "icon-question");
+  container.classList.toggle("dense-grid", question.id === "industry" && question.options.length > 8);
 
   question.options.forEach((option) => {
     const button = document.createElement("button");
@@ -10603,8 +10688,15 @@ function nextDetailCandidate(currentDetailKey = "") {
 function renderCoverageComparison(comparison, detailKey = "") {
   if (!comparison) return "";
   const recommendedLabels = comparison.recommended.map((option) => option.title).join(", ");
-  const explicitlySelectedKey = st().selectedCoverage[detailKey] || "";
-  const explicitlySelectedOption = comparison.options.find((option) => option.key === explicitlySelectedKey);
+  const multipleSelection = comparison.selectionMode === "multiple";
+  const explicitlySelectedKeys = explicitCoverageKeys(detailKey, comparison);
+  const explicitlySelectedOptions = comparison.options.filter((option) => explicitlySelectedKeys.includes(option.key));
+  const selectedTitles = explicitlySelectedOptions.map((option) => option.title).join(", ");
+  const isSelected = (optionKey) => explicitlySelectedKeys.includes(optionKey);
+  const selectButtonLabel = (optionKey, mobile = false) => {
+    if (isSelected(optionKey)) return multipleSelection ? "✓ Valittu · poista" : mobile ? "✓ Valittu vaihtoehto" : "✓ Valittu";
+    return multipleSelection ? "Lisää valintaan" : mobile ? "Valitse tämä vaihtoehto" : "Valitse tämä";
+  };
   const featureRows = comparison.featureRows || [];
   const tableRows = featureRows.length
     ? featureRows.map((row) => [row.label, (option) => row.values?.[option.key] || "Ei sisälly", row.description])
@@ -10622,14 +10714,15 @@ function renderCoverageComparison(comparison, detailKey = "") {
   };
 
   return `
-    <section class="coverage-compare" aria-label="${escapeHtml(comparison.title)}">
+    <section class="coverage-compare ${multipleSelection ? "multiple-choice" : "single-choice"}" aria-label="${escapeHtml(comparison.title)}">
       <div class="coverage-recommendation">
         <p class="eyebrow compact">Kartoituksen lähtökohta</p>
         <h4>${escapeHtml(recommendedLabels)}</h4>
         <p>${escapeHtml(shortenText(comparison.basis, 220))}</p>
-        <div class="coverage-current-selection ${explicitlySelectedOption ? "has-selection" : ""}" aria-live="polite">
-          <strong>${explicitlySelectedOption ? "Valitsemasi vaihtoehto" : "Valitse vertailun jälkeen sopiva vaihtoehto"}</strong>
-          <span>${explicitlySelectedOption ? escapeHtml(explicitlySelectedOption.title) : "Valinta tallentuu yhteenvetoon ja välitetään yhteydenottopyynnön mukana asiantuntijalle."}</span>
+        <div class="coverage-current-selection ${explicitlySelectedOptions.length ? "has-selection" : ""}" aria-live="polite">
+          <strong>${explicitlySelectedOptions.length ? (multipleSelection ? "Valitsemasi vakuutukset" : "Valitsemasi vaihtoehto") : (multipleSelection ? "Valitse yksi tai useampi sopiva vakuutus" : "Valitse vertailun jälkeen sopiva vaihtoehto")}</strong>
+          <span>${explicitlySelectedOptions.length ? escapeHtml(selectedTitles) : "Valintasi tallentuvat yhteenvetoon ja välitetään yhteydenottopyynnön mukana asiantuntijalle."}</span>
+          ${multipleSelection ? `<small>Voit valita useamman vakuutuksen, koska nämä vaihtoehdot voivat täydentää toisiaan.</small>` : ""}
         </div>
       </div>
       <details class="coverage-details" open>
@@ -10642,12 +10735,14 @@ function renderCoverageComparison(comparison, detailKey = "") {
               <tr>
                 <th>Vertailukohta</th>
                 ${comparison.options.map((option) => `
-                  <th class="${option.key === explicitlySelectedKey ? "selected" : ""}">
-                    <strong>${escapeHtml(option.title)}</strong>
-                    ${comparison.recommendedKeys.includes(option.key) ? `<span class="recommend-badge">Suositus</span>` : ""}
-                    <button class="coverage-select-button" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${option.key === explicitlySelectedKey ? "true" : "false"}">
-                      ${option.key === explicitlySelectedKey ? "✓ Valittu" : "Valitse tämä"}
-                    </button>
+                  <th class="${isSelected(option.key) ? "selected" : ""}">
+                    <div class="coverage-option-head">
+                      <div class="coverage-option-title"><strong>${escapeHtml(option.title)}</strong></div>
+                      <div class="coverage-option-meta">${comparison.recommendedKeys.includes(option.key) ? `<span class="recommend-badge">Suositus</span>` : ""}</div>
+                      <button class="coverage-select-button" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${isSelected(option.key) ? "true" : "false"}">
+                        ${selectButtonLabel(option.key)}
+                      </button>
+                    </div>
                   </th>
                 `).join("")}
               </tr>
@@ -10656,7 +10751,7 @@ function renderCoverageComparison(comparison, detailKey = "") {
               ${tableRows.map(([label, getValue, description]) => `
                 <tr>
                   <th scope="row">${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</th>
-                  ${comparison.options.map((option) => `<td class="${option.key === explicitlySelectedKey ? "selected" : ""}">${renderComparisonValue(getValue(option))}</td>`).join("")}
+                  ${comparison.options.map((option) => `<td class="${isSelected(option.key) ? "selected" : ""}">${renderComparisonValue(getValue(option))}</td>`).join("")}
                 </tr>
               `).join("")}
             </tbody>
@@ -10664,17 +10759,17 @@ function renderCoverageComparison(comparison, detailKey = "") {
         </div>
         <div class="coverage-detail-list">
           ${comparison.options.map((option) => `
-            <article class="coverage-detail-item ${option.key === explicitlySelectedKey ? "selected" : ""}">
+            <article class="coverage-detail-item ${isSelected(option.key) ? "selected" : ""}">
               <div>
                 <strong>${escapeHtml(option.title)}</strong>
                 ${comparison.recommendedKeys.includes(option.key) ? `<span>Suositus</span>` : ""}
-                ${option.key === explicitlySelectedKey ? `<span>Valittu</span>` : ""}
+                ${isSelected(option.key) ? `<span>Valittu</span>` : ""}
               </div>
               <dl>
                 ${tableRows.map(([label, getValue, description]) => `<div><dt>${description ? `<details class="coverage-feature-detail"><summary>${escapeHtml(label)}</summary><p>${escapeHtml(description)}</p></details>` : escapeHtml(label)}</dt><dd>${renderComparisonValue(getValue(option))}</dd></div>`).join("")}
               </dl>
-              <button class="coverage-select-button mobile" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${option.key === explicitlySelectedKey ? "true" : "false"}">
-                ${option.key === explicitlySelectedKey ? "✓ Valittu vaihtoehto" : "Valitse tämä vaihtoehto"}
+              <button class="coverage-select-button mobile" type="button" data-detail-key="${escapeHtml(detailKey)}" data-coverage-choice="${escapeHtml(option.key)}" aria-pressed="${isSelected(option.key) ? "true" : "false"}">
+                ${selectButtonLabel(option.key, true)}
               </button>
             </article>
           `).join("")}
@@ -10710,9 +10805,15 @@ function typeKeyFromDetail(detailKey) {
   return Object.keys(types()).find((key) => types()[key].detailFlow === detailKey) || "";
 }
 
-function selectedCoverageKey(detailKey, comparison) {
+function explicitCoverageKeys(detailKey, comparison) {
   const saved = st().selectedCoverage[detailKey];
-  if (saved && comparison.options.some((option) => option.key === saved)) return saved;
+  const values = Array.isArray(saved) ? saved : saved ? [saved] : [];
+  return [...new Set(values)].filter((key) => comparison?.options?.some((option) => option.key === key));
+}
+
+function selectedCoverageKey(detailKey, comparison) {
+  const saved = explicitCoverageKeys(detailKey, comparison);
+  if (saved.length) return saved[0];
   return comparison.recommendedKeys[0] || comparison.options[0]?.key || "";
 }
 
@@ -10725,7 +10826,17 @@ function selectCoverageOption(detailKey, coverageKey) {
   if (!detailKey || !coverageKey) return;
   const result = st().detailResults[detailKey];
   if (!result?.comparison?.options?.some((option) => option.key === coverageKey)) return;
-  st().selectedCoverage[detailKey] = coverageKey;
+  const multipleSelection = result.comparison.selectionMode === "multiple";
+  const current = explicitCoverageKeys(detailKey, result.comparison);
+  if (multipleSelection) {
+    const next = current.includes(coverageKey)
+      ? current.filter((key) => key !== coverageKey)
+      : [...current, coverageKey];
+    if (next.length) st().selectedCoverage[detailKey] = next;
+    else delete st().selectedCoverage[detailKey];
+  } else {
+    st().selectedCoverage[detailKey] = coverageKey;
+  }
   const typeKey = typeKeyFromDetail(detailKey);
   if (typeKey) {
     st().selectedContact[typeKey] = true;
@@ -10735,7 +10846,7 @@ function selectCoverageOption(detailKey, coverageKey) {
   renderDetailResult(detailKey, result);
   renderChatPanel();
   renderSummaryList();
-  track("coverage_option_selected", { mode, detailKey, coverageKey });
+  track("coverage_option_selected", { mode, detailKey, coverageKey, multipleSelection });
 }
 
 function renderProductMaterials(meta = {}) {
@@ -10835,10 +10946,8 @@ function renderContact() {
   $("contactChoices").innerHTML = candidateKeys.length ? candidateKeys.map((key) => {
     const meta = types()[key];
     const checked = st().selectedContact[key] ? "checked" : "";
-    const selectedOption = st().selectedCoverage[meta.detailFlow]
-      ? coverageModels[mode]?.[meta.detailFlow]?.options?.find((option) => option.key === st().selectedCoverage[meta.detailFlow])
-      : null;
-    const detailBadge = selectedOption ? `Valittu: ${selectedOption.title}` : st().detailResults[meta.detailFlow] ? "Vertailtu · ei valintaa" : "";
+    const selectedTitle = assessmentSelectedTitle(key);
+    const detailBadge = selectedTitle ? `Valittu: ${selectedTitle}` : st().detailResults[meta.detailFlow] ? "Vertailtu · ei valintaa" : "";
     const badges = [meta.area, detailBadge].filter(Boolean).join(" · ");
     return `
       <label class="check-card">
@@ -10945,8 +11054,12 @@ function renderContactHandoffSummary() {
 
 function assessmentSelectedTitle(typeKey) {
   const detailKey = types()[typeKey]?.detailFlow;
-  const selectedKey = detailKey ? st().selectedCoverage[detailKey] : "";
-  return coverageModels[mode]?.[detailKey]?.options?.find((option) => option.key === selectedKey)?.title || "";
+  const model = coverageModels[mode]?.[detailKey];
+  if (!model) return "";
+  return explicitCoverageKeys(detailKey, model)
+    .map((selectedKey) => model.options.find((option) => option.key === selectedKey)?.title)
+    .filter(Boolean)
+    .join(", ");
 }
 
 function openCustomerSummary(showCrm = false) {
@@ -11534,7 +11647,10 @@ function showView(next) {
   document.body.classList.toggle("assessment-active", !$("appShell").classList.contains("hidden"));
   const focusOnly = ["intro", "base", "quick", "results", "detail", "detailResult", "contact", "summary"].includes(next);
   $("appShell")?.classList.toggle("flow-only", focusOnly);
-  if ($("appShell")) $("appShell").dataset.view = next;
+  if ($("appShell")) {
+    $("appShell").dataset.view = next;
+    if (next !== "quick") delete $("appShell").dataset.question;
+  }
   updateSteps(next);
   renderSummaryList();
   renderChatPanel();
