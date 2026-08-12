@@ -50,6 +50,21 @@ assert.ok(document.querySelector(".coverage-feature-detail"));
 assert.equal(document.querySelector(".coverage-choice-grid"), null);
 assert.equal(document.querySelector(".coverage-selection-note"), null);
 assert.doesNotMatch(document.querySelector("#detailResultView").textContent, /Miksi tämä ehdotus syntyi|Mitä vakuutus yleisesti tekee/);
+
+const selectionButton = document.querySelector(".coverage-select-button");
+assert.ok(selectionButton, "Jokaisella vertailuvaihtoehdolla pitää olla valintapainike");
+const selectedTitle = selectionButton.closest("th").querySelector("strong").textContent.trim();
+selectionButton.click();
+assert.equal(document.querySelector(".coverage-select-button[aria-pressed='true']")?.textContent.includes("Valittu"), true);
+assert.match(document.querySelector(".coverage-current-selection").textContent, new RegExp(selectedTitle));
+
+document.querySelector("#contactFromDetail").click();
+assert.equal(document.querySelector("#summaryView").classList.contains("hidden"), false);
+assert.match(document.querySelector("#customerSummaryContent").textContent, /Asiakkaan valitsema vaihtoehto/);
+assert.match(document.querySelector("#customerSummaryContent").textContent, new RegExp(selectedTitle));
+document.querySelector("#summaryContact").click();
+assert.equal(document.querySelector("#contactView").classList.contains("hidden"), false);
+assert.match(document.querySelector("#contactPriceSummary").textContent, new RegExp(selectedTitle));
 assert.deepEqual(runtimeErrors, []);
 
 dom.window.close();
