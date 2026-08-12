@@ -1305,60 +1305,10 @@ h4 {
   line-height: 1.5;
 }
 
-.mandatory-disclosure {
-  border-top: 1px solid #b9daec;
-}
-
-.mandatory-disclosure summary {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 58px;
-  padding: 14px 20px;
-  color: var(--blue-900);
-  font-weight: 700;
-  cursor: pointer;
-  list-style: none;
-}
-
-.mandatory-disclosure summary::-webkit-details-marker {
-  display: none;
-}
-
-.mandatory-disclosure summary::after {
-  content: "+";
-  flex: 0 0 26px;
-  font-size: 25px;
-  font-weight: 500;
-  line-height: 1;
-  text-align: center;
-}
-
-.mandatory-disclosure[open] summary::after {
-  content: "−";
-}
-
-.mandatory-disclosure summary:hover {
-  background: #f4fbfe;
-}
-
-.mandatory-count {
-  margin-left: auto;
-  color: #315b78;
-  font-size: 13px;
-  font-weight: 600;
-}
-
 .mandatory-content {
-  padding: 0 20px 20px;
+  padding: 20px;
   border-top: 1px solid #d8e8f1;
-}
-
-.mandatory-guidance {
-  margin: 16px 0 12px;
-  color: var(--blue-950);
-  font-weight: 700;
+  background: #f8fcfe;
 }
 
 .mandatory-list {
@@ -1446,7 +1396,7 @@ h4 {
 }
 
 .mandatory-product-grid {
-  margin-top: 12px;
+  margin-top: 0;
 }
 
 .product-rec-card {
@@ -1893,7 +1843,8 @@ h4 {
 
 .mandatory-card-note {
   margin: 0;
-  padding: 0 18px 18px;
+  padding: 10px 0 0;
+  border-top: 1px solid #d3e6f0;
   color: #315b78;
   font-size: 13px;
   line-height: 1.45;
@@ -4789,17 +4740,8 @@ details.source-details summary {
     font-size: 17px;
   }
 
-  .mandatory-disclosure summary {
-    align-items: flex-start;
-    padding: 14px 16px;
-  }
-
-  .mandatory-count {
-    display: none;
-  }
-
   .mandatory-content {
-    padding: 0 16px 16px;
+    padding: 16px;
   }
 
   .product-section-head h3,

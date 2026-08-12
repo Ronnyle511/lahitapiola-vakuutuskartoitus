@@ -1312,60 +1312,10 @@ h4 {
   line-height: 1.5;
 }
 
-.mandatory-disclosure {
-  border-top: 1px solid #b9daec;
-}
-
-.mandatory-disclosure summary {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 58px;
-  padding: 14px 20px;
-  color: var(--blue-900);
-  font-weight: 700;
-  cursor: pointer;
-  list-style: none;
-}
-
-.mandatory-disclosure summary::-webkit-details-marker {
-  display: none;
-}
-
-.mandatory-disclosure summary::after {
-  content: "+";
-  flex: 0 0 26px;
-  font-size: 25px;
-  font-weight: 500;
-  line-height: 1;
-  text-align: center;
-}
-
-.mandatory-disclosure[open] summary::after {
-  content: "−";
-}
-
-.mandatory-disclosure summary:hover {
-  background: #f4fbfe;
-}
-
-.mandatory-count {
-  margin-left: auto;
-  color: #315b78;
-  font-size: 13px;
-  font-weight: 600;
-}
-
 .mandatory-content {
-  padding: 0 20px 20px;
+  padding: 20px;
   border-top: 1px solid #d8e8f1;
-}
-
-.mandatory-guidance {
-  margin: 16px 0 12px;
-  color: var(--blue-950);
-  font-weight: 700;
+  background: #f8fcfe;
 }
 
 .mandatory-list {
@@ -1453,7 +1403,7 @@ h4 {
 }
 
 .mandatory-product-grid {
-  margin-top: 12px;
+  margin-top: 0;
 }
 
 .product-rec-card {
@@ -1900,7 +1850,8 @@ h4 {
 
 .mandatory-card-note {
   margin: 0;
-  padding: 0 18px 18px;
+  padding: 10px 0 0;
+  border-top: 1px solid #d3e6f0;
   color: #315b78;
   font-size: 13px;
   line-height: 1.45;
@@ -4796,17 +4747,8 @@ details.source-details summary {
     font-size: 17px;
   }
 
-  .mandatory-disclosure summary {
-    align-items: flex-start;
-    padding: 14px 16px;
-  }
-
-  .mandatory-count {
-    display: none;
-  }
-
   .mandatory-content {
-    padding: 0 16px 16px;
+    padding: 16px;
   }
 
   .product-section-head h3,
@@ -9596,7 +9538,9 @@ function renderRecommendations() {
   $("recommendationInsights").innerHTML = renderRecommendationContext(assessment);
   $("contactFromResults")?.classList.add("hidden");
 
-  $("recommendationBuckets").innerHTML = `${renderMandatoryChecks(assessment.mandatoryChecks)}${buckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}`;
+  const primaryBuckets = buckets.filter((bucket) => bucket.key === "primary");
+  const remainingBuckets = buckets.filter((bucket) => bucket.key !== "primary");
+  $("recommendationBuckets").innerHTML = `${primaryBuckets.map(renderBucket).join("")}${renderMandatoryChecks(assessment.mandatoryChecks)}${remainingBuckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}`;
   $("recommendationBuckets").querySelector("[data-refine-recommendations]")?.addEventListener("click", () => refineTopRecommendation());
   $("recommendationBuckets").querySelector("[data-summary-next]")?.addEventListener("click", () => openCustomerSummary());
   $("recommendationBuckets").querySelector("[data-expert-contact]")?.addEventListener("click", () => openContact());
@@ -9693,30 +9637,22 @@ function renderMandatoryChecks(checks = []) {
       </div>
     </section>
   `;
-  const countLabel = checks.length === 1 ? "1 tarkistettava vakuutus" : `${checks.length} tarkistettavaa vakuutusta`;
   return `
     <section class="mandatory-section product-section" id="results-mandatory">
       <div class="product-section-head mandatory-intro">
         <span class="mandatory-icon" aria-hidden="true">!</span>
         <div>
-          <p class="eyebrow compact">Pakolliset ja sopimusperusteiset</p>
+          <p class="eyebrow compact">Lakisääteiset ja sopimusperusteiset vakuutukset</p>
           <h4>Tarkista nämä ensin</h4>
-          <p>Vastaustesi perusteella tunnistimme ${escapeHtml(countLabel)}. Velvoitteen peruste ja soveltuminen varmistetaan aina yrityksen tilanteen mukaan.</p>
+          <p>Nämä on erotettu vapaaehtoisista vakuutuksista. Velvoitteen peruste ja soveltuminen varmistetaan aina yrityksen tilanteen mukaan.</p>
         </div>
       </div>
-      <details class="mandatory-disclosure">
-        <summary>
-          <span>Avaa pakolliset ja sopimusperusteiset tarkistukset</span>
-          <span class="mandatory-count">${escapeHtml(countLabel)}</span>
-        </summary>
-        <div class="mandatory-content">
-          <p class="mandatory-guidance">Tarkista nämä ennen vapaaehtoisen vakuutusturvan valintaa.</p>
-          <div class="product-card-grid mandatory-product-grid">
-            ${checks.map((item) => renderMandatoryProductCard(item)).join("")}
-          </div>
-          <p class="mandatory-note">Lakisääteinen velvoite koskee yksittäistä vakuutusta, ei koko henkilöstö- tai ajoneuvovakuutusten aluetta.</p>
+      <div class="mandatory-content">
+        <div class="product-card-grid mandatory-product-grid">
+          ${checks.map((item) => renderMandatoryProductCard(item)).join("")}
         </div>
-      </details>
+        <p class="mandatory-note">Lakisääteinen velvoite koskee yksittäistä vakuutusta, ei koko henkilöstö- tai ajoneuvovakuutusten aluetta.</p>
+      </div>
     </section>
   `;
 }
@@ -9726,17 +9662,18 @@ function renderMandatoryProductCard(item) {
   const badgeLabel = item.badgeLabel || "Lakisääteisesti tarkistettava";
   return `
     <article class="product-rec-card mandatory-product-card obligation-${escapeHtml(item.obligationKind || "statutory")}">
-      <a class="product-card-summary mandatory-card-link" href="${escapeHtml(card.url)}" target="_blank" rel="noopener noreferrer">
-        ${renderProductMedia(card.visual, card.title, card.imageUrl, card.imagePosition)}
-        <div class="product-card-body">
-          <h4>${escapeHtml(card.title)} <span aria-hidden="true">›</span></h4>
-          <p>${escapeHtml(card.lead)}</p>
-          <div class="product-card-tags">
-            <span>${escapeHtml(badgeLabel)}</span>
-          </div>
+      ${renderProductMedia(card.visual, card.title, card.imageUrl, card.imagePosition)}
+      <div class="product-card-body">
+        <h4>${escapeHtml(card.title)}</h4>
+        <p>${escapeHtml(card.lead)}</p>
+        <div class="product-card-tags">
+          <span>${escapeHtml(badgeLabel)}</span>
         </div>
-      </a>
-      <p class="mandatory-card-note">${escapeHtml(item.text)}</p>
+        <p class="mandatory-card-note">${escapeHtml(item.text)}</p>
+        <div class="product-card-actions">
+          <a class="product-page-link" href="${escapeHtml(card.url)}" target="_blank" rel="noopener noreferrer">Lue lisää <span aria-hidden="true">›</span></a>
+        </div>
+      </div>
     </article>
   `;
 }

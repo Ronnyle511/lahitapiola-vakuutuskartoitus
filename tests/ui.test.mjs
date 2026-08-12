@@ -97,9 +97,21 @@ async function testBusinessResults() {
   await completeAssessment(dom, "business");
 
   assert.ok(document.querySelector("#results-mandatory"));
+  assert.ok(document.querySelector("#results-mandatory .mandatory-product-card"));
+  assert.equal(document.querySelector("#results-mandatory details"), null);
   assert.ok(document.querySelector("#results-recommended"));
   assert.ok(document.querySelector("#results-optional"));
-  assert.match(document.querySelector("#resultsView").textContent, /Pakolliset ja sopimusperusteiset|Lakisääteiset vakuutukset/);
+  assert.equal(
+    document.querySelector("#results-recommended").compareDocumentPosition(document.querySelector("#results-mandatory")) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING,
+    dom.window.Node.DOCUMENT_POSITION_FOLLOWING,
+    "Lakisääteisten osion pitää tulla suositeltujen vakuutusten jälkeen"
+  );
+  assert.equal(
+    document.querySelector("#results-mandatory").compareDocumentPosition(document.querySelector("#results-optional")) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING,
+    dom.window.Node.DOCUMENT_POSITION_FOLLOWING,
+    "Lakisääteisten osion pitää tulla ennen harkittavia vakuutuksia"
+  );
+  assert.match(document.querySelector("#resultsView").textContent, /Lakisääteiset ja sopimusperusteiset vakuutukset/);
   assert.match(document.querySelector("#resultsView").textContent, /Suositellut vakuutukset/);
 
   const contactButton = document.querySelector("[data-expert-contact]");

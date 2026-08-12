@@ -137,6 +137,8 @@ assert.match(appSource, /function renderContactHandoffSummary/);
 assert.match(appSource, /Nämä tiedot välitetään asiantuntijalle/);
 assert.match(appSource, /Näytä kaikki välitettävät tiedot/);
 assert.match(appSource, /Turvavaihtoehto avoinna/);
+assert.doesNotMatch(appSource, /mandatory-disclosure|Avaa pakolliset ja sopimusperusteiset tarkistukset/);
+assert.match(appSource, /Nämä on erotettu vapaaehtoisista vakuutuksista/);
 assert.match(templateSource, /Muokkaa keskusteluun valittuja vakuutuksia/);
 assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
 assert.match(templateSource, /id="contactTime"/);

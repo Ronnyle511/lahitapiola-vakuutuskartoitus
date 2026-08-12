@@ -873,7 +873,9 @@ function renderRecommendations() {
   $("recommendationInsights").innerHTML = renderRecommendationContext(assessment);
   $("contactFromResults")?.classList.add("hidden");
 
-  $("recommendationBuckets").innerHTML = `${renderMandatoryChecks(assessment.mandatoryChecks)}${buckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}`;
+  const primaryBuckets = buckets.filter((bucket) => bucket.key === "primary");
+  const remainingBuckets = buckets.filter((bucket) => bucket.key !== "primary");
+  $("recommendationBuckets").innerHTML = `${primaryBuckets.map(renderBucket).join("")}${renderMandatoryChecks(assessment.mandatoryChecks)}${remainingBuckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}`;
   $("recommendationBuckets").querySelector("[data-refine-recommendations]")?.addEventListener("click", () => refineTopRecommendation());
   $("recommendationBuckets").querySelector("[data-summary-next]")?.addEventListener("click", () => openCustomerSummary());
   $("recommendationBuckets").querySelector("[data-expert-contact]")?.addEventListener("click", () => openContact());
@@ -970,30 +972,22 @@ function renderMandatoryChecks(checks = []) {
       </div>
     </section>
   `;
-  const countLabel = checks.length === 1 ? "1 tarkistettava vakuutus" : `${checks.length} tarkistettavaa vakuutusta`;
   return `
     <section class="mandatory-section product-section" id="results-mandatory">
       <div class="product-section-head mandatory-intro">
         <span class="mandatory-icon" aria-hidden="true">!</span>
         <div>
-          <p class="eyebrow compact">Pakolliset ja sopimusperusteiset</p>
+          <p class="eyebrow compact">Lakisääteiset ja sopimusperusteiset vakuutukset</p>
           <h4>Tarkista nämä ensin</h4>
-          <p>Vastaustesi perusteella tunnistimme ${escapeHtml(countLabel)}. Velvoitteen peruste ja soveltuminen varmistetaan aina yrityksen tilanteen mukaan.</p>
+          <p>Nämä on erotettu vapaaehtoisista vakuutuksista. Velvoitteen peruste ja soveltuminen varmistetaan aina yrityksen tilanteen mukaan.</p>
         </div>
       </div>
-      <details class="mandatory-disclosure">
-        <summary>
-          <span>Avaa pakolliset ja sopimusperusteiset tarkistukset</span>
-          <span class="mandatory-count">${escapeHtml(countLabel)}</span>
-        </summary>
-        <div class="mandatory-content">
-          <p class="mandatory-guidance">Tarkista nämä ennen vapaaehtoisen vakuutusturvan valintaa.</p>
-          <div class="product-card-grid mandatory-product-grid">
-            ${checks.map((item) => renderMandatoryProductCard(item)).join("")}
-          </div>
-          <p class="mandatory-note">Lakisääteinen velvoite koskee yksittäistä vakuutusta, ei koko henkilöstö- tai ajoneuvovakuutusten aluetta.</p>
+      <div class="mandatory-content">
+        <div class="product-card-grid mandatory-product-grid">
+          ${checks.map((item) => renderMandatoryProductCard(item)).join("")}
         </div>
-      </details>
+        <p class="mandatory-note">Lakisääteinen velvoite koskee yksittäistä vakuutusta, ei koko henkilöstö- tai ajoneuvovakuutusten aluetta.</p>
+      </div>
     </section>
   `;
 }
@@ -1003,17 +997,18 @@ function renderMandatoryProductCard(item) {
   const badgeLabel = item.badgeLabel || "Lakisääteisesti tarkistettava";
   return `
     <article class="product-rec-card mandatory-product-card obligation-${escapeHtml(item.obligationKind || "statutory")}">
-      <a class="product-card-summary mandatory-card-link" href="${escapeHtml(card.url)}" target="_blank" rel="noopener noreferrer">
-        ${renderProductMedia(card.visual, card.title, card.imageUrl, card.imagePosition)}
-        <div class="product-card-body">
-          <h4>${escapeHtml(card.title)} <span aria-hidden="true">›</span></h4>
-          <p>${escapeHtml(card.lead)}</p>
-          <div class="product-card-tags">
-            <span>${escapeHtml(badgeLabel)}</span>
-          </div>
+      ${renderProductMedia(card.visual, card.title, card.imageUrl, card.imagePosition)}
+      <div class="product-card-body">
+        <h4>${escapeHtml(card.title)}</h4>
+        <p>${escapeHtml(card.lead)}</p>
+        <div class="product-card-tags">
+          <span>${escapeHtml(badgeLabel)}</span>
         </div>
-      </a>
-      <p class="mandatory-card-note">${escapeHtml(item.text)}</p>
+        <p class="mandatory-card-note">${escapeHtml(item.text)}</p>
+        <div class="product-card-actions">
+          <a class="product-page-link" href="${escapeHtml(card.url)}" target="_blank" rel="noopener noreferrer">Lue lisää <span aria-hidden="true">›</span></a>
+        </div>
+      </div>
     </article>
   `;
 }
