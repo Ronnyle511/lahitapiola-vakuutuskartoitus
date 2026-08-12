@@ -109,6 +109,7 @@ assert.ok(family.recommendedCovers.some((item) => item.key === "pet"));
 assert.ok(family.mandatoryChecks.some((item) => item.id === "traffic"));
 assert.ok(!family.mandatoryChecks.some((item) => item.id === "yel"));
 assert.equal(family.selectedCoverageLevels.home.refined, false);
+assert.equal(family.selectedCoverageLevels.home.chosen, false);
 assert.equal(family.pricingPayload.selectedCoverageLevels.home, undefined);
 assert.equal(family.pricingPayload.priceImpactSymbol, "");
 
@@ -166,6 +167,7 @@ const familyPerus = buildAssessmentResult("personal", state({
 }));
 assert.equal(familyPerus.selectedCoverageLevels.home.selectedKey, "perus");
 assert.equal(familyPerus.selectedCoverageLevels.home.refined, true);
+assert.equal(familyPerus.selectedCoverageLevels.home.chosen, true);
 assert.equal(familyPerus.pricingPayload.selectedCoverageLevels.home.selectedKey, "perus");
 assert.equal(familyPerus.aiContext.selectedCoverageLevels.home.selectedKey, "perus");
 assert.match(familyPerus.contactSummary, /Valittujen laajuuksien suunta/);
