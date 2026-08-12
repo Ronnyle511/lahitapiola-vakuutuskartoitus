@@ -1201,8 +1201,8 @@ function renderResultsStickyActions() {
   return `
     <aside class="results-sticky-actions" aria-label="Kartoituksen jatkotoiminnot">
       <div class="results-sticky-copy">
-        <strong>Kartoituksesi on valmis</strong>
-        <span>Katso yhteenveto tai pyydä asiantuntijaa ottamaan yhteyttä.</span>
+        <strong>Yhteenveto ja yhteydenotto</strong>
+        <span>Katso oma kooste tai pyydä asiantuntijaa ottamaan yhteyttä.</span>
       </div>
       <div class="results-sticky-buttons">
         <button class="btn btn-primary" type="button" data-summary-next>Näytä oma yhteenveto</button>
