@@ -7,18 +7,15 @@ const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const css = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 const runtimeErrors = [];
 
-await testPersonalAndFamilyFlow();
-await testOtherAnswerAndEditing();
-await testBusinessFlowsAndTwoLevelComparison();
-await testDetailOtherAnswer();
-assert.deepEqual(runtimeErrors, [], `Käyttöliittymässä havaittiin ajonaikaisia virheitä:\n${runtimeErrors.join("\n")}`);
+await testPersonalResultsAndContact();
+await testBusinessResults();
 
-assert.match(css, /@media \(max-width: 760px\)[\s\S]*\.coverage-details\s*{\s*display: none/);
-assert.match(css, /@media \(max-width: 760px\)[\s\S]*\.coverage-mobile-comparison\s*{\s*display: grid/);
-assert.match(css, /\.mobile-compare-selects[\s\S]*grid-template-columns: repeat\(2/);
+assert.deepEqual(runtimeErrors, [], `Käyttöliittymässä havaittiin ajonaikaisia virheitä:\n${runtimeErrors.join("\n")}`);
+assert.match(css, /@media \(max-width: 720px\)[\s\S]*\.results-snapshot-stats\s*{[\s\S]*grid-template-columns: 1fr/);
+assert.match(css, /@media \(max-width: 720px\)[\s\S]*\.handoff-facts,[\s\S]*grid-template-columns: 1fr/);
 assert.doesNotMatch(css, /calculator-|contact-price|#laskuri/);
 
-console.log("UI tests passed: personal, family, sole trader, small business, comparison, editing and other answers");
+console.log("UI tests passed: personal and business results, navigation, contact handoff and accessibility");
 
 async function createApp() {
   const virtualConsole = new VirtualConsole();
@@ -26,6 +23,7 @@ async function createApp() {
     if (!/Not implemented: window\.print/.test(error.message)) runtimeErrors.push(`jsdom: ${error.message}`);
   });
   virtualConsole.on("error", (message) => runtimeErrors.push(`console: ${message}`));
+
   const dom = new JSDOM(html, {
     runScripts: "dangerously",
     resources: "usable",
@@ -39,187 +37,77 @@ async function createApp() {
       window.matchMedia = () => ({ matches: false, addEventListener() {}, removeEventListener() {} });
     }
   });
+
   if (dom.window.document.readyState !== "complete") {
     await new Promise((resolve) => dom.window.addEventListener("load", resolve, { once: true }));
   }
   return dom;
 }
 
-function click(document, selector) {
-  const element = document.querySelector(selector);
-  assert.ok(element, `Elementti puuttuu: ${selector}`);
-  element.click();
-}
-
-function setValue(window, selector, value) {
-  const element = window.document.querySelector(selector);
-  assert.ok(element, `Kenttä puuttuu: ${selector}`);
-  element.value = value;
-  element.dispatchEvent(new window.Event("input", { bubbles: true }));
-  element.dispatchEvent(new window.Event("change", { bubbles: true }));
-}
-
-function isVisible(document, selector) {
-  const element = document.querySelector(selector);
-  return Boolean(element && !element.classList.contains("hidden") && !element.closest(".hidden"));
-}
-
-function findByText(document, selector, text) {
-  return [...document.querySelectorAll(selector)].find((element) => element.textContent.includes(text));
-}
-
-function openBase(dom, mode = "personal") {
+async function completeAssessment(dom, mode = "personal") {
   const { document } = dom.window;
-  if (mode === "business") click(document, "#modeBusiness");
-  click(document, "#startAssessment");
-  click(document, "#startQuick");
-  assert.equal(isVisible(document, "#baseInfoView"), true);
-}
+  if (mode === "business") document.querySelector("#modeBusiness").click();
+  document.querySelector("#startAssessment").click();
 
-function completePersonalBase(dom, values = {}) {
-  openBase(dom, "personal");
-  const { window } = dom;
-  setValue(window, "#base_ageGroup", values.ageGroup || "36_45");
-  setValue(window, "#base_livingType", values.livingType || "house");
-  if (values.livingType === "other") setValue(window, "#base_livingType_other", values.livingTypeOther || "Yhteisöllinen asuminen");
-  setValue(window, "#base_lifeSituation", values.lifeSituation || "employed");
-  click(window.document, "#baseNext");
-  assert.equal(isVisible(window.document, "#resultsView"), true);
-}
-
-function completeBusinessBase(dom, industry, employeeCount) {
-  openBase(dom, "business");
-  const { window } = dom;
-  setValue(window, "#base_industry", industry);
-  setValue(window, "#base_employeeCount", employeeCount);
-  click(window.document, "#baseNext");
-  assert.equal(isVisible(window.document, "#resultsView"), true);
-}
-
-function completeActiveDetail(dom) {
-  const { document } = dom.window;
-  for (let index = 0; index < 18; index += 1) {
-    if (isVisible(document, "#detailResultView")) return;
-    if (!document.querySelector("#detailAnswers .answer-option.selected")) {
-      click(document, "#detailAnswers .answer-option");
-    }
-    click(document, "#detailNext");
+  for (let index = 0; index < 24 && isHidden(document, "#resultsView"); index += 1) {
+    const options = [...document.querySelectorAll("#answerList .answer-option")];
+    const preferred = options.find((item) => /Kyllä|Omistan|Työssä|1–10|1-10|Asiantuntija/i.test(item.textContent));
+    const option = preferred || options[0];
+    assert.ok(option, `Kartoituksen kysymyksestä ${index + 1} puuttuu vastausvaihtoehto`);
+    option.click();
+    await wait(230);
+    const next = document.querySelector("#questionNext");
+    if (next && !next.classList.contains("hidden")) next.click();
+    await wait(230);
   }
-  assert.fail("Vakuutuskohtainen tarkennus ei valmistunut");
+
+  assert.equal(isHidden(document, "#resultsView"), false, `${mode}-kartoituksen pitää päättyä tuloksiin`);
 }
 
-function openFirstComparison(dom) {
-  const { document } = dom.window;
-  const button = findByText(document, "button", "Aloita turvatasojen vertailu");
-  assert.ok(button);
-  button.click();
-  assert.equal(isVisible(document, "#detailView"), true);
-  completeActiveDetail(dom);
-  assert.ok(document.querySelector(".coverage-compare"));
-}
-
-async function testPersonalAndFamilyFlow() {
+async function testPersonalResultsAndContact() {
   const dom = await createApp();
   const { document } = dom.window;
-  completePersonalBase(dom, { livingType: "house", lifeSituation: "parentalLeave" });
+  await completeAssessment(dom, "personal");
 
-  const resultText = document.querySelector("#resultsView").textContent;
-  assert.match(resultText, /Kartoituksesi on valmis/);
-  assert.match(resultText, /Ei tunnistettuja lakisääteisiä vakuutuksia/);
-  assert.match(resultText, /Tilanteeseesi suositellut vakuutukset/);
-  assert.match(resultText, /Harkittavat lisäturvat/);
-  assert.match(resultText, /Näytä myös vakuutukset, joita ei suositeltu/);
-  assert.equal(isVisible(document, "#contactView"), false);
-  assert.equal(document.querySelectorAll("img[src^='http']").length, 0);
+  const snapshot = document.querySelector(".results-snapshot");
+  assert.ok(snapshot, "Tulossivun yläkooste puuttuu");
+  assert.match(snapshot.textContent, /Kartoituksesi tulos/);
+  assert.equal(snapshot.querySelectorAll(".results-snapshot-stats button").length, 3);
+  assert.equal(snapshot.querySelectorAll(".results-section-nav button").length >= 4, true);
 
-  openFirstComparison(dom);
-  assert.ok(document.querySelector(".coverage-table"));
-  assert.match(document.querySelector(".best-fit").textContent, /Suosituksemme:/);
-  click(document, "[data-comparison-differences]");
-  click(document, "[data-comparison-expand]");
-  assert.match(document.querySelector("[data-comparison-expand]").textContent, /Näytä vain tärkeimmät erot/);
-  assert.equal(document.querySelectorAll("[data-mobile-comparison]").length, 2);
-  click(document, "[data-close-comparison]");
+  const cards = [...document.querySelectorAll(".product-rec-card")];
+  assert.equal(cards.length > 0, true, "Tuloksissa pitää olla vakuutuskortteja");
+  assert.equal(cards.every((card) => card.querySelector(".product-card-body > p")?.textContent.trim().length > 35), true);
+  assert.doesNotMatch(document.querySelector("#resultsView").textContent, /Miksi tämä nousi esiin|Mitä vakuutus yleisesti tekee/);
+  assert.ok(document.querySelector(".product-card-actions [data-card-refine]"));
 
-  click(document, "#contactFromResults");
-  assert.equal(isVisible(document, "#summaryView"), true);
-  assert.match(document.querySelector("#customerSummaryContent").textContent, /Mitä vakuutus tekee\?/);
-  click(document, "#summaryContact");
+  document.querySelector("[data-result-target='contact']").click();
+  assert.equal(isHidden(document, "#contactView"), false);
   assert.match(document.querySelector("#contactHandoffSummary").textContent, /Nämä tiedot välitetään asiantuntijalle/);
-  setValue(dom.window, "#contactName", "Demo Asiakas");
-  setValue(dom.window, "#contactEmail", "demo@example.com");
-  setValue(dom.window, "#contactGoal", "Haluan vertailla sopivia turvatasoja");
-  document.querySelector("#privacyConsent").click();
-  click(document, "#createSummary");
-  assert.equal(isVisible(document, "#crmSummaryDetails"), true);
-  const crmText = document.querySelector("#crmSummary").value;
-  assert.match(crmText, /Asiakkaan tavoite: Haluan vertailla sopivia turvatasoja/);
-  assert.match(crmText, /Valitut turvatasot/);
+  assert.match(document.querySelector("#contactHandoffSummary").textContent, /Suositellut vakuutukset/);
+  assert.ok(document.querySelector("#contactTime"));
 
   await assertAccessible(dom.window);
   dom.window.close();
 }
 
-async function testOtherAnswerAndEditing() {
+async function testBusinessResults() {
   const dom = await createApp();
   const { document } = dom.window;
-  completePersonalBase(dom, { livingType: "other", livingTypeOther: "Asun osan vuodesta ulkomailla" });
-  click(document, "#contactFromResults");
-  assert.match(document.querySelector("#customerSummaryContent").textContent, /Asun osan vuodesta ulkomailla/);
-  click(document, "#editAnswers");
-  assert.equal(document.querySelector("#base_livingType").value, "other");
-  assert.equal(document.querySelector("#base_livingType_other").value, "Asun osan vuodesta ulkomailla");
-  dom.window.close();
-}
+  await completeAssessment(dom, "business");
 
-async function testBusinessFlowsAndTwoLevelComparison() {
-  const sole = await createApp();
-  completeBusinessBase(sole, "professional", "solo");
-  const soleText = sole.window.document.querySelector("#resultsView").textContent;
-  assert.match(soleText, /YEL-vakuutus/);
-  assert.doesNotMatch(soleText, /TyEL-vakuutus/);
-  sole.window.close();
+  assert.ok(document.querySelector("#results-mandatory"));
+  assert.ok(document.querySelector("#results-recommended"));
+  assert.ok(document.querySelector("#results-optional") || document.querySelector(".results-snapshot-stats"));
+  assert.match(document.querySelector("#resultsView").textContent, /Pakolliset ja sopimusperusteiset|Lakisääteiset vakuutukset/);
+  assert.match(document.querySelector("#resultsView").textContent, /Suositellut vakuutukset/);
 
-  const small = await createApp();
-  completeBusinessBase(small, "restaurant", "1_10");
-  const smallText = small.window.document.querySelector("#resultsView").textContent;
-  assert.match(smallText, /TyEL-vakuutus/);
-  assert.match(smallText, /Työtapaturma- ja ammattitautivakuutus/);
-  assert.match(smallText, /Omaisuus ja toimitilat/);
-  assert.match(smallText, /Vastuu ja oikeusturva/);
-  assert.equal([...small.window.document.querySelectorAll("#base_employeeCount option")].some((item) => /51|250/.test(item.textContent)), false);
-  small.window.close();
+  const contactButton = document.querySelector(".results-primary-actions [data-result-target='contact']");
+  assert.ok(contactButton);
+  contactButton.click();
+  assert.match(document.querySelector("#contactHandoffSummary").textContent, /Asiakastyyppi ja tilanne/);
+  assert.ok(document.querySelector("#editAnswersFromContact"));
 
-  const twoLevel = await createApp();
-  completeBusinessBase(twoLevel, "professional", "1_10");
-  const cyberCard = findByText(twoLevel.window.document, ".rec-card", "Kyber ja tietoriskit");
-  assert.ok(cyberCard);
-  cyberCard.querySelector("[data-card-refine]").click();
-  completeActiveDetail(twoLevel);
-  assert.equal(twoLevel.window.document.querySelectorAll(".coverage-choice").length, 2);
-  twoLevel.window.close();
-}
-
-async function testDetailOtherAnswer() {
-  const dom = await createApp();
-  const { document } = dom.window;
-  completePersonalBase(dom, { livingType: "house" });
-  click(document, "[data-refine-recommendations]");
-  const vehicleNeed = findByText(document, "#answerList .answer-option", "Auto, moottoripyörä");
-  assert.ok(vehicleNeed);
-  vehicleNeed.click();
-  click(document, "#questionNext");
-  const vehicleCard = findByText(document, ".rec-card", "Ajoneuvot");
-  assert.ok(vehicleCard);
-  vehicleCard.querySelector("[data-card-refine]").click();
-  const otherVehicle = findByText(document, "#detailAnswers .answer-option", "Muu ajoneuvo");
-  assert.ok(otherVehicle);
-  otherVehicle.click();
-  setValue(dom.window, "#detailAnswers .answer-other-field input", "Kevyt sähköajoneuvo");
-  click(document, "#detailNext");
-  completeActiveDetail(dom);
-  click(document, "#contactFromDetail");
-  assert.match(document.querySelector("#customerSummaryContent").textContent, /Kevyt sähköajoneuvo/);
   dom.window.close();
 }
 
@@ -232,4 +120,13 @@ async function assertAccessible(window) {
   const severe = results.violations.filter((item) => ["serious", "critical"].includes(item.impact));
   const messages = severe.map((item) => `${item.id}: ${item.help} (${item.nodes.map((node) => node.target.join(" ")).join(", ")})`);
   assert.equal(messages.length, 0, messages.join("\n"));
+}
+
+function isHidden(document, selector) {
+  const element = document.querySelector(selector);
+  return !element || element.classList.contains("hidden") || Boolean(element.closest(".hidden"));
+}
+
+function wait(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }

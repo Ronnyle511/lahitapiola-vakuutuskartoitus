@@ -37,8 +37,10 @@ html {
 }
 
 #appShell,
-#laskuri,
-#contactView {
+#contactView,
+#results-mandatory,
+#results-recommended,
+#results-optional {
   scroll-margin-top: 118px;
 }
 
@@ -1041,52 +1043,6 @@ h4 {
   margin-top: 22px;
 }
 
-.contact-price-summary {
-  display: grid;
-  gap: 14px;
-  margin-top: 18px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--blue-050);
-}
-
-.contact-price-summary h4 {
-  margin-top: 3px;
-}
-
-.contact-price-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 10px;
-}
-
-.contact-price-list.compact {
-  grid-template-columns: 1fr;
-  margin-top: 10px;
-}
-
-.contact-price-line,
-.contact-price-empty {
-  display: grid;
-  gap: 4px;
-  min-height: 72px;
-  padding: 13px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #ffffff;
-}
-
-.contact-price-line strong {
-  color: var(--blue-950);
-}
-
-.contact-price-line span,
-.contact-price-empty {
-  color: var(--muted);
-  font-size: 14px;
-}
-
 .contact-pending-details {
   padding: 12px;
   border: 1px solid var(--line);
@@ -1266,6 +1222,99 @@ h4 {
   border: 1px solid #b7d7e8;
   border-radius: 8px;
   background: #f7fcff;
+}
+
+.results-snapshot {
+  display: grid;
+  gap: 20px;
+  margin: 0 0 24px;
+  padding: 24px;
+  border: 1px solid #a9d4e9;
+  border-left: 6px solid var(--blue-700);
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f3fbff 0%, #ffffff 72%);
+}
+
+.results-snapshot h3 {
+  margin: 4px 0 7px;
+  color: var(--blue-950);
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.results-snapshot p:last-child {
+  max-width: 760px;
+  margin: 0;
+  color: #315b78;
+}
+
+.results-snapshot-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.results-snapshot-stats button {
+  display: grid;
+  gap: 2px;
+  min-height: 82px;
+  padding: 13px 15px;
+  border: 1px solid #c4ddea;
+  border-radius: 8px;
+  color: var(--blue-950);
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.results-snapshot-stats button:hover {
+  border-color: var(--blue-700);
+  background: var(--blue-050);
+}
+
+.results-snapshot-stats strong {
+  color: var(--blue-700);
+  font-size: 27px;
+  line-height: 1.1;
+}
+
+.results-snapshot-stats span {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.results-section-nav,
+.results-primary-actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.results-section-nav {
+  padding-top: 16px;
+  border-top: 1px solid #d3e6f0;
+}
+
+.results-section-nav button {
+  min-height: 38px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--blue-800);
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.results-section-nav button:hover {
+  border-color: var(--blue-700);
+  background: var(--blue-050);
+}
+
+.results-primary-actions {
+  padding-top: 2px;
 }
 
 .recommendation-context h4 {
@@ -1461,6 +1510,17 @@ h4 {
   margin-top: 34px;
 }
 
+.product-bucket.empty {
+  padding: 18px 20px;
+  border: 1px dashed #b7d7e8;
+  border-radius: 8px;
+  background: #fbfdff;
+}
+
+.product-bucket.empty .product-section-head {
+  margin: 0;
+}
+
 .product-section-head {
   display: grid;
   gap: 6px;
@@ -1609,6 +1669,117 @@ h4 {
   min-height: 214px;
   padding: 22px;
   background: #eef8fd;
+}
+
+.product-card-selection {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid #92ceb3;
+  border-radius: 7px;
+  color: #285b48;
+  background: #f0faf5;
+  font-size: 12px;
+}
+
+.product-card-selection strong {
+  color: #145b40;
+  font-size: 14px;
+}
+
+.product-card-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  align-self: end;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.product-card-actions .product-page-link {
+  min-height: 36px;
+  padding: 7px 2px;
+}
+
+.contact-handoff-summary {
+  display: grid;
+  gap: 18px;
+  margin: 18px 0 24px;
+  padding: 20px;
+  border: 1px solid #9dcfe7;
+  border-left: 6px solid var(--blue-700);
+  border-radius: 9px;
+  background: var(--blue-050);
+}
+
+.contact-handoff-head {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.contact-handoff-head h4 {
+  margin: 3px 0 5px;
+  color: var(--blue-950);
+  font-size: 21px;
+}
+
+.contact-handoff-head p:last-child {
+  max-width: 660px;
+  margin: 0;
+  color: #315b78;
+}
+
+.handoff-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.handoff-facts > div,
+.contact-handoff-line {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid #d1e4ef;
+  border-radius: 7px;
+  background: #ffffff;
+}
+
+.handoff-facts span,
+.contact-handoff-line span {
+  color: #486b83;
+  font-size: 12px;
+}
+
+.handoff-facts strong,
+.contact-handoff-line strong {
+  color: var(--blue-950);
+  line-height: 1.4;
+}
+
+.contact-handoff-list {
+  display: grid;
+  gap: 8px;
+}
+
+.contact-handoff-line {
+  grid-template-columns: minmax(0, 1fr) minmax(180px, auto);
+  align-items: center;
+}
+
+.contact-handoff-line span {
+  color: #285b48;
+  font-weight: 700;
+  text-align: right;
+}
+
+.handoff-selection-note {
+  margin: 0;
+  color: #315b78;
+  font-size: 13px;
 }
 
 .product-card-body h4 {
@@ -2157,16 +2328,6 @@ details.source-details summary {
   font-size: 14px;
 }
 
-.coverage-price-disclaimer {
-  margin: 12px 0 0;
-  padding: 11px 13px;
-  border-radius: 8px;
-  background: var(--blue-050);
-  color: #315b78;
-  font-size: 13px;
-  line-height: 1.45;
-}
-
 .insurance-plain-summary {
   margin-top: 14px;
   padding: 14px 16px;
@@ -2333,28 +2494,6 @@ details.source-details summary {
   font-size: 14px;
 }
 
-.calculator-summary-card,
-.calculator-side-card {
-  display: grid;
-  gap: 14px;
-  margin-top: 16px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #ffffff;
-}
-
-.calculator-summary-card {
-  display: none;
-  max-width: 520px;
-}
-
-.calculator-summary-card h5 {
-  margin: 0;
-  color: var(--blue-950);
-  font-size: 20px;
-}
-
 .next-detail-card {
   display: flex;
   gap: 18px;
@@ -2381,75 +2520,6 @@ details.source-details summary {
   max-width: 560px;
   margin: 6px 0 0;
   color: var(--muted);
-}
-
-.calculator-product {
-  display: grid;
-  gap: 3px;
-}
-
-.calculator-product strong {
-  color: #071d33;
-  font-size: 18px;
-}
-
-.calculator-product span {
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.calculator-highlight {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
-  border-radius: 6px;
-  color: var(--blue-950);
-  background: var(--blue-100);
-}
-
-.calculator-total {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding-top: 6px;
-  color: #071d33;
-  font-weight: 700;
-}
-
-.calculator-total span {
-  color: var(--blue-900);
-}
-
-.calculator-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 4px;
-}
-
-.calculator-actions.stacked {
-  display: grid;
-}
-
-.calculator-basket {
-  display: grid;
-  gap: 10px;
-  margin-top: 14px;
-  padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #ffffff;
-}
-
-.calculator-basket.pending {
-  background: var(--blue-050);
-}
-
-.calculator-basket > strong {
-  color: var(--blue-950);
 }
 
 .basket-line {
@@ -2761,35 +2831,6 @@ details.source-details summary {
   font-weight: 700;
 }
 
-.calculator-slot {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 14px;
-  padding: 14px;
-  border: 1px dashed #9fc4dc;
-  border-radius: 8px;
-  background: var(--blue-050);
-}
-
-.calculator-slot.compact {
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 5px;
-  margin-top: 8px;
-}
-
-.calculator-slot span {
-  flex: 1;
-  color: var(--muted);
-}
-
-.calculator-slot .btn[disabled] {
-  cursor: not-allowed;
-  opacity: 0.72;
-}
-
 .materials-panel {
   margin-top: 18px;
   padding: 16px;
@@ -2905,10 +2946,6 @@ details.source-details summary {
   padding: 20px;
   box-shadow: none;
   background: var(--blue-050);
-}
-
-.calculator-panel h3 {
-  margin-bottom: 12px;
 }
 
 .chat-popup {
@@ -3216,30 +3253,6 @@ details.source-details summary {
 
 .chat-send-button:hover {
   color: var(--blue-950);
-}
-
-.calculator-benefits {
-  display: grid;
-  gap: 10px;
-  margin: 18px 0 0;
-  padding: 0;
-  list-style: none;
-  color: #071d33;
-  font-size: 14px;
-}
-
-.calculator-benefits li {
-  position: relative;
-  padding-left: 26px;
-}
-
-.calculator-benefits li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--blue-700);
-  font-weight: 700;
 }
 
 .full-width {
@@ -4541,6 +4554,73 @@ details.source-details summary {
 }
 
 @media (max-width: 720px) {
+  .results-snapshot {
+    gap: 16px;
+    padding: 18px 16px;
+  }
+
+  .results-snapshot h3 {
+    font-size: 21px;
+  }
+
+  .results-snapshot-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .results-snapshot-stats button {
+    grid-template-columns: 44px minmax(0, 1fr);
+    min-height: 56px;
+    align-items: center;
+  }
+
+  .results-snapshot-stats strong {
+    font-size: 23px;
+  }
+
+  .results-primary-actions,
+  .results-primary-actions .btn,
+  .contact-handoff-head {
+    width: 100%;
+  }
+
+  .results-primary-actions,
+  .contact-handoff-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .results-section-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .results-section-nav button {
+    border-radius: 7px;
+  }
+
+  .product-card-actions,
+  .product-card-actions .btn {
+    width: 100%;
+  }
+
+  .product-card-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .contact-handoff-summary {
+    padding: 17px 15px;
+  }
+
+  .handoff-facts,
+  .contact-handoff-line {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-handoff-line span {
+    text-align: left;
+  }
+
   .site-topline {
     display: none;
   }
@@ -4850,11 +4930,6 @@ details.source-details summary {
     width: 100%;
   }
 
-  .calculator-slot {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
   .next-detail-card {
     align-items: stretch;
     flex-direction: column;
@@ -4868,19 +4943,8 @@ details.source-details summary {
     padding: 16px;
   }
 
-  .calculator-side-card,
-  .calculator-basket {
-    padding: 14px;
-  }
-
   .coverage-mobile-list {
     display: grid;
-  }
-
-  .calculator-highlight,
-  .calculator-total {
-    align-items: flex-start;
-    flex-direction: column;
   }
 
   .materials-panel summary {
@@ -4891,10 +4955,6 @@ details.source-details summary {
   .materials-panel .material-disclosure summary {
     align-items: center;
     flex-direction: row;
-  }
-
-  .calculator-actions .btn {
-    width: 100%;
   }
 
   .chat-input-row {
@@ -5265,7 +5325,7 @@ details.source-details summary {
           <div id="contactView" class="hidden">
             <h3>Vapaaehtoinen yhteydenotto</h3>
             <p class="muted">Voit käyttää kartoitusta ja nähdä oman yhteenvedon myös ilman yhteystietojen antamista. Täytä tämä osio vain, jos haluat valmistella yhteydenottopyynnön.</p>
-            <div id="contactPriceSummary"></div>
+            <div id="contactHandoffSummary"></div>
             <h4 class="contact-subtitle">Mistä haluat keskustella?</h4>
             <div class="contact-list" id="contactChoices"></div>
             <div class="form-grid">
@@ -5273,7 +5333,8 @@ details.source-details summary {
               <label class="field" id="contactOrgField">Yrityksen nimi <input id="contactOrg"></label>
               <label class="field">Sähköposti <input id="contactEmail" type="email" autocomplete="email" required></label>
               <label class="field">Puhelin <input id="contactPhone" autocomplete="tel"></label>
-              <label class="field">Toivottu yhteydenottotapa <select id="contactChannel"><option>Puhelu</option><option>Sähköposti</option><option>Verkkotapaaminen</option></select></label>
+              <label class="field">Toivottu yhteydenottotapa <select id="contactChannel"><option value="">Ei valittu</option><option>Puhelu</option><option>Sähköposti</option><option>Verkkotapaaminen</option></select></label>
+              <label class="field">Paras aika ottaa yhteyttä <select id="contactTime"><option value="">Ei valittu</option><option>Arkisin aamupäivällä</option><option>Arkisin iltapäivällä</option><option>Arkisin alkuillasta</option><option>Sähköpostilla milloin vain</option></select></label>
               <label class="field full">Lisätiedot tai kysymykset
                 <textarea id="freeText" placeholder="Kuvaa tilannettasi omin sanoin"></textarea>
               </label>
@@ -5282,7 +5343,8 @@ details.source-details summary {
             <p class="form-error hidden" id="formError"></p>
             <div class="actions">
               <button class="btn btn-secondary" id="contactBack" type="button">Takaisin suosituksiin</button>
-              <button class="btn btn-primary" id="createSummary" type="button">Näytä yhteenveto</button>
+              <button class="btn btn-secondary" id="editAnswersFromContact" type="button">Muokkaa vastauksia</button>
+              <button class="btn btn-primary" id="createSummary" type="button">Muodosta yhteydenoton yhteenveto</button>
             </div>
           </div>
 
@@ -5299,11 +5361,12 @@ details.source-details summary {
             <details class="crm-summary-details hidden" id="crmSummaryDetails">
               <summary>Yhteydenoton taustayhteenveto</summary>
               <p class="muted small">Tämä kooste voidaan siirtää asiakaspalvelulle yhteydenoton yhteydessä.</p>
-              <textarea id="crmSummary" class="summary-box" readonly></textarea>
+              <textarea id="crmSummary" class="summary-box" aria-label="Asiantuntijalle välitettävä yhteenveto" readonly></textarea>
               <button class="btn btn-secondary btn-small" id="backToContact" type="button">Muokkaa yhteydenottoa</button>
             </details>
             <div class="summary-actions">
               <button class="btn btn-secondary" id="summaryBackToResults" type="button">Takaisin suosituksiin</button>
+              <button class="btn btn-secondary" id="editAnswers" type="button">Muokkaa vastauksia</button>
               <button class="btn btn-soft" id="summaryRefine" type="button">Tarkenna vakuutuksia</button>
               <button class="btn btn-primary" id="summaryContact" type="button">Pyydä yhteydenottoa</button>
               <button class="link-button summary-restart" id="restartFromSummary" type="button">Aloita alusta</button>
@@ -5675,28 +5738,28 @@ const businessRiskAreaPlaybooks = {
 
 const businessRelevantNeedOptions = {
   professional: [
-    { id: "financial_error", label: "Virhe neuvossa, suunnitelmassa, koodissa tai laskelmassa voisi aiheuttaa taloudellista vahinkoa", affects: ["bizLiability"], priceImpact: 2 },
-    { id: "system_dependency", label: "Järjestelmät, asiakasdata tai tietoturva ovat toiminnalle olennaisia", affects: ["bizCyber", "bizInterruption"], priceImpact: 2 },
-    { id: "owner_key_person", label: "Laskutus riippuu yrittäjästä tai muutamasta avainhenkilöstä", affects: ["bizPeople", "bizInterruption"], priceImpact: 1 },
-    { id: "property_or_assets", label: "Yrityksellä on arvokkaita laitteita tai toimitila", affects: ["bizProperty"], priceImpact: 1 },
-    { id: "contract_requirements", label: "Asiakassopimuksissa on vastuu- tai vakuutusvaatimuksia", affects: ["bizLiability", "bizCyber"], priceImpact: 1 }
+    { id: "financial_error", label: "Virhe neuvossa, suunnitelmassa, koodissa tai laskelmassa voisi aiheuttaa taloudellista vahinkoa", affects: ["bizLiability"] },
+    { id: "system_dependency", label: "Järjestelmät, asiakasdata tai tietoturva ovat toiminnalle olennaisia", affects: ["bizCyber", "bizInterruption"] },
+    { id: "owner_key_person", label: "Laskutus riippuu yrittäjästä tai muutamasta avainhenkilöstä", affects: ["bizPeople", "bizInterruption"] },
+    { id: "property_or_assets", label: "Yrityksellä on arvokkaita laitteita tai toimitila", affects: ["bizProperty"] },
+    { id: "contract_requirements", label: "Asiakassopimuksissa on vastuu- tai vakuutusvaatimuksia", affects: ["bizLiability", "bizCyber"] }
   ],
   restaurant: [
-    { id: "business_interruption", label: "Toimitilan tai laitteen vahinko pysäyttäisi toiminnan nopeasti", affects: ["bizProperty", "bizInterruption"], priceImpact: 2 },
-    { id: "customer_liability", label: "Asiakkaalle voi aiheutua allergia-, ruokamyrkytys-, liukastumis- tai muu vahinko", affects: ["bizLiability"], priceImpact: 1 },
-    { id: "system_dependency", label: "Kassa-, maksu-, tilaus- tai varausjärjestelmä on tärkeä", affects: ["bizCyber", "bizInterruption"], priceImpact: 1 },
-    { id: "vehicles_or_transport", label: "Yrityksellä on kuljetuksia, cateringia tai food truck -toimintaa", affects: ["bizVehicle"], priceImpact: 1 }
+    { id: "business_interruption", label: "Toimitilan tai laitteen vahinko pysäyttäisi toiminnan nopeasti", affects: ["bizProperty", "bizInterruption"] },
+    { id: "customer_liability", label: "Asiakkaalle voi aiheutua allergia-, ruokamyrkytys-, liukastumis- tai muu vahinko", affects: ["bizLiability"] },
+    { id: "system_dependency", label: "Kassa-, maksu-, tilaus- tai varausjärjestelmä on tärkeä", affects: ["bizCyber", "bizInterruption"] },
+    { id: "vehicles_or_transport", label: "Yrityksellä on kuljetuksia, cateringia tai food truck -toimintaa", affects: ["bizVehicle"] }
   ],
   generic: [
-    { id: "property_or_assets", label: "Toimitila, koneet, laitteet, työkalut tai varasto ovat toiminnalle tärkeitä", affects: ["bizProperty"], priceImpact: 1 },
-    { id: "business_interruption", label: "Toiminnan keskeytyminen aiheuttaisi nopeasti taloudellista vahinkoa", affects: ["bizInterruption"], priceImpact: 2 },
-    { id: "customer_liability", label: "Yrityksen työ, tuote tai palvelu voi aiheuttaa vahinkoa asiakkaalle", affects: ["bizLiability"], priceImpact: 1 },
-    { id: "people_risk", label: "Työntekijöiden tai avainhenkilöiden poissaolo olisi olennainen riski", affects: ["bizPeople"], priceImpact: 1 },
-    { id: "system_dependency", label: "Järjestelmät, maksaminen, verkkokauppa tai asiakasdata ovat olennaisia", affects: ["bizCyber"], priceImpact: 1 },
-    { id: "vehicles_or_transport", label: "Ajoneuvot, kuljetukset tai liikkuva työ ovat olennaisia", affects: ["bizVehicle"], priceImpact: 1 },
-    { id: "cargo_or_goods", label: "Yritys kuljettaa omaa tai asiakkaan tavaraa", affects: ["bizCargo"], priceImpact: 1 },
-    { id: "contract_requirements", label: "Sopimuksissa on erityisiä vakuutus- tai vastuuvaatimuksia", affects: ["bizLiability", "bizLegal"], priceImpact: 1 },
-    { id: "patient_work", label: "Toimintaan liittyy potilas- tai hoitotyötä", affects: ["bizPatient"], priceImpact: 1 }
+    { id: "property_or_assets", label: "Toimitila, koneet, laitteet, työkalut tai varasto ovat toiminnalle tärkeitä", affects: ["bizProperty"] },
+    { id: "business_interruption", label: "Toiminnan keskeytyminen aiheuttaisi nopeasti taloudellista vahinkoa", affects: ["bizInterruption"] },
+    { id: "customer_liability", label: "Yrityksen työ, tuote tai palvelu voi aiheuttaa vahinkoa asiakkaalle", affects: ["bizLiability"] },
+    { id: "people_risk", label: "Työntekijöiden tai avainhenkilöiden poissaolo olisi olennainen riski", affects: ["bizPeople"] },
+    { id: "system_dependency", label: "Järjestelmät, maksaminen, verkkokauppa tai asiakasdata ovat olennaisia", affects: ["bizCyber"] },
+    { id: "vehicles_or_transport", label: "Ajoneuvot, kuljetukset tai liikkuva työ ovat olennaisia", affects: ["bizVehicle"] },
+    { id: "cargo_or_goods", label: "Yritys kuljettaa omaa tai asiakkaan tavaraa", affects: ["bizCargo"] },
+    { id: "contract_requirements", label: "Sopimuksissa on erityisiä vakuutus- tai vastuuvaatimuksia", affects: ["bizLiability", "bizLegal"] },
+    { id: "patient_work", label: "Toimintaan liittyy potilas- tai hoitotyötä", affects: ["bizPatient"] }
   ]
 };
 
@@ -5760,35 +5823,20 @@ const privatePlaybooks = [
 ];
 
 const privateRelevantNeedOptions = [
-  { id: "home", label: "Koti ja tavarat", affects: ["home"], priceImpact: 1 },
-  { id: "building_or_cottage", label: "Omakotitalo, rakennus tai vapaa-ajan asunto", affects: ["home", "apartment"], priceImpact: 2 },
-  { id: "vehicle", label: "Auto, moottoripyörä, mopo tai muu ajoneuvo", affects: ["vehicle"], priceImpact: 1 },
-  { id: "health", label: "Oma terveys ja tapaturmat", affects: ["health"], priceImpact: 1 },
-  { id: "children_health", label: "Lasten terveys ja tapaturmat", affects: ["health", "life"], priceImpact: 1 },
-  { id: "fast_care", label: "Nopea hoitoon pääsy", affects: ["health"], priceImpact: 1 },
-  { id: "travel", label: "Matkat", affects: ["travel"], priceImpact: 1 },
-  { id: "pet", label: "Lemmikki", affects: ["pet"], priceImpact: 1 },
-  { id: "family_financial_security", label: "Läheisten taloudellinen turva", affects: ["life"], priceImpact: 1 },
-  { id: "loan", label: "Asuntolaina tai muu iso taloudellinen vastuu", affects: ["life"], priceImpact: 1 },
-  { id: "cottage_forest_boat", label: "Mökki, metsä, vene tai muu vapaa-ajan omaisuus", affects: ["apartment", "forest", "boat"], priceImpact: 1 },
-  { id: "valuable_hobbies", label: "Harrastusvälineet tai arvokkaat tavarat", affects: ["home"], priceImpact: 1 },
-  { id: "current_cover_unclear", label: "Nykyiset vakuutukset ovat epäselvät", affects: ["all"], priceImpact: 0 },
-  { id: "unsure", label: "En osaa sanoa", affects: [], priceImpact: 0 }
+  { id: "home", label: "Koti ja tavarat", affects: ["home"] },
+  { id: "building_or_cottage", label: "Omakotitalo, rakennus tai vapaa-ajan asunto", affects: ["home", "apartment"] },
+  { id: "vehicle", label: "Auto, moottoripyörä, mopo tai muu ajoneuvo", affects: ["vehicle"] },
+  { id: "health", label: "Oma terveys ja tapaturmat", affects: ["health"] },
+  { id: "children_health", label: "Lasten terveys ja tapaturmat", affects: ["health", "life"] },
+  { id: "fast_care", label: "Nopea hoitoon pääsy", affects: ["health"] },
+  { id: "travel", label: "Matkat", affects: ["travel"] },
+  { id: "pet", label: "Lemmikki", affects: ["pet"] },
+  { id: "family_financial_security", label: "Läheisten taloudellinen turva", affects: ["life"] },
+  { id: "loan", label: "Asuntolaina tai muu iso taloudellinen vastuu", affects: ["life"] },
+  { id: "cottage_forest_boat", label: "Mökki, metsä, vene tai muu vapaa-ajan omaisuus", affects: ["apartment", "forest", "boat"] },
+  { id: "valuable_hobbies", label: "Harrastusvälineet tai arvokkaat tavarat", affects: ["home"] },
+  { id: "unsure", label: "En osaa sanoa", affects: [] }
 ];
-
-const priceImpactDisclaimer = "Tämä ei ole lopullinen hinta, vaan suuntaa antava arvio siitä, miten valinnat vaikuttavat vakuutuskokonaisuuden laajuuteen.";
-
-function indicativePriceSymbol(value) {
-  if (typeof value === "number") {
-    if (value <= 1) return "€";
-    if (value <= 3) return "€€";
-    return "€€€";
-  }
-  const text = String(value || "").toLocaleLowerCase("fi-FI");
-  if (text.includes("suppea") || text.includes("liikenne") || text.includes("narrow")) return "€";
-  if (text.includes("laaja") || text.includes("plus") || text.includes("pro") || text.includes("fleet") || text.includes("broad")) return "€€€";
-  return "€€";
-}
 
 
 /* src/data.js */
@@ -5815,7 +5863,7 @@ const profiles = {
     detailText: "Syventävä vaihe antaa konkreettisen ehdotuksen turvatasosta, lisäturvista ja jatkotarkistuksista.",
     layer1Chips: ["Asuminen", "Ajoneuvot", "Matkat", "Terveys", "Läheiset", "Eläimet", "Omaisuus"],
     layer2Chips: ["Koti", "Ajoneuvo", "Matka", "Terveys", "Henki", "Koira ja kissa"],
-    materialsIntro: "Hinta-arvio muodostetaan laskuri-integraatiossa tai asiantuntijan kanssa."
+    materialsIntro: "Tarkka vakuutusturva ja hinta varmistetaan asiantuntijan kanssa."
   },
   business: {
     id: "business",
@@ -5828,7 +5876,7 @@ const profiles = {
     detailText: "Syventävä vaihe tarkentaa esimerkiksi vakuutettavaa omaisuutta, vastuun lähdettä, keskeytyksen syytä, kyberturvaa tai henkilöstöratkaisua.",
     layer1Chips: ["Toimiala", "Ihmiset", "Toimitilat", "Omaisuus", "Ajoneuvot", "Matkustaminen", "Digitaalisuus"],
     layer2Chips: ["Omaisuus", "Vastuu", "Keskeytys", "Kyber", "Henkilöstö", "Ajoneuvot", "Matka", "Kuljetus"],
-    materialsIntro: "Hinta-arvio muodostetaan laskuri-integraatiossa tai asiantuntijan kanssa."
+    materialsIntro: "Tarkka vakuutusturva ja hinta varmistetaan asiantuntijan kanssa."
   }
 };
 
@@ -6887,7 +6935,7 @@ const detailFlows = {
       questions: [
         q("liabilityNeeds", "Mitä haluat tarkistaa?", "Valitse ne aiheet, joista haluat asiantuntijan tarkistuksen taustatiedon.", true, [["personal_liability", "Vastuuvahinko toiselle henkilölle tai toisen omaisuudelle"], ["legal", "Oikeudenkäyntikulut tai riitatilanteet"], ["home_related", "Asumiseen, remonttiin tai vuokraamiseen liittyvät vastuut"], ["family", "Perheen tai lasten aiheuttamat vahingot"], ["pet_related", "Lemmikkiin liittyvät vastuutilanteet"]]),
         q("liabilityConcern", "Mikä huolestuttaa eniten?", "Tämä auttaa valitsemaan, painottuuko yhteydenotossa vastuu vai oikeusturva.", false, [["damage", "Vahinko toiselle"], ["dispute", "Riita tai oikeudellinen asia"], ["both", "Molemmat"], ["unsure", "En osaa sanoa"]]),
-        q("liabilityScope", "Miten haluat jatkaa?", "Valitse vaihtoehto, joka siirtyy laskurin tai asiantuntijan tarkistuksen pohjaksi.", false, [["home_bundle", "Tarkistetaan kodin vakuutuksen yhteydessä"], ["broader", "Haluan laajemman vastuu- ja oikeusturvatarkistuksen"], ["expert", "Haluan asiantuntijan arvion"], ["unsure", "En osaa sanoa"]])
+        q("liabilityScope", "Miten haluat jatkaa?", "Valitse vaihtoehto, joka toimii asiantuntijan tarkistuksen pohjana.", false, [["home_bundle", "Tarkistetaan kodin vakuutuksen yhteydessä"], ["broader", "Haluan laajemman vastuu- ja oikeusturvatarkistuksen"], ["expert", "Haluan asiantuntijan arvion"], ["unsure", "En osaa sanoa"]])
       ]
     }
   },
@@ -7055,11 +7103,10 @@ const coverageModels = {
       notice: "Sisällöt perustuvat LähiTapiolan autovakuutuksen julkaistuun vertailuun. Lopullinen sisältö ja soveltuvuus varmistetaan vakuutusehdoista.",
       sourceUrl: "https://www.lahitapiola.fi/henkilo/vakuutukset/ajoneuvovakuutukset/autovakuutus/mita-autovakuutus-korvaa/",
       sourceLabel: "LähiTapiolan autovakuutuksen turvavertailu",
-      calculatorAction: "Siirry ajoneuvovakuutuksen hinta-arvioon, kun laskuri-integraatio on käytössä",
       options: [
         option("liikenne", "Liikennevakuutus", "Lakisääteinen vähimmäinen", "Pakollinen vakuutus liikenteessä käytettävälle ajoneuvolle.", "Kun halutaan vain lakisääteinen turva eikä oman ajoneuvon vahinkoja haluta vakuuttaa.", "Henkilövahinkoja ja syyttömän osapuolen omaisuusvahinkoja lain mukaan.", "Ei kata oman ajoneuvon vaurioita, varkautta, lasia tai kolarointia."),
         option("suppea", "Suppea Vakuutus", "Suppeampi vapaaehtoinen kasko", "Liikennevakuutusta täydentävä rajatumpi vapaaehtoinen ajoneuvovakuutus.", "Vanhemmalle tai pienemmän arvon ajoneuvolle, kun halutaan suojaa tyypillisiin riskeihin ilman laajaa kolarointiturvaa.", "Esimerkiksi palo-, varkaus-, ilkivalta-, eläin- ja luonnonilmiöriskejä sekä lisäturvia valinnan mukaan.", "Ei kata yhtä laajasti oman ajoneuvon kolarointi- tai pysäköintivahinkoja kuin Laaja Vakuutus."),
-        option("laaja", "Laaja Vakuutus", "Laajempi kasko", "Liikennevakuutus ja kattavampi vapaaehtoinen ajoneuvoturva.", "Uudemmalle, rahoitetulle, leasingissä olevalle tai taloudellisesti merkittävälle ajoneuvolle.", "Kolarointi-, pysäköinti-, lasi-, varkaus-, palo-, ilkivalta- ja luonnonilmiöriskejä valittujen turvien mukaan.", "Omavastuut, lisäturvat ja ajoneuvokohtaiset rajaukset pitää tarkistaa laskurissa.")
+        option("laaja", "Laaja Vakuutus", "Laajempi kasko", "Liikennevakuutus ja kattavampi vapaaehtoinen ajoneuvoturva.", "Uudemmalle, rahoitetulle, leasingissä olevalle tai taloudellisesti merkittävälle ajoneuvolle.", "Kolarointi-, pysäköinti-, lasi-, varkaus-, palo-, ilkivalta- ja luonnonilmiöriskejä valittujen turvien mukaan.", "Omavastuut, lisäturvat ja ajoneuvokohtaiset rajaukset pitää tarkistaa vakuutusehdoista tai asiantuntijalta.")
       ],
       featureRows: [
         { key: "traffic", label: "Liikennevahingon henkilövahingot", description: "Liikennevakuutus korvaa liikennevahingossa syntyneitä henkilövahinkoja lain mukaisesti.", values: { liikenne: "Sisältyy", suppea: "Sisältyy", laaja: "Sisältyy" } },
@@ -7077,8 +7124,7 @@ const coverageModels = {
     travel: {
       label: "Sopimusmuoto: jatkuva vai matkakohtainen",
       title: "Matkavakuutuksen sopimusmuotojen vertailu",
-      notice: "Matkavakuutuksen sisältö, voimassaolo ja hinta riippuvat matkan kestosta, kohteesta, matkustajista ja valituista turvista. Lopullinen sisältö varmistetaan laskurissa tai asiantuntijan kanssa.",
-      calculatorAction: "Siirry matkavakuutuksen hinta-arvioon, kun laskuri-integraatio on käytössä",
+      notice: "Matkavakuutuksen sisältö ja voimassaolo riippuvat matkan kestosta, kohteesta, matkustajista ja valituista turvista. Lopullinen sisältö varmistetaan vakuutusehdoista tai asiantuntijan kanssa.",
       options: [
         option("matkakohtainen", "Matkakohtainen eli määräaikainen", "Yksittäisen matkan ratkaisu", "Vakuutus otetaan tietylle matkalle ja sen kestolle.", "Kun matkustat harvoin, yleensä kerran vuodessa tai yksittäiselle matkalle.", "Matkustajan hoitoturvaa, peruuntumista, keskeytymistä, myöhästymistä ja matkatavaroita valintojen mukaan.", "Ei ole jatkuvasti voimassa seuraavia matkoja varten; uusi matka vaatii uuden vakuutuksen."),
         option("jatkuva", "Jatkuva matkavakuutus", "Usein matkustavan ratkaisu", "Vuoden ympäri voimassa oleva matkavakuutus matkoille tuotekohtaisen voimassaolon mukaan.", "Kun matkustat useamman kerran vuodessa, kotimaassa tai ulkomailla.", "Matkustajan ja matkatavaroiden turvia, kotimaan matkoja yli 50 km päähän ja ulkomaanmatkoja ehtojen mukaan.", "Normaali voimassaolo on rajattu matkan kestoon; pitkät matkat vaativat erillisen tarkistuksen."),
@@ -7089,7 +7135,6 @@ const coverageModels = {
       label: "Turvan osat: sairaus, tapaturma, urheilu ja toimeentulo",
       title: "Terveys- ja tapaturmavakuutuksen rakenneosien vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä terveysvakuutuksen hinta-arvio asiantuntijalta tai laskuri-integraation kautta",
       options: [
         option("sairausLaaja", "Sairauden hoitoturva", "Laajempi sairauskulujen turva", "Sairauksien tutkimus- ja hoitokuluja valitun vakuutuksen mukaan.", "Kun nopea pääsy hoitoon ja laajempi yksityisen hoidon käyttö korostuvat.", "Lääkäri-, tutkimus- ja hoitokuluja sekä valittuja hoitopolkuja ehtojen mukaan.", "Terveysselvitys, rajoitusehdot, omavastuu ja ikärajat vaikuttavat."),
         option("sairausSuppea", "Suppea sairauden hoitoturva", "Rajattu sairauskulujen turva", "Rajatummin määritelty sairauden hoitokulujen turva.", "Kun halutaan edullisempi ja rajatumpi vaihtoehto sairauskuluille.", "Perustason sairauden hoitokuluja valitun turvan mukaan.", "Ei kata yhtä laajasti kuin sairauden laajempi hoitoturva."),
@@ -7102,7 +7147,6 @@ const coverageModels = {
       label: "Rakenne: kuolemanvara, vakava sairaus, aleneva tai kiinteä määrä",
       title: "Henkivakuutuksen rakenteiden vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä henkivakuutuksen hinta-arvio asiantuntijalta tai laskuri-integraation kautta",
       options: [
         option("kuolemanvara", "Kuolemanvaraturva", "Läheisten taloudellinen turva", "Kertakorvaus edunsaajille kuolemantapauksessa.", "Kun puoliso, lapset, laina tai arjen menot riippuvat tuloistasi.", "Sovittu vakuutusmäärä edunsaajille ehtojen mukaan.", "Ei ratkaise automaattisesti oikeaa vakuutusmäärää tai edunsaajaa."),
         option("vakavaSairaus", "Vakavan sairauden kertakorvaus", "Oman talouden lisätuki", "Kertakorvaus tiettyjen vakavien sairauksien tilanteessa.", "Kun haluat taloudellista liikkumavaraa sairastumisen alkuvaiheeseen.", "Sovittu kertakorvaus vakuutusehtojen mukaisissa tilanteissa.", "Korvattavat sairaudet ja rajoitukset pitää tarkistaa ehdoista."),
@@ -7114,7 +7158,6 @@ const coverageModels = {
       label: "Rakenne: eläinlääkärikulut, Plus, henki, käyttö ja vastuu",
       title: "Koira- ja kissavakuutuksen rakenneosien vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä lemmikkivakuutuksen hinta-arvio laskuri-integraation kautta",
       options: [
         option("elainlaakari", "Eläinlääkärikuluvakuutus", "Keskeinen hoitokuluturva", "Turvaa sairauden tai tapaturman eläinlääkärikuluja.", "Useimmille koiran tai kissan omistajille.", "Tutkimus- ja hoitokuluja vakuutusmäärän, omavastuun ja ehtojen mukaan.", "Ei välttämättä kata kaikkia sairauksia, ennaltaehkäisyä tai aiempia vaivoja."),
         option("hoitoturvaPlus", "Hoitoturva Plus", "Laajentava lisäturva", "Täydentää eläinlääkärikuluturvaa valituilla hoito- ja kuntoutusmenoilla.", "Kun haluat laajemman hoitopolun esimerkiksi fysioterapiaan liittyen.", "Lisähoitoja tuotekohtaisten ehtojen mukaan.", "Saatavuus voi riippua eläimen iästä ja terveydestä."),
@@ -7226,7 +7269,6 @@ const coverageModels = {
       label: "Turvatasot: Suppea, Perus ja Laaja",
       title: "Vapaa-ajan asunnon turvatasojen vertailu",
       notice: defaultNotice,
-      calculatorAction: "Siirry vapaa-ajan asunnon hinta-arvioon, kun laskuri-integraatio on käytössä",
       options: [
         option("suppea", "Suppea", "Rajattu mökkiturva", "Varautuminen erityisesti vakavimpiin palo- ja luonnonilmiövahinkoihin.", "Kohteeseen, jossa halutaan suojata vain suurimpia riskejä ja irtaimiston arvo on pieni.", "Tyypillisesti palo-, myrsky-, rae- ja salamaniskuvahinkoja tuotekohtaisten ehtojen mukaan.", "Ei yleensä kata yhtä laajasti vuoto-, varkaus-, ilkivalta- tai rikkoutumisvahinkoja."),
         option("perus", "Perus", "Keskeisten mökkiriskien turva", "Laajaa rajatumpi ratkaisu vapaa-ajan asunnolle ja siihen liittyvälle irtaimistolle.", "Kun halutaan kattaa mökin keskeisiä vahinkoja ilman laajinta rikkoutumissuojaa.", "Esimerkiksi palo-, myrsky-, vuoto-, varkaus- ja ilkivaltatilanteita ehtojen mukaan.", "Ei kata kaikkia äkillisiä rikkoutumisia samalla tavalla kuin Laaja."),
@@ -7237,11 +7279,10 @@ const coverageModels = {
       label: "Rakenne: vastuu ja oikeusturva",
       title: "Vastuu- ja oikeusturvatarpeen vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä vastuu- ja oikeusturvan hinta-arvio asiantuntijalta",
       options: [
         option("home_bundle", "Kodin vakuutuksen yhteydessä", "Arjen perustarkistus", "Vastuu- ja oikeusturvakysymykset tarkistetaan kodin vakuutuskokonaisuuden rinnalla.", "Kun tarve liittyy tavalliseen asumiseen, perheeseen tai arjen vahinkoihin.", "Vastuuvahinkoihin ja oikeudellisiin kuluihin liittyviä tilanteita sovitun kotivakuutuksen mukaan.", "Korvausrajat, omavastuut, riidan laatu ja vakuutetut henkilöt pitää tarkistaa."),
         option("broader", "Laajempi vastuu- ja oikeusturvatarkistus", "Useamman tilanteen selvitys", "Asumiseen, vuokraamiseen, remontteihin, lemmikkeihin tai perheeseen liittyvät vastuut tarkistetaan tarkemmin.", "Kun vastauksissa korostuu useampi mahdollinen vastuutilanne tai oikeudellinen huoli.", "Useita vastuu- ja oikeusturvatilanteita tuotekohtaisten ehtojen mukaan.", "Ei tarkoita, että kaikki riidat tai sopimusvastuut kuuluvat turvaan."),
-        option("expert", "Asiantuntijan arvio", "Epäselvän tilanteen jatkoselvitys", "Tilanne viedään asiantuntijalle, jos oikea turva tai vastuun laajuus ei ole asiakkaalle selvä.", "Kun et ole varma, miten vastuu, oikeusturva tai olemassa oleva vakuutus soveltuu tilanteeseesi.", "Asiantuntija voi arvioida, mihin vakuutukseen tarkistus kannattaa liittää.", "Hinta ja soveltuvuus edellyttävät asiantuntijan tai laskurin tarkistusta.")
+        option("expert", "Asiantuntijan arvio", "Epäselvän tilanteen jatkoselvitys", "Tilanne viedään asiantuntijalle, jos oikea turva tai vastuun laajuus ei ole asiakkaalle selvä.", "Kun et ole varma, miten vastuu, oikeusturva tai olemassa oleva vakuutus soveltuu tilanteeseesi.", "Asiantuntija voi arvioida, mihin vakuutukseen tarkistus kannattaa liittää.", "Sisältö ja soveltuvuus edellyttävät asiantuntijan tarkistusta.")
       ]
     }
   },
@@ -7250,7 +7291,6 @@ const coverageModels = {
       label: "Rakenne: esine-, huoneisto-, kiinteistö- ja projektiturvat",
       title: "Yritysomaisuuden vakuutusrakenteiden vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä yritysomaisuuden hinta-arvio asiantuntijalta",
       options: [
         option("esine", "ES1 Esinevakuutus", "Yrityksen irtaimen omaisuuden perusrakenne", "Koneiden, laitteiden, työkalujen ja vaihto-omaisuuden suoja.", "Yritykselle, jolla on toiminnan kannalta tärkeää irtainta omaisuutta.", "Omaisuusvahinkoja sovittujen turvien ja ehtojen mukaan.", "Ei yksin ratkaise keskeytys-, vastuu- tai kiinteistöriskiä."),
         option("huoneisto", "Huoneistoturva", "Vuokratilan ja sisustusten näkökulma", "Vuokratilan muutostöiden ja kiinteiden sisustusten suoja.", "Vuokratilassa toimivalle yritykselle.", "Vuokratilan omaisuuteen ja sisustuksiin liittyviä vahinkoja ehtojen mukaan.", "Ei korvaa rakennuksen omistajan kaikkia vastuita."),
@@ -7262,7 +7302,6 @@ const coverageModels = {
       label: "Rakenne: toiminnan, tuotteen, varallisuuden, IT:n ja hallinnon vastuut",
       title: "Yrityksen vastuuvakuutusten vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä vastuuvakuutuksen hinta-arvio asiantuntijalta",
       options: [
         option("operations", "Toiminnan vastuuvakuutus", "Henkilö- ja esinevahinkojen päävastuu", "Turvaa yrityksen toiminnasta aiheutuvaa korvausvastuuta.", "Useimmille yrityksille, joilla on asiakkaita, tiloja, töitä tai palveluita.", "Henkilö- ja esinevahinkoja ehtojen mukaan.", "Ei kata kaikkia puhtaita varallisuusvahinkoja tai erityisvastuita."),
         option("products", "Tuotevastuuvakuutus", "Tuotteisiin liittyvä vastuu", "Valmistettujen, myytyjen tai maahantuotujen tuotteiden aiheuttamat vahingot.", "Kaupalle, valmistajalle, maahantuojalle ja verkkokaupalle.", "Tuotteen virheellisyydestä aiheutuvia henkilö- tai esinevahinkoja.", "Takaisinveto ja sopimusvastuut vaativat erillisen tarkistuksen."),
@@ -7275,7 +7314,6 @@ const coverageModels = {
       label: "Rakenne: KE1, KE2, KE3 ja KE4",
       title: "Keskeytysvakuutuksen rakenneosien vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä keskeytysvakuutuksen hinta-arvio asiantuntijalta",
       options: [
         option("ke1", "KE1 Omaisuuskeskeytys", "Omaisuusvahingon aiheuttama keskeytys", "Turvaa liiketoiminnan katkosta korvattavan esinevahingon jälkeen.", "Yritykselle, jonka tuotanto, myynti tai palvelu riippuu tilasta, koneesta tai varastosta.", "Käyttökatetta, kiinteitä kuluja ja lisäkuluja sovitun rakenteen mukaan.", "Vakuutusmäärä, vastuuaika ja omavastuu pitää laskea kirjanpidosta."),
         option("ke2", "KE2 Henkilökeskeytys", "Avainhenkilön poissaolo", "Turvaa liiketoiminnan katkosta yrittäjän tai nimetyn henkilön työkyvyttömyyden vuoksi.", "Pienyritykselle, asiantuntijayritykselle tai avainhenkilöriippuvaiseen toimintaan.", "Saamatta jäänyttä katetta ehtojen mukaan.", "Terveysselvitys ja henkilön merkitys liiketoiminnalle pitää varmistaa."),
@@ -7287,7 +7325,6 @@ const coverageModels = {
       label: "Rakenne: Kybervakuutus ja Kybervakuutus Pro",
       title: "Kybervakuutuksen vaihtoehtojen vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä kybervakuutuksen hinta-arvio asiantuntijalta",
       options: [
         option("standard", "Kybervakuutus", "Digitaalisen riskin perusteltu kokonaisuus", "Kustannus-, keskeytys- ja vastuuvakuutuksen yhdistelmä kybervahinkoihin.", "Pk-yritykselle, jolla on dataa, järjestelmäriippuvuutta tai asiakasrekistereitä.", "Selvitys-, palautus-, ilmoitus-, keskeytys- ja vastuukustannuksia ehtojen mukaan.", "Perustietoturvan taso, alihankkijat ja järjestelmäriippuvuus pitää selvittää."),
         option("pro", "Kybervakuutus Pro", "Laajemman digiriippuvuuden jatkoselvitys", "Laajempi tai asiantuntijamaisempi kyberratkaisu suurempaan vahinkopotentiaaliin.", "Yritykselle, jonka toiminta pysähtyy järjestelmäkatkosta tai jolla on merkittävä datariski.", "Laajempia kybervahinkojen kustannus-, keskeytys- ja vastuuriskejä sovitun ratkaisun mukaan.", "Edellyttää tarkempaa riskikartoitusta ja tietoturvakäytäntöjen arviointia.")
@@ -7297,7 +7334,6 @@ const coverageModels = {
       label: "Rakenne: liikenne, kasko, ryhmä/fleet ja korjaamoratkaisut",
       title: "Yrityksen ajoneuvoratkaisujen vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä yritysajoneuvojen hinta-arvio asiantuntijalta",
       options: [
         option("trafficKasko", "Liikennevakuutus + kasko", "Yksittäisen yritysajoneuvon perusratkaisu", "Lakisääteinen liikennevakuutus ja vapaaehtoinen kasko.", "Yrityksen henkilö-, paketti- tai käyttöajoneuvolle.", "Liikennevahinkoja ja oman ajoneuvon kaskoriskejä valitun laajuuden mukaan.", "Käyttötarkoitus, kuljettajat ja rahoitus vaikuttavat."),
         option("fleet", "Ryhmä- tai fleet-ratkaisu", "Usean ajoneuvon hallinta", "Useamman ajoneuvon vakuutusten keskitetty tarkistus.", "Yritykselle, jolla on useita ajoneuvoja tai kalustoa.", "Kaluston vakuutukset ja mahdolliset yhtenäiset käytännöt.", "Ajoneuvolajit, käyttö ja vahinkohistoria pitää käydä läpi."),
@@ -7308,7 +7344,6 @@ const coverageModels = {
       label: "Rakenne: lakisääteinen, yrittäjä, työkyky ja avainhenkilöt",
       title: "Henkilö- ja työkykyratkaisujen vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä henkilöratkaisujen hinta-arvio asiantuntijalta",
       options: [
         option("statutory", "Työtapaturma- ja ammattitautivakuutus", "Lakisääteinen työntekijäturva", "Työntekijöiden työtapaturmien ja ammattitautien vakuuttaminen.", "Yritykselle, jolla on työntekijöitä.", "Työtapaturmia ja ammattitauteja lain mukaan.", "Ei yksin kata vapaa-aikaa, yrittäjää tai sairauskuluetuja."),
         option("entrepreneur", "Yrittäjän tapaturmavakuutus", "Yrittäjän oma turva", "Yrittäjän tapaturmariskin turvaaminen.", "Yksinyrittäjälle tai yrittäjälle työntekijöiden rinnalla.", "Yrittäjän tapaturmia valitun turvan mukaan.", "YEL/TyEL-tilanne ja vapaa-ajan tarve pitää varmistaa."),
@@ -7320,7 +7355,6 @@ const coverageModels = {
       label: "Rakenne: työmatka, komennus, tavarat, vastuu ja oikeusturva",
       title: "Yrityksen matkavakuutuksen rakenteiden vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä yrityksen matkavakuutuksen hinta-arvio asiantuntijalta",
       options: [
         option("traveler", "Matkustajavakuutus", "Työmatkan hoitoturva", "Työmatkalla sattuvan sairauden tai tapaturman turva.", "Yritykselle, jossa yrittäjä tai henkilöstö matkustaa työasioissa.", "Sairaus- ja tapaturmakuluja matkalla ehtojen mukaan.", "Matkan kesto, kohdemaa ja vakuutettavat henkilöt pitää tarkistaa."),
         option("posted", "Komennusvakuutus", "Pitkä ulkomaantyö", "Komennukselle tai pitkäaikaiselle ulkomaantyölle suunnattu turva.", "Kun työntekijä tai yrittäjä työskentelee pidempään ulkomailla.", "Komennuksen erityistarpeita valitun ratkaisun mukaan.", "Perheenjäsenet, kohdemaa ja kesto pitää määritellä."),
@@ -7332,7 +7366,6 @@ const coverageModels = {
       label: "Rakenne: oma tavara, asiakkaan tavara ja logistiikkavastuu",
       title: "Kuljetusvakuutusten rakenteiden vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä kuljetusvakuutuksen hinta-arvio asiantuntijalta",
       options: [
         option("ownGoods", "Tavarankuljetusvakuutus", "Oman tavaran vakuuttaminen", "Yrityksen oman tavaran kuljetusriskin vakuuttaminen.", "Kun yritys kuljettaa tai lähettää omaa tavaraa.", "Tavaralle kuljetuksen aikana aiheutuvia vahinkoja ehtojen mukaan.", "Kuljetusehdot, arvo ja kuljetusmaat vaikuttavat."),
         option("carrier", "Tiekuljetusvastuu tai autokuljetusvastuu", "Asiakkaan tavaraan liittyvä vastuu", "Rahdinkuljettajan vastuuta asiakkaan tavarasta.", "Kuljetusliikkeelle tai asiakkaan tavaraa kuljettavalle.", "Lain tai sopimuksen mukaista kuljetusvastuuta ehtojen mukaan.", "Ei välttämättä kata tavaran täyttä arvoa ilman tavarankuljetusvakuutusta."),
@@ -7344,7 +7377,6 @@ const coverageModels = {
       label: "Rakenne: OK1 ja OK2",
       title: "Yrityksen oikeusturvan vaihtoehtojen vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä oikeusturvavakuutuksen hinta-arvio asiantuntijalta",
       options: [
         option("ok1", "OK1 Oikeudenkäyntikuluvakuutus", "Yritystoiminnan riitojen pääratkaisu", "Asianajo- ja oikeudenkäyntikulujen turva yritystoiminnan riidoissa.", "Useimmille yrityksille, joilla on sopimuksia, asiakkaita tai toimittajia.", "Riita- ja hakemusasioiden kuluja ehtojen mukaan.", "Ei kata kaikkia rikos-, sopimus- tai kansainvälisiä tilanteita."),
         option("ok2", "OK2 Immateriaalioikeudet", "IP-riitojen lisäselvitys", "Immateriaalioikeuksiin liittyvien riitojen oikeusturva.", "Yritykselle, jonka toiminnassa brändi, ohjelmisto, malli, patentti tai tekijänoikeus on olennainen.", "IP-riitojen kuluja ehtojen mukaan.", "Tarve, toimialue ja oikeudet pitää kartoittaa erikseen.")
@@ -7354,7 +7386,6 @@ const coverageModels = {
       label: "Rakenne: kiinteistö, vastuu ja vuokratuotto",
       title: "Kiinteistövakuutuksen rakenteiden vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä kiinteistövakuutuksen hinta-arvio asiantuntijalta",
       options: [
         option("building", "Kiinteistövakuutus", "Rakennuksen ja kiinteistön turva", "Rakennuksen omaisuusvahinkojen vakuuttaminen.", "Kiinteistön omistajalle tai vuokranantajalle.", "Rakennusvahinkoja valittujen turvien mukaan.", "Käyttötarkoitus, ikä, kunto ja suojeluohjeet vaikuttavat."),
         option("liability", "Kiinteistön vastuuvakuutus", "Omistajan vastuu", "Kiinteistön omistamiseen ja hallintaan liittyvä vastuuriski.", "Kun kiinteistössä on vuokralaisia, kävijöitä tai ulkopuolisia.", "Henkilö- ja esinevahinkoja ehtojen mukaan.", "Ei korvaa rakennuksen omaisuusvahinkoa ilman kiinteistövakuutusta."),
@@ -7365,7 +7396,6 @@ const coverageModels = {
       label: "Rakenne: potilasvakuutus ja toiminnan vastuun tarkistus",
       title: "Potilasvakuutuksen ja vastuun vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä potilasvakuutuksen hinta-arvio asiantuntijalta",
       options: [
         option("patient", "Potilasvakuutus", "Potilasvahinkojen lakisääteinen näkökulma", "Terveyden- ja sairaanhoitotoiminnan potilasvahinkoriskien vakuuttaminen.", "Sote-, hoiva-, terapia- tai terveyspalvelutoimijalle, jos toiminta kuuluu potilasvakuutuksen piiriin.", "Potilasvahinkoja lain ja ehtojen mukaan.", "Toiminnan kuuluminen potilasvakuutuksen piiriin pitää varmistaa."),
         option("operations", "Toiminnan vastuuvakuutus", "Muu toiminnan vastuu", "Terveyspalveluun liittyvät muut henkilö- ja esinevahingot.", "Kun toiminnassa on tiloja, asiakkaita, laitteita tai palvelutilanteita.", "Toiminnan aiheuttamia vastuita ehtojen mukaan.", "Ei korvaa potilasvahinkoja, jos ne kuuluvat potilasvakuutuksen piiriin.")
@@ -7375,7 +7405,6 @@ const coverageModels = {
       label: "Rakenne: määräaikainen, jatkuva, vastuu ja suorituskyky",
       title: "Rakennus- ja asennustyövakuutuksen rakenteiden vertailu",
       notice: defaultNotice,
-      calculatorAction: "Pyydä rakennus- ja asennustyövakuutuksen hinta-arvio asiantuntijalta",
       options: [
         option("singleProject", "Määräaikainen rakennus- ja asennustyövakuutus", "Yksittäinen hanke", "Yhden rakennus- tai asennushankkeen vakuuttaminen.", "Kun kyseessä on rajattu projekti, jolla on selkeä alku ja loppu.", "Työn kohdetta, materiaaleja ja työmaan riskejä ehtojen mukaan.", "Hankkeen arvo, kesto ja sopimusvelvoitteet pitää määritellä."),
         option("continuous", "Jatkuva rakennus- ja asennustyövakuutus", "Jatkuva urakointi", "Toistuvan urakointi- tai asennustoiminnan vakuuttaminen.", "Yritykselle, joka tekee jatkuvasti rakennus-, asennus- tai korjaustöitä.", "Useita hankkeita sovitun vakuutusrakenteen mukaan.", "Yksittäisten suurten hankkeiden rajat pitää tarkistaa."),
@@ -8148,7 +8177,7 @@ function attachCoverageComparison(profileId, flowKey, answers, output) {
     recommended,
     alternatives,
     basis: recommendation.basis,
-    nextStep: recommendation.nextStep || model.calculatorAction
+    nextStep: recommendation.nextStep || "Tarkista valittu vaihtoehto asiantuntijan kanssa."
   };
   return output;
 }
@@ -8299,24 +8328,24 @@ function result(primaryTag, title, rows, reasons, notes, nextStep) {
 /* src/solutionEngine.js */
 
 const businessBaseNeedOptions = [
-  { id: "people_risk", baseQuestionId: "hasEmployees", affects: ["bizPeople"], priceImpact: 1 },
-  { id: "business_travel", baseQuestionId: "businessTravelNeed", affects: ["bizTravel", "bizPeople"], priceImpact: 1 },
-  { id: "property_or_assets", baseQuestionId: "hasPremises", affects: ["bizProperty", "bizInterruption"], priceImpact: 2 },
-  { id: "property_or_assets", baseQuestionId: "hasBusinessAssets", affects: ["bizProperty"], priceImpact: 1 },
-  { id: "owns_business_property", baseQuestionId: "ownsBusinessProperty", affects: ["bizRealEstate", "bizProperty", "bizInterruption"], priceImpact: 2 },
-  { id: "vehicles_or_transport", baseQuestionId: "hasVehicles", affects: ["bizVehicle"], priceImpact: 1 },
-  { id: "system_dependency", baseQuestionId: "digitalDependency", affects: ["bizCyber", "bizInterruption"], priceImpact: 2 }
+  { id: "people_risk", baseQuestionId: "hasEmployees", affects: ["bizPeople"] },
+  { id: "business_travel", baseQuestionId: "businessTravelNeed", affects: ["bizTravel", "bizPeople"] },
+  { id: "property_or_assets", baseQuestionId: "hasPremises", affects: ["bizProperty", "bizInterruption"] },
+  { id: "property_or_assets", baseQuestionId: "hasBusinessAssets", affects: ["bizProperty"] },
+  { id: "owns_business_property", baseQuestionId: "ownsBusinessProperty", affects: ["bizRealEstate", "bizProperty", "bizInterruption"] },
+  { id: "vehicles_or_transport", baseQuestionId: "hasVehicles", affects: ["bizVehicle"] },
+  { id: "system_dependency", baseQuestionId: "digitalDependency", affects: ["bizCyber", "bizInterruption"] }
 ];
 
 const personalBaseNeedOptions = [
-  { id: "children_health", baseQuestionId: "hasChildren", affects: ["health", "life"], priceImpact: 1 },
-  { id: "vehicle", baseQuestionId: "hasPersonalVehicle", affects: ["vehicle"], priceImpact: 1 },
-  { id: "travel", baseQuestionId: "travelsRegularly", affects: ["travel"], priceImpact: 1 },
-  { id: "health", baseQuestionId: "healthCoverInterest", affects: ["health"], priceImpact: 1 },
-  { id: "family_financial_security", baseQuestionId: "financialDependents", affects: ["life"], priceImpact: 1 },
-  { id: "pet", baseQuestionId: "hasPets", affects: ["pet"], priceImpact: 1 },
-  { id: "valuable_hobbies", baseQuestionId: "valuableOrLeisureProperty", affects: ["home"], priceImpact: 1 },
-  { id: "cottage_forest_boat", baseQuestionId: "valuableOrLeisureProperty", affects: ["apartment", "forest", "boat"], priceImpact: 1 }
+  { id: "children_health", baseQuestionId: "hasChildren", affects: ["health", "life"] },
+  { id: "vehicle", baseQuestionId: "hasPersonalVehicle", affects: ["vehicle"] },
+  { id: "travel", baseQuestionId: "travelsRegularly", affects: ["travel"] },
+  { id: "health", baseQuestionId: "healthCoverInterest", affects: ["health"] },
+  { id: "family_financial_security", baseQuestionId: "financialDependents", affects: ["life"] },
+  { id: "pet", baseQuestionId: "hasPets", affects: ["pet"] },
+  { id: "valuable_hobbies", baseQuestionId: "valuableOrLeisureProperty", affects: ["home"] },
+  { id: "cottage_forest_boat", baseQuestionId: "valuableOrLeisureProperty", affects: ["apartment", "forest", "boat"] }
 ];
 
 function normalizeEmployeeBand(value) {
@@ -8343,7 +8372,7 @@ function relevantNeedOptions(mode, state = {}) {
   const playbook = businessPlaybooks[industryKey] || businessPlaybooks.other;
   const group = playbook.relevantGroup || "generic";
   const options = businessRelevantNeedOptions[group] || businessRelevantNeedOptions.generic;
-  return [...options, { id: "current_cover_unclear", label: "Nykyinen vakuutusturva on epäselvä tai haluan tarkistaa riittävyyden", affects: ["all"], priceImpact: 0 }, { id: "unsure", label: "En osaa sanoa", affects: [], priceImpact: 0 }];
+  return [...options, { id: "unsure", label: "En osaa sanoa", affects: [] }];
 }
 
 function buildAssessmentResult(mode, state = {}, legacyRecommendation = null) {
@@ -8414,10 +8443,8 @@ function buildBusinessAssessmentResult(state = {}, legacyRecommendation = null) 
       reason: "Vastaustesi perusteella tämä vakuutusalue kannattaa avata ymmärrettävästi.",
       defaultCoverageKey: ""
     }));
-  const existingCoverReviews = currentCoverReviewCovers("business", state);
-  const existingCoverKeys = new Set(existingCoverReviews.map((item) => item.key));
-  const recommendedCovers = uniqueCovers([...existingCoverReviews, ...(playbook.recommendedCovers || []), ...activatedOptional, ...selectedNeedCovers])
-    .filter((item) => existingCoverKeys.has(item.key) || !businessCoverExplicitlyExcluded(item.key, state, selectedRelevantNeeds));
+  const recommendedCovers = uniqueCovers([...(playbook.recommendedCovers || []), ...activatedOptional, ...selectedNeedCovers])
+    .filter((item) => !businessCoverExplicitlyExcluded(item.key, state, selectedRelevantNeeds));
   const riskAreas = flowType === "risk_area_discussion"
     ? businessRiskAreaPlaybooks.generic.riskAreas
     : [];
@@ -8449,7 +8476,6 @@ function buildPrivateAssessmentResult(state = {}, legacyRecommendation = null) {
     livingType: state.baseAnswers?.livingType || "",
     lifeSituation: state.baseAnswers?.lifeSituation || "",
     hasVehicles: vehicleAnswer === "yes"
-      || (!vehicleAnswer && (state.currentInsuranceAreas || []).includes("vehicle"))
       || (!vehicleAnswer && (state.selectedRelevantNeeds || []).includes("vehicle"))
   };
   const priorityKey = profile.lifeSituation === "entrepreneur"
@@ -8482,8 +8508,7 @@ function buildPrivateAssessmentResult(state = {}, legacyRecommendation = null) {
     });
   }
 
-  const existingCoverReviews = currentCoverReviewCovers("personal", state);
-  const recommendedCovers = uniqueCovers([...existingCoverReviews, ...(playbook.recommendedCovers || []), ...inferred]);
+  const recommendedCovers = uniqueCovers([...(playbook.recommendedCovers || []), ...inferred]);
   const recommendedKeys = new Set(recommendedCovers.map((item) => item.key));
   const optionalCovers = privateRelevantNeedOptions
     .flatMap((item) => item.affects || [])
@@ -8531,7 +8556,6 @@ function refreshDerivedAssessmentData(result, state = {}) {
     ])
   };
   next.selectedCoverageLevels = buildCoverageLevelRecommendations(next, state.detailResults || {}, state.selectedCoverage || {});
-  next.pricingPayload = buildPricingPayload(next);
   next.contactSummary = buildContactSummary(next);
   next.aiContext = buildAiContext(next);
   return next;
@@ -8567,42 +8591,11 @@ function buildCoverageLevelRecommendations(result, detailResults = {}, selectedC
       selectedKey,
       selectedTitle: selectedOption.title,
       basis: detailComparison?.basis || coverItem.reason || "Ehdotus perustuu asiakasprofiiliin ja valittuihin tilanteisiin.",
-      priceImpactSymbol: indicativePriceSymbol(selectedKey),
       refined,
       chosen
     };
   });
   return levels;
-}
-
-function buildPricingPayload(result) {
-  const selectedCovers = uniqueCovers([
-    ...(result.recommendedCovers || []),
-    ...(result.optionalCovers || []).filter((item) => item.active)
-  ]).map((item) => item.key);
-  const refinedCoverageLevels = Object.fromEntries(
-    Object.entries(result.selectedCoverageLevels || {}).filter(([, item]) => item.chosen)
-  );
-  const symbols = Object.values(refinedCoverageLevels).map((item) => item.priceImpactSymbol);
-  const priceImpactSymbol = symbols.includes("€€€") ? "€€€" : symbols.includes("€€") ? "€€" : symbols.length ? "€" : "";
-  return {
-    customerType: result.mode,
-    flowType: result.flowType,
-    selectedCovers,
-    mandatoryChecks: (result.mandatoryChecks || []).map((item) => item.id),
-    selectedCoverageLevels: refinedCoverageLevels,
-    selectedRelevantNeeds: result.selectedRelevantNeeds || [],
-    riskFactors: (result.riskAreas || []).map((item) => item.id),
-    calculatorInputs: {
-      industry: result.profile?.industryKey || "",
-      companySize: result.profile?.sizeClass || "",
-      ageGroup: result.profile?.ageGroup || "",
-      livingType: result.profile?.livingType || ""
-    },
-    priceImpactLevel: priceImpactSymbol === "€€€" ? "laaja" : priceImpactSymbol === "€€" ? "tasapainoinen" : priceImpactSymbol ? "kevyt" : "ei arvioitu",
-    priceImpactSymbol,
-    disclaimer: priceImpactDisclaimer
-  };
 }
 
 function buildAiContext(result) {
@@ -8618,7 +8611,6 @@ function buildAiContext(result) {
     riskAreas: result.riskAreas || [],
     selectedRelevantNeeds: result.selectedRelevantNeeds || [],
     selectedCoverageLevels: result.selectedCoverageLevels || {},
-    pricingPayload: result.pricingPayload || null,
     sellerDiscussionPoints: result.sellerDiscussionPoints || []
   };
 }
@@ -8637,9 +8629,6 @@ function buildContactSummary(result) {
     coverTitles.length ? `Suositellut vakuutusalueet: ${coverTitles.join(", ")}` : "",
     activeOptionalTitles.length ? `Tilanteesta riippuvat valinnat: ${activeOptionalTitles.join(", ")}` : "",
     result.riskAreas?.length ? `Riskialueet: ${result.riskAreas.map((item) => item.title).join(", ")}` : "",
-    result.pricingPayload?.priceImpactLevel
-      ? `Valittujen laajuuksien suunta: ${result.pricingPayload.priceImpactLevel}`
-      : "",
     "Lopullinen sisältö ja soveltuvuus varmistetaan vakuutusehdoista, LähiTapiolan palvelussa tai asiantuntijan kanssa."
   ].filter(Boolean).join("\n");
 }
@@ -8667,33 +8656,6 @@ function businessCoverExplicitlyExcluded(key, state = {}, selectedRelevantNeeds 
       && !selected.has("people_risk") && !selected.has("owner_key_person");
   }
   return false;
-}
-
-function currentCoverReviewCovers(mode, state = {}) {
-  if (!shouldPrioritizeCurrentCovers(state)) return [];
-  return toArray(state.quickAnswers?.currentInsuranceAreas)
-    .filter((key) => key !== "none" && key !== "unsure" && insuranceTypes[mode]?.[key])
-    .map((key) => ({
-      key,
-      reason: mode === "business"
-        ? "Kerroit, että yrityksellä on tämä vakuutusalue jo voimassa. Siksi sen riittävyys, laajuus ja kilpailukyky kannattaa tarkistaa."
-        : "Kerroit, että sinulla on tämä vakuutus jo voimassa. Siksi sen riittävyys, laajuus ja omavastuut kannattaa tarkistaa.",
-      defaultCoverageKey: mode === "personal" ? defaultPersonalCoverageKey(key) : ""
-    }));
-}
-
-function shouldPrioritizeCurrentCovers(state = {}) {
-  const selected = toArray(state.quickAnswers?.currentInsuranceAreas)
-    .filter((key) => key !== "none" && key !== "unsure");
-  if (!selected.length) return false;
-  const goals = toArray(state.quickAnswers?.reviewGoal);
-  if (!goals.length) return true;
-  return goals.some((goal) => ["check", "compare", "understand", "unsure"].includes(goal));
-}
-
-function toArray(value) {
-  if (Array.isArray(value)) return value;
-  return value ? [value] : [];
 }
 
 function businessBaseRelevantNeeds(baseAnswers = {}) {
@@ -8809,17 +8771,14 @@ function freshState() {
     recommendationRefined: false,
     assessmentResult: null,
     selectedRelevantNeeds: [],
-    pricingPayload: null,
     contactSummary: "",
     aiContext: null,
     selectedContact: {},
-    selectedPrice: {},
     activeDetail: null,
     detailIndex: 0,
     detailAnswers: {},
     detailResults: {},
     selectedCoverage: {},
-    priceEstimateInterest: false,
     contactSelectionInitialized: false,
     contact: {},
     crmSummaryCreated: false,
@@ -8982,7 +8941,6 @@ function init() {
   renderShellTexts();
   renderIntro();
   renderBaseInfo();
-  renderCalculatorPanel();
   renderChatPanel();
   renderSummaryList();
   updateResumeNotice();
@@ -9020,9 +8978,11 @@ function bindEvents() {
     openCustomerSummary();
   });
   $("contactBack").addEventListener("click", () => openRecommendations());
+  $("editAnswersFromContact").addEventListener("click", () => startBaseInfo());
   $("createSummary").addEventListener("click", () => createCrmSummary());
   $("backToContact").addEventListener("click", () => openContact());
   $("summaryBackToResults").addEventListener("click", () => openRecommendations());
+  $("editAnswers").addEventListener("click", () => startBaseInfo());
   $("summaryRefine").addEventListener("click", () => refineTopRecommendation());
   $("summaryContact").addEventListener("click", () => openContact());
   $("printCustomerSummary").addEventListener("click", () => window.print());
@@ -9046,7 +9006,6 @@ function setMode(nextMode) {
   renderShellTexts();
   renderIntro();
   renderBaseInfo();
-  renderCalculatorPanel();
   renderChatPanel();
   renderSummaryList();
   showView("intro");
@@ -9106,7 +9065,6 @@ function discardSavedAssessment() {
   renderShellTexts();
   renderIntro();
   renderBaseInfo();
-  renderCalculatorPanel();
   renderChatPanel();
   renderSummaryList();
   $("resumeNotice").classList.add("hidden");
@@ -9124,11 +9082,7 @@ function hasCompleteBaseInfo() {
 }
 
 function hasCompletedIntake() {
-  if (!activeIntakeQuestions().length) return true;
-  return Boolean(
-    toArray(st().quickAnswers.currentInsuranceAreas).length
-    && toArray(st().quickAnswers.reviewGoal).length
-  );
+  return true;
 }
 
 function openAssessment() {
@@ -9266,7 +9220,7 @@ function renderQuestion() {
     : st().quickPhase === "needs" && st().quickIndex === 0
       ? "Takaisin suosituksiin"
       : "Takaisin";
-  $("questionSkip").classList.toggle("hidden", !(isIntake && question.id === "currentInsuranceAreas"));
+  $("questionSkip").classList.add("hidden");
   $("questionNext").textContent = st().quickIndex === questions.length - 1
     ? isBase ? "Jatka" : isIntake ? "Näytä vakuutusalueet" : "Päivitä suositus"
     : "Seuraava";
@@ -9553,11 +9507,7 @@ function returnToPreviousQuestion() {
 }
 
 function skipQuestion() {
-  const questions = currentQuickFlowQuestions();
-  const question = questions[st().quickIndex];
-  if (st().quickPhase !== "intake" || question?.id !== "currentInsuranceAreas") return;
-  st().quickAnswers.currentInsuranceAreas = ["unsure"];
-  questionNext();
+  return;
 }
 
 function finishQuickFlow() {
@@ -9583,8 +9533,7 @@ function finishInitialAssessment() {
   calculateAndRenderRecommendations();
   showView("results");
   track("initial_context_completed", {
-    mode,
-    reviewGoal: st().quickAnswers.reviewGoal || ""
+    mode
   });
 }
 
@@ -9593,14 +9542,12 @@ function calculateAndRenderRecommendations() {
   refreshAssessmentResult();
   primeContactSelection();
   renderRecommendations();
-  renderCalculatorPanel();
   renderChatPanel();
   renderSummaryList();
 }
 
 function refreshAssessmentResult() {
   st().assessmentResult = buildAssessmentResult(mode, st(), st().recommendation);
-  st().pricingPayload = st().assessmentResult.pricingPayload;
   st().contactSummary = st().assessmentResult.contactSummary;
   st().aiContext = st().assessmentResult.aiContext;
   persistAssessment();
@@ -9654,14 +9601,16 @@ function renderRecommendations() {
   st().recommendation = recommendation;
   if (!st().assessmentResult) refreshAssessmentResult();
   const assessment = st().assessmentResult;
-  $("resultsTitle").textContent = resultsTitleFor(assessment);
-  $("resultsIntro").textContent = resultsIntroFor(assessment);
-  $("recommendationInsights").innerHTML = renderRecommendationContext(assessment);
-  renderResultsPrimaryAction(recommendation);
-  $("contactFromResults")?.classList.remove("hidden");
-
   const buckets = assessmentBuckets(assessment);
-  $("recommendationBuckets").innerHTML = `${buckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}`;
+  const hasSnapshot = ["solution_package", "personal_solution_package"].includes(assessment.flowType);
+  $("resultsTitle").textContent = resultsTitleFor(assessment);
+  $("resultsIntro").textContent = resultsIntroFor(assessment, buckets);
+  $("resultsTitle").classList.toggle("hidden", hasSnapshot);
+  $("resultsIntro").classList.toggle("hidden", hasSnapshot);
+  $("recommendationInsights").innerHTML = `${renderResultsSnapshot(assessment, buckets)}${renderRecommendationContext(assessment)}`;
+  $("contactFromResults")?.classList.add("hidden");
+
+  $("recommendationBuckets").innerHTML = `${renderMandatoryChecks(assessment.mandatoryChecks)}${buckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}`;
   $("recommendationBuckets").querySelector("[data-refine-recommendations]")?.addEventListener("click", () => refineTopRecommendation());
   $("recommendationBuckets").querySelector("[data-summary-next]")?.addEventListener("click", () => openCustomerSummary());
   $("recommendationBuckets").querySelector("[data-expert-contact]")?.addEventListener("click", () => openContact());
@@ -9669,17 +9618,24 @@ function renderRecommendations() {
   $("recommendationBuckets").querySelectorAll("[data-card-refine]").forEach((button) => {
     button.addEventListener("click", () => openDetail(button.dataset.cardRefine || ""));
   });
+  $("recommendationInsights").querySelectorAll("[data-result-target]").forEach((button) => {
+    button.addEventListener("click", () => openResultTarget(button.dataset.resultTarget || "", assessment));
+  });
+  $("recommendationInsights").querySelector("[data-start-comparison]")?.addEventListener("click", () => {
+    const detailKey = firstRelevantDetailFlow(assessment);
+    if (detailKey) openDetail(detailKey);
+  });
 }
 
 function resultsTitleFor(assessment) {
   if (assessment.flowType === "direct_expert_contact") return "Asiantuntijan arvio yrityksellenne";
   if (assessment.flowType === "risk_area_discussion") return "Yrityksenne keskeiset riskialueet";
-  return st().recommendationRefined ? "Tarkennettu vakuutuskokonaisuus" : "Alustava vakuutuskokonaisuus";
+  return "Kartoituksesi on valmis";
 }
 
-function resultsIntroFor(assessment) {
+function resultsIntroFor(assessment, buckets = assessmentBuckets(assessment)) {
   if (assessment.flowType === "solution_package") {
-    return "Aloita näistä vakuutusalueista. Sopiva turvataso arvioidaan vasta vakuutuskohtaisessa tarkennuksessa.";
+    return resultsCountSentence(assessment, buckets);
   }
   if (assessment.flowType === "risk_area_discussion") {
     return "Alla olevat alueet eivät ole valmis vakuutuspaketti, vaan keskustelun pohja nykyisen vakuutusohjelman ja riskien tarkistamiseen.";
@@ -9687,7 +9643,74 @@ function resultsIntroFor(assessment) {
   if (assessment.flowType === "direct_expert_contact") {
     return "Tämän kokoinen yritys tarvitsee räätälöidyn vakuutusohjelman ja suoran yritysasiantuntijan arvion.";
   }
-  return "Aloita näistä vakuutusalueista. Voit avata jokaisen kohdan ja tarkentaa turvatasoa vain tarvittaessa.";
+  return resultsCountSentence(assessment, buckets);
+}
+
+function resultsCountSentence(assessment, buckets = assessmentBuckets(assessment)) {
+  const mandatory = assessment.mandatoryChecks?.length || 0;
+  const recommended = buckets.find((bucket) => bucket.key === "primary")?.items.length || 0;
+  const optional = buckets.find((bucket) => bucket.key === "possible")?.items.length || 0;
+  return `Löysimme tilanteeseesi ${countLabel(mandatory, "lakisääteisesti tarkistettavan vakuutuksen", "lakisääteisesti tarkistettavaa vakuutusta")}, ${countLabel(recommended, "suositellun vakuutuksen", "suositeltua vakuutusta")} ja ${countLabel(optional, "harkittavan lisäturvan", "harkittavaa lisäturvaa")}.`;
+}
+
+function countLabel(count, singular, plural) {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
+function renderResultsSnapshot(assessment, buckets) {
+  if (!["solution_package", "personal_solution_package"].includes(assessment.flowType)) return "";
+  const mandatory = assessment.mandatoryChecks?.length || 0;
+  const recommended = buckets.find((bucket) => bucket.key === "primary")?.items.length || 0;
+  const optional = buckets.find((bucket) => bucket.key === "possible")?.items.length || 0;
+  const detailKey = firstRelevantDetailFlow(assessment);
+  return `
+    <section class="results-snapshot" aria-labelledby="resultsSnapshotTitle">
+      <div>
+        <p class="eyebrow compact">Kartoituksesi tulos</p>
+        <h3 id="resultsSnapshotTitle">Kartoituksesi on valmis</h3>
+        <p>${escapeHtml(resultsCountSentence(assessment, buckets))}</p>
+      </div>
+      <div class="results-snapshot-stats" aria-label="Tulosten lukumäärät">
+        <button type="button" data-result-target="results-mandatory"><strong>${mandatory}</strong><span>Lakisääteiset</span></button>
+        <button type="button" data-result-target="results-recommended"><strong>${recommended}</strong><span>Suositellut</span></button>
+        <button type="button" data-result-target="results-optional"><strong>${optional}</strong><span>Harkittavat</span></button>
+      </div>
+      <nav class="results-section-nav" aria-label="Tulossivun osiot">
+        <button type="button" data-result-target="results-mandatory">Lakisääteiset</button>
+        <button type="button" data-result-target="results-recommended">Suositellut</button>
+        <button type="button" data-result-target="results-optional">Harkittavat</button>
+        ${detailKey ? `<button type="button" data-result-target="comparison">Turvatasojen vertailu</button>` : ""}
+        <button type="button" data-result-target="contact">Yhteydenotto</button>
+      </nav>
+      <div class="results-primary-actions">
+        ${detailKey ? `<button class="btn btn-primary" type="button" data-start-comparison>Vertaile turvatasoja</button>` : ""}
+        <button class="btn btn-secondary" type="button" data-result-target="contact">Pyydä asiantuntijaa ottamaan yhteyttä</button>
+      </div>
+    </section>
+  `;
+}
+
+function firstRelevantDetailFlow(assessment = st().assessmentResult) {
+  const covers = [
+    ...(assessment?.recommendedCovers || []),
+    ...(assessment?.optionalCovers || []).filter((item) => item.active)
+  ];
+  return covers
+    .map((item) => types()[item.key]?.detailFlow)
+    .find((detailKey) => detailKey && coverageModels[mode]?.[detailKey]?.options?.length) || "";
+}
+
+function openResultTarget(target, assessment) {
+  if (target === "contact") {
+    openContact();
+    return;
+  }
+  if (target === "comparison") {
+    const detailKey = firstRelevantDetailFlow(assessment);
+    if (detailKey) openDetail(detailKey);
+    return;
+  }
+  document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function renderAssessmentOverview(assessment) {
@@ -9734,8 +9757,6 @@ function renderRecommendationContext(assessment) {
     return renderAssessmentOverview(assessment);
   }
 
-  const currentLabels = currentInsuranceLabels();
-  const goal = reviewGoalLabel(st().quickAnswers.reviewGoal);
   return `
     <section class="recommendation-context">
       <div>
@@ -9743,59 +9764,26 @@ function renderRecommendationContext(assessment) {
         <h4>${escapeHtml(assessment.title)}</h4>
         <p>${escapeHtml(assessment.summary)}</p>
       </div>
-      ${activeIntakeQuestions().length && hasCompletedIntake() ? `
-        <div class="context-facts" aria-label="Nykytilanne">
-          <span>${escapeHtml(goal)}</span>
-          ${currentLabels.slice(0, 5).map((label) => `<em>${escapeHtml(label)}</em>`).join("")}
-        </div>
-      ` : ""}
-    </section>
-  `;
-}
-
-function renderMandatoryChecksLegacy(checks = []) {
-  if (!checks.length) return "";
-  const countLabel = checks.length === 1 ? "1 tarkistettava vakuutus" : `${checks.length} tarkistettavaa vakuutusta`;
-  return `
-    <section class="mandatory-section">
-      <div class="mandatory-intro">
-        <span class="mandatory-icon" aria-hidden="true">!</span>
-        <div>
-          <p class="eyebrow compact">Tärkeä tarkistus</p>
-          <h4>Yritykselläsi voi olla lakisääteisiä vakuutusvelvollisuuksia</h4>
-          <p>Vastaustesi perusteella tunnistimme ${escapeHtml(countLabel)}. Tarkka vakuuttamisvelvollisuus varmistetaan aina yrityksen tilanteen perusteella.</p>
-        </div>
-      </div>
-      <details class="mandatory-disclosure">
-        <summary>
-          <span>Avaa lakisääteisesti tarkistettavat vakuutukset</span>
-          <span class="mandatory-count">${escapeHtml(countLabel)}</span>
-        </summary>
-        <div class="mandatory-content">
-          <p class="mandatory-guidance">Tarkista nämä ennen vapaaehtoisen vakuutusturvan valintaa.</p>
-          <div class="mandatory-list">
-            ${checks.map((item) => `
-              <article>
-                <span class="mandatory-item-icon" aria-hidden="true">✓</span>
-                <div>
-                  <strong>${escapeHtml(item.name)}</strong>
-                  <span>${escapeHtml(item.text)}</span>
-                </div>
-              </article>
-            `).join("")}
-          </div>
-          <p class="mandatory-note">Asiantuntija auttaa varmistamaan, mitkä vakuutukset ovat yrityksellesi lakisääteisiä.</p>
-        </div>
-      </details>
     </section>
   `;
 }
 
 function renderMandatoryChecks(checks = []) {
-  if (!checks.length) return "";
+  if (!checks.length) return `
+    <section class="mandatory-section product-section no-mandatory" id="results-mandatory">
+      <div class="product-section-head mandatory-intro">
+        <span class="mandatory-icon" aria-hidden="true">✓</span>
+        <div>
+          <p class="eyebrow compact">Lakisääteiset vakuutukset</p>
+          <h4>Ei tunnistettuja lakisääteisiä vakuutuksia</h4>
+          <p>Antamiesi tietojen perusteella kartoitus ei nostanut tähän ryhmään vakuutuksia. Tilanne varmistetaan tarvittaessa asiantuntijan kanssa.</p>
+        </div>
+      </div>
+    </section>
+  `;
   const countLabel = checks.length === 1 ? "1 tarkistettava vakuutus" : `${checks.length} tarkistettavaa vakuutusta`;
   return `
-    <section class="mandatory-section product-section">
+    <section class="mandatory-section product-section" id="results-mandatory">
       <div class="product-section-head mandatory-intro">
         <span class="mandatory-icon" aria-hidden="true">!</span>
         <div>
@@ -9925,7 +9913,6 @@ function assessmentBuckets(assessment) {
   const primary = assessment.recommendedCovers
     .filter((item) => types()[item.key])
     .map((item) => solutionCoverToRecommendation(item, 8));
-  const mandatoryItems = mandatoryCardsForAssessment(assessment);
   const possible = assessment.optionalCovers
     .filter((item) => !recommendedKeysSet.has(item.key) && types()[item.key])
     .map((item) => solutionCoverToRecommendation({
@@ -9940,7 +9927,7 @@ function assessmentBuckets(assessment) {
       desc: mode === "business"
         ? "Nämä vakuutusalueet ovat yritysprofiilin perusteella ensimmäisenä tarkistettavia."
         : "Nämä vakuutusalueet sopivat vastauksiesi perusteella ensimmäiseksi tarkistettaviksi.",
-      items: [...mandatoryItems, ...primary]
+      items: primary
     },
     {
       key: "possible",
@@ -9955,109 +9942,16 @@ function assessmentBuckets(assessment) {
 
 function solutionCoverToRecommendation(coverItem, score) {
   const legacyItem = st().recommendation?.items?.find((item) => item.key === coverItem.key);
-  const existingKeys = currentInsuranceKeys();
   return {
     key: coverItem.key,
     score: Math.max(score, legacyItem?.score || 0),
     reasons: [coverItem.reason || coverItem.condition || legacyItem?.reasons?.[0] || types()[coverItem.key]?.desc].filter(Boolean),
-    existing: Boolean(legacyItem?.existing || existingKeys.has(coverItem.key))
+    existing: Boolean(legacyItem?.existing)
   };
-}
-
-function currentInsuranceKeys() {
-  if (!activeIntakeQuestions().length) return new Set();
-  return new Set(toArray(st().quickAnswers.currentInsuranceAreas).filter((key) => types()[key]));
-}
-
-function renderIntakeSummary() {
-  if (!activeIntakeQuestions().length || !hasCompletedIntake()) return "";
-  const currentLabels = currentInsuranceLabels();
-  const goal = reviewGoalLabel(st().quickAnswers.reviewGoal);
-  return `
-    <section class="intake-summary">
-      <div>
-        <p class="eyebrow compact">Nykytilanne ja tavoite</p>
-        <h4>${escapeHtml(goal)}</h4>
-        <p>Valintojasi käytetään nostamaan oikeat vakuutusalueet tarkasteltaviksi. Turvan laajuus valitaan vasta vakuutuskohtaisessa tarkennuksessa.</p>
-      </div>
-      <div class="intake-tags">
-        ${currentLabels.map((label) => `<span>${escapeHtml(label)}</span>`).join("")}
-      </div>
-    </section>
-  `;
-}
-
-function currentInsuranceLabels() {
-  if (!activeIntakeQuestions().length) return [];
-  const selected = toArray(st().quickAnswers.currentInsuranceAreas);
-  if (selected.includes("none")) return ["Ei vielä voimassa olevaa kokonaisuutta"];
-  if (selected.includes("unsure")) return ["Nykyinen vakuutusturva epäselvä"];
-  const options = Object.fromEntries(currentInsuranceOptions(mode).map((item) => [item.value, item.label]));
-  return selected.map((value) => options[value]).filter(Boolean).slice(0, 6);
-}
-
-function reviewGoalLabel(value) {
-  const labels = {
-    check: "Haluat tarkistaa nykyisen vakuutusturvan riittävyyden",
-    compare: "Haluat tutkia ja kilpailuttaa nykyisiä vakuutuksia",
-    new_or_missing: "Haluat selvittää, mitä vakuutuksia puuttuu",
-    understand: "Haluat ymmärtää, mitä vakuutuksia tilanteessa kannattaa harkita",
-    unsure: "Tavoite tarkentuu kartoituksen aikana"
-  };
-  const selected = toArray(value).map((item) => labels[item]).filter(Boolean);
-  if (!selected.length) return "Tavoite tarkentuu kartoituksen aikana";
-  if (selected.length === 1) return selected[0];
-  return `Tavoitteet: ${selected.join(", ")}`;
-}
-
-function renderResultsPrimaryAction(recommendation) {
-  const button = $("contactFromResults");
-  if (!button) return;
-  if (st().assessmentResult?.flowType === "direct_expert_contact") {
-    button.textContent = "Näytä arvio ja keskustelukohdat";
-    return;
-  }
-  button.textContent = "Näytä oma yhteenveto";
 }
 
 function resultsPrimaryAction() {
   openCustomerSummary();
-}
-
-function recommendationBuckets(recommendation) {
-  const visibleItems = recommendation.items.filter((item) => recommendationAreaOrder[mode].includes(item.key));
-  const relevant = visibleItems.filter((item) => item.score >= 3);
-  const primary = relevant.slice(0, 3);
-  const possible = relevant.slice(3);
-  const notNow = visibleItems.filter((item) => item.score < 3);
-
-  return [
-    {
-      key: "primary",
-      title: "Suositeltu aloitus",
-      desc: "Aloita näistä. Vastauksesi nostivat nämä selkeimmin tarkistettaviksi.",
-      items: primary
-    },
-    {
-      key: "possible",
-      title: "Mahdollisesti hyödylliset",
-      desc: "Nämä voivat täydentää kokonaisuutta, jos ne liittyvät arkeesi tai nykyiseen turvaasi.",
-      items: possible
-    },
-    {
-      key: "notNow",
-      title: "Muut vakuutusalueet",
-      desc: "Nämä eivät nousseet nyt vahvasti esiin, mutta voit tutustua niihin myöhemmin.",
-      items: notNow
-    }
-  ];
-}
-
-function hasRefinableRecommendations(recommendation = st().recommendation) {
-  if (!recommendation) return false;
-  return recommendation.items
-    .filter((item) => recommendationAreaOrder[mode].includes(item.key) && item.score >= 3)
-    .some((item) => types()[item.key]?.detailFlow && flow(types()[item.key].detailFlow));
 }
 
 function renderNextStepPrompt(assessment) {
@@ -10198,53 +10092,31 @@ function riskLevel(score) {
   return { label: "Matala", className: "low" };
 }
 
-function selectForPriceEstimate(typeKey) {
-  if (!typeKey || !types()[typeKey]) return;
-  st().selectedContact[typeKey] = true;
-  st().selectedPrice[typeKey] = true;
-  st().priceEstimateInterest = true;
-  renderRecommendations();
-  renderCalculatorPanel();
-  persistAssessment();
-  track("price_estimate_selected", { mode, typeKey });
-}
-
-function renderBucketLegacy(bucket) {
-  const visibleItems = bucket.key === "notNow" ? bucket.items.slice(0, 8) : bucket.items;
-  if (!visibleItems.length) return "";
-  const content = `
-      <p class="bucket-label">${escapeHtml(bucket.title)}</p>
-      <div class="recommendation-list">
-        ${visibleItems.map((item, index) => renderRecommendationCard(item, bucket.key, index)).join("")}
-      </div>
-  `;
-  if (bucket.key === "possible" || bucket.key === "notNow") {
-    return `
-      <details class="bucket bucket-collapsed">
-        <summary>
-          <span>${escapeHtml(bucket.title)}</span>
-          <small>${visibleItems.length} vakuutusaluetta</small>
-        </summary>
-        ${content}
-      </details>
-    `;
-  }
-
-  return `<section class="bucket">${content}</section>`;
-}
-
 function renderBucket(bucket) {
   const sortedItems = sortBucketItems(bucket.items);
   const visibleItems = bucket.key === "notNow" ? sortedItems.slice(0, 8) : sortedItems;
-  if (!visibleItems.length) return "";
   const title = bucket.key === "primary" ? "Suositellut vakuutukset" : bucket.title;
   const eyebrow = bucket.key === "primary" ? "Suositukset" : "Harkitse myös";
   const description = bucket.desc || (bucket.key === "primary"
     ? "Nämä vakuutusalueet nousivat vastauksiesi perusteella ensin tarkistettaviksi."
     : "Nämä voivat olla hyödyllisiä, jos ne liittyvät arkeesi tai nykyiseen vakuutusturvaasi.");
 
+  const sectionId = bucket.key === "primary" ? "results-recommended" : "results-optional";
+  if (!visibleItems.length) {
+    return `
+      <section class="bucket product-section product-bucket empty ${escapeHtml(bucket.key)}" id="${sectionId}">
+        <div class="product-section-head">
+          <p class="eyebrow compact">${escapeHtml(eyebrow)}</p>
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(bucket.key === "primary"
+            ? "Vastauksistasi ei noussut tähän ryhmään vakuutuksia. Voit tarkentaa vastauksia tai keskustella asiantuntijan kanssa."
+            : "Vastauksistasi ei noussut tällä hetkellä erillisiä harkittavia lisäturvia.")}</p>
+        </div>
+      </section>
+    `;
+  }
   return `
-    <section class="bucket product-section product-bucket ${escapeHtml(bucket.key)}">
+    <section class="bucket product-section product-bucket ${escapeHtml(bucket.key)}" id="${sectionId}">
       <div class="product-section-head">
         <p class="eyebrow compact">${escapeHtml(eyebrow)}</p>
         <h3>${escapeHtml(title)}</h3>
@@ -10309,22 +10181,13 @@ function renderMandatoryInlineCard(item) {
   `;
 }
 
-function mandatoryCardsForAssessment(assessment) {
-  return (assessment.mandatoryChecks || [])
-    .map((item) => ({
-      key: `mandatory:${item.id}`,
-      mandatoryOnly: true,
-      mandatory: item,
-      score: 9,
-      reasons: [item.text]
-    }));
-}
-
 function renderRecommendationCard(item, bucketKey) {
   const meta = types()[item.key];
   const card = productCardMeta(item.key, meta);
   const strength = recommendationStrength(item.score);
   const detailKey = meta.detailFlow || "";
+  const selectedTitle = detailKey ? assessmentSelectedTitle(item.key) : "";
+  const learnMoreUrl = card.sourceUrl || meta.materials?.[0]?.url || "";
   const articleClass = [
     "product-rec-card",
     bucketKey === "primary" ? "priority" : "supporting",
@@ -10332,28 +10195,25 @@ function renderRecommendationCard(item, bucketKey) {
 
   return `
     <article class="${articleClass}">
-      <details class="product-disclosure">
-        <summary class="product-card-summary">
-          ${renderProductMedia(card.visual, meta.title, card.imageUrl, card.imagePosition)}
-          <div class="product-card-body">
-            <h4>${escapeHtml(meta.title)} <span aria-hidden="true">›</span></h4>
-            <p>${escapeHtml(card.lead)}</p>
-            <div class="product-card-tags">
-              ${renderProductTags(item, bucketKey, strength)}
-              ${productScopeTag(item.key) ? `<span>${escapeHtml(productScopeTag(item.key))}</span>` : ""}
-            </div>
-          </div>
-        </summary>
-        <div class="product-expanded">
-          ${detailKey ? `
-            <div class="card-action-row product-refine-row">
-              <button class="btn btn-secondary btn-small" type="button" data-card-refine="${escapeHtml(detailKey)}">Vertaa turvia</button>
-              <span>Näet turvien sisällöt ja erot ilman lisäkysymyksiä.</span>
-            </div>
-          ` : ""}
-          ${renderRecommendationLearn(meta, card)}
+      ${renderProductMedia(card.visual, meta.title, card.imageUrl, card.imagePosition)}
+      <div class="product-card-body">
+        <h4>${escapeHtml(meta.title)}</h4>
+        <p>${escapeHtml(card.lead)}</p>
+        <div class="product-card-tags">
+          ${renderProductTags(item, bucketKey, strength)}
+          ${productScopeTag(item.key) ? `<span>${escapeHtml(productScopeTag(item.key))}</span>` : ""}
         </div>
-      </details>
+        ${selectedTitle ? `
+          <div class="product-card-selection" aria-live="polite">
+            <span>Valitsemasi vaihtoehto</span>
+            <strong>${escapeHtml(selectedTitle)}</strong>
+          </div>
+        ` : ""}
+        <div class="product-card-actions">
+          ${detailKey ? `<button class="btn btn-primary btn-small" type="button" data-card-refine="${escapeHtml(detailKey)}">${selectedTitle ? "Muuta turvavalintaa" : "Vertaile ja valitse turva"}</button>` : ""}
+          ${learnMoreUrl ? `<a class="product-page-link" href="${escapeHtml(learnMoreUrl)}" target="_blank" rel="noopener noreferrer">Lue lisää <span aria-hidden="true">›</span></a>` : ""}
+        </div>
+      </div>
     </article>
   `;
 }
@@ -10382,21 +10242,6 @@ function renderProductMedia(visual, title, imageUrl = "", imagePosition = "") {
     <div class="product-card-media product-visual-${escapeHtml(visual || "property")}${imageUrl ? " has-image" : ""}"${imageStyle} aria-hidden="true">
       ${imageUrl ? "" : `<span>${renderOptionIcon(visual || "property")}</span>`}
     </div>
-  `;
-}
-
-function renderRecommendationLearn(meta, card = {}) {
-  return `
-    <details class="learn-panel product-learn-panel">
-      <summary>Vakuutusselosteet ja lisätiedot</summary>
-      <p class="material-empty">Tarkka sisältö, rajoitukset, omavastuut ja korvattavuus tarkistetaan vakuutusehdoista.</p>
-      ${card.sourceUrl ? `
-        <a class="product-page-link" href="${escapeHtml(card.sourceUrl)}" target="_blank" rel="noopener noreferrer">
-          Lue lisää LähiTapiolan sivuilla <span aria-hidden="true">›</span>
-        </a>
-      ` : ""}
-      ${renderMaterialDisclosure(meta.materials)}
-    </details>
   `;
 }
 
@@ -10662,48 +10507,13 @@ function productSummary(meta) {
   return meta.desc || "Vakuutuksen tarkka sisältö varmistetaan tuotemateriaaleista ja asiantuntijan kanssa.";
 }
 
-function productCovers(meta) {
-  const title = meta.title.toLocaleLowerCase("fi-FI");
-  const text = `${meta.title} ${meta.area || ""} ${meta.desc || ""}`.toLocaleLowerCase("fi-FI");
-  if (title.includes("koti")) return "Kodin irtaimistoa, rakennusta, vastuuta, oikeusturvaa ja valittuja lisäturvia vakuutuksen rakenteen mukaan.";
-  if (text.includes("ajoneuvo")) return "Liikenteessä käytettävän ajoneuvon lakisääteistä turvaa ja valittua vapaaehtoista kaskoa.";
-  if (text.includes("matka")) return "Matkustajaan, matkatavaroihin, matkan peruuntumiseen, keskeytymiseen ja myöhästymiseen liittyviä tilanteita valintojen mukaan.";
-  if (text.includes("terveys") || text.includes("tapaturma") || text.includes("toimeentulo")) return "Sairaus- ja tapaturmatilanteisiin, hoitokuluihin sekä toimeentulon tai läheisten turvaan liittyviä ratkaisuja.";
-  if (text.includes("henkivakuutus") || text.includes("henkiturva") || text.includes("kuolemanvaraturva")) return "Läheisille tai omaan talouteen sovittua kertakorvausta kuoleman tai vakavan sairauden varalle valitun rakenteen mukaan.";
-  if (text.includes("lemmikki") || text.includes("koira") || text.includes("kissa")) return "Eläinlääkärikuluja ja valittuja lisäturvia, kuten henki-, käyttöominaisuus- tai vastuuvakuutusta.";
-  if (text.includes("omaisuus") || text.includes("esine") || text.includes("kiinteistö")) return "Yrityksen omaisuutta, toimitiloja, koneita, laitteita, varastoa tai kiinteistöjä sovitun rakenteen mukaan.";
-  if (text.includes("vastuu")) return "Yrityksen toiminnasta, tuotteista, asiantuntijatyöstä tai hallinnosta aiheutuvia vastuutarkistuksia vakuutuslajin mukaan.";
-  if (text.includes("keskeytys")) return "Toiminnan keskeytymisestä aiheutuvia taloudellisia vaikutuksia sovitun keskeytysturvan mukaan.";
-  if (text.includes("kyber")) return "Tietoturvapoikkeamiin, järjestelmäkatkoihin ja asiantuntija-apuun liittyviä tilanteita valitun kyberturvan mukaan.";
-  return meta.desc || "Vakuutus voi kattaa tuotekohtaisissa ehdoissa määriteltyjä vahinkoja ja kustannuksia.";
-}
-
-function productLimits(meta) {
-  const title = meta.title.toLocaleLowerCase("fi-FI");
-  if (title.includes("ajoneuvo")) return "Oman ajoneuvon vahingot, lisäturvat, bonukset, omavastuut ja ajoneuvokohtaiset rajaukset pitää varmistaa laskurissa.";
-  if (title.includes("matka")) return "Matkan kesto, kohdemaa, matkustajat, matkatavarat, peruuntumisen syy ja voimassaolo pitää tarkistaa.";
-  if (title.includes("terveys") || title.includes("tapaturma")) return "Terveysselvitys, rajoitusehdot, ikärajat, urheilulajit, omavastuu ja hoitokulujen enimmäismäärät pitää tarkistaa.";
-  if (title.includes("henki")) return "Vakuutusmäärä, edunsaaja, terveystiedot, voimassaolo ja mahdolliset rajoitukset pitää varmistaa.";
-  if (title.includes("vastuu")) return "Sopimusvastuut, toimialarajaukset, enimmäiskorvaukset ja puhtaat varallisuusvahingot pitää tarkistaa erikseen.";
-  if (title.includes("keskeytys")) return "Keskeytyksen syy, vastuuaika, katteen laskenta, omavastuu ja riippuvuudet pitää määrittää tarkasti.";
-  return "Lopullinen sisältö, rajoitukset, omavastuut, vakuutusmäärät ja soveltuvuus pitää varmistaa tuotemateriaaleista, laskurista tai asiantuntijalta.";
-}
-
 function recommendationStrength(score) {
   return score >= 7 ? "Suositeltu" : "";
-}
-
-function riskImpactForScore(score) {
-  return recommendationStrength(score);
 }
 
 function refineTopRecommendation() {
   if (!st().assessmentResult) calculateAndRenderRecommendations();
   startQuick();
-}
-
-function firstDetailFlow() {
-  return recommendationAreaOrder[mode].map((key) => types()[key]).find((item) => item?.detailFlow && flow(item.detailFlow))?.detailFlow;
 }
 
 function openDetail(detailKey) {
@@ -10814,8 +10624,7 @@ function renderDetailResult(detailKey, result) {
       ${renderProductMaterials(meta)}
     </div>
   `;
-  bindCalculatorActions($("detailResult"));
-  renderCalculatorPanel();
+  bindDetailActions($("detailResult"));
   renderSummaryList();
 }
 
@@ -10944,27 +10753,12 @@ function renderCoverageComparison(comparison, detailKey = "") {
   `;
 }
 
-function bindCalculatorActions(root) {
+function bindDetailActions(root) {
   root.querySelectorAll("[data-coverage-choice]").forEach((button) => {
     button.addEventListener("click", () => selectCoverageOption(button.dataset.detailKey || "", button.dataset.coverageChoice || ""));
   });
   root.querySelectorAll("[data-coverage-cell]").forEach((cell) => {
     cell.addEventListener("click", () => selectCoverageOption(cell.dataset.detailKey || "", cell.dataset.coverageCell || ""));
-  });
-  root.querySelectorAll("[data-calculator-contact]").forEach((button) => {
-    button.addEventListener("click", () => requestPriceEstimate(button.dataset.calculatorContact || ""));
-  });
-  root.querySelectorAll("[data-remove-price]").forEach((button) => {
-    button.addEventListener("click", () => removePriceEstimate(button.dataset.removePrice || ""));
-  });
-  root.querySelectorAll("[data-calculator-more]").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (st().recommendation) openRecommendations();
-      else startQuick();
-    });
-  });
-  root.querySelectorAll("[data-calculator-start]").forEach((button) => {
-    button.addEventListener("click", () => startQuick(hasCompleteBaseInfo() ? "intake" : "base"));
   });
   root.querySelectorAll("[data-open-contact]").forEach((button) => {
     button.addEventListener("click", () => openContact());
@@ -10978,29 +10772,6 @@ function bindCalculatorActions(root) {
   root.querySelectorAll("[data-next-detail]").forEach((button) => {
     button.addEventListener("click", () => openDetail(button.dataset.nextDetail || ""));
   });
-}
-
-function requestPriceEstimate(detailKey = "") {
-  const context = calculatorContext();
-  const typeKey = detailKey ? typeKeyFromDetail(detailKey) : context.typeKey;
-  st().priceEstimateInterest = true;
-  if (typeKey) {
-    st().selectedContact[typeKey] = true;
-    st().selectedPrice[typeKey] = true;
-  }
-  persistAssessment();
-  openCustomerSummary();
-}
-
-function removePriceEstimate(typeKey = "") {
-  if (!typeKey || !types()[typeKey]) return;
-  st().selectedPrice[typeKey] = false;
-  st().priceEstimateInterest = Object.keys(st().selectedPrice).some((key) => st().selectedPrice[key]);
-  renderRecommendations();
-  renderCalculatorPanel();
-  renderSummaryList();
-  persistAssessment();
-  track("price_estimate_removed", { mode, typeKey });
 }
 
 function typeKeyFromDetail(detailKey) {
@@ -11026,13 +10797,10 @@ function selectCoverageOption(detailKey, coverageKey) {
   const typeKey = typeKeyFromDetail(detailKey);
   if (typeKey) {
     st().selectedContact[typeKey] = true;
-    st().selectedPrice[typeKey] = true;
-    st().priceEstimateInterest = true;
   }
   refreshAssessmentResult();
   persistAssessment();
   renderDetailResult(detailKey, result);
-  renderCalculatorPanel();
   renderChatPanel();
   renderSummaryList();
   track("coverage_option_selected", { mode, detailKey, coverageKey });
@@ -11131,7 +10899,6 @@ function openContact() {
 function renderContact() {
   $("contactOrgField")?.classList.toggle("hidden", mode !== "business");
   if (mode !== "business" && $("contactOrg")) $("contactOrg").value = "";
-  $("contactPriceSummary").innerHTML = renderContactPriceSummary();
   const candidateKeys = recommendationKeysForContact();
   $("contactChoices").innerHTML = candidateKeys.length ? candidateKeys.map((key) => {
     const meta = types()[key];
@@ -11140,8 +10907,7 @@ function renderContact() {
       ? coverageModels[mode]?.[meta.detailFlow]?.options?.find((option) => option.key === st().selectedCoverage[meta.detailFlow])
       : null;
     const detailBadge = selectedOption ? `Valittu: ${selectedOption.title}` : st().detailResults[meta.detailFlow] ? "Vertailtu · ei valintaa" : "";
-    const priceBadge = st().selectedPrice[key] ? "Valittu" : "";
-    const badges = [meta.area, detailBadge, priceBadge].filter(Boolean).join(" · ");
+    const badges = [meta.area, detailBadge].filter(Boolean).join(" · ");
     return `
       <label class="check-card">
         <input type="checkbox" data-contact-choice="${escapeHtml(key)}" ${checked}>
@@ -11152,38 +10918,75 @@ function renderContact() {
   $("contactChoices").querySelectorAll("[data-contact-choice]").forEach((input) => {
     input.addEventListener("change", () => {
       st().selectedContact[input.dataset.contactChoice] = input.checked;
-      if (!input.checked) st().selectedPrice[input.dataset.contactChoice] = false;
-      st().priceEstimateInterest = Object.keys(st().selectedPrice).some((key) => st().selectedPrice[key]);
-      renderCalculatorPanel();
+      updateContactHandoffSummary();
       renderSummaryList();
       persistAssessment();
     });
   });
   restoreContactFields();
+  readContactFields();
+  updateContactHandoffSummary();
+  ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactTime", "freeText"].forEach((id) => {
+    if (!$(id)) return;
+    $(id).oninput = () => { readContactFields(); updateContactHandoffSummary(); persistAssessment(); };
+    $(id).onchange = () => { readContactFields(); updateContactHandoffSummary(); persistAssessment(); };
+  });
   if (mode !== "business" && $("contactOrg")) $("contactOrg").value = "";
 }
 
-function renderContactPriceSummary() {
+function updateContactHandoffSummary() {
+  const root = $("contactHandoffSummary");
+  if (!root) return;
+  root.innerHTML = renderContactHandoffSummary();
+  root.querySelector("[data-edit-contact-answers]")?.addEventListener("click", () => startBaseInfo());
+}
+
+function renderContactHandoffSummary() {
+  const assessment = st().assessmentResult;
+  if (!assessment) return "";
   const selectedAreas = recommendedContactKeys();
-  const shownItems = selectedAreas.map((key) => ({
-    key,
-    title: types()[key].title,
-    selectedTitle: assessmentSelectedTitle(key),
-    compared: Boolean(st().detailResults[types()[key].detailFlow])
-  }));
+  const selectedLevels = selectedAreas
+    .map((key) => ({ key, title: types()[key].title, selectedTitle: assessmentSelectedTitle(key) }))
+    .filter((item) => item.selectedTitle);
+  const openLevels = selectedAreas
+    .filter((key) => types()[key]?.detailFlow && !assessmentSelectedTitle(key))
+    .map((key) => types()[key].title);
+  const recommendedTitles = (assessment.recommendedCovers || [])
+    .map((item) => types()[item.key]?.title)
+    .filter(Boolean);
+  const optionalTitles = (assessment.optionalCovers || [])
+    .filter((item) => item.active)
+    .map((item) => types()[item.key]?.title)
+    .filter(Boolean);
+  const baseSummary = baseAnswerTags().join(" · ") || "Ei kirjattuja lähtötietoja";
 
   return `
-    <section class="contact-context-summary">
-      <div>
-        <p class="eyebrow compact">Kartoituksesta mukana</p>
-        <h4>Valitse keskusteltavat vakuutukset</h4>
-        <p class="muted small">Suositukset on esivalittu. Voit poistaa tai lisätä valintoja alla.</p>
-      </div>
-      ${shownItems.length ? `
-        <div class="contact-context-tags">
-          ${shownItems.map((item) => `<span>${escapeHtml(item.title)}${item.selectedTitle ? ` · ${escapeHtml(item.selectedTitle)}` : item.compared ? " · ei valittua vaihtoehtoa" : ""}</span>`).join("")}
+    <section class="contact-handoff-summary" aria-labelledby="handoffTitle">
+      <div class="contact-handoff-head">
+        <div>
+          <p class="eyebrow compact">Ennen vahvistamista</p>
+          <h4 id="handoffTitle">Nämä tiedot välitetään asiantuntijalle</h4>
+          <p>Kooste päivittyy valintojesi mukana. Voit palata muokkaamaan kartoituksen vastauksia ennen vahvistamista.</p>
         </div>
-      ` : `<p class="muted small">Valitse keskusteluaiheet alla.</p>`}
+        <button class="btn btn-secondary btn-small" type="button" data-edit-contact-answers>Muokkaa vastauksia</button>
+      </div>
+      <div class="handoff-facts">
+        <div><span>Asiakastyyppi ja tilanne</span><strong>${escapeHtml(`${profile().label} · ${baseSummary}`)}</strong></div>
+        <div><span>Lakisääteiset tarkistukset</span><strong>${escapeHtml(assessment.mandatoryChecks?.map((item) => item.name).join(", ") || "Ei tunnistettuja")}</strong></div>
+        <div><span>Suositellut vakuutukset</span><strong>${escapeHtml(recommendedTitles.join(", ") || "Ei tunnistettuja")}</strong></div>
+        <div><span>Harkittavat lisäturvat</span><strong>${escapeHtml(optionalTitles.join(", ") || "Ei tunnistettuja")}</strong></div>
+        <div><span>Yhteydenottotapa</span><strong>${escapeHtml([st().contact.contactChannel, st().contact.contactTime].filter(Boolean).join(" · ") || "Ei vielä valittu")}</strong></div>
+        <div><span>Avoimet turvavalinnat</span><strong>${escapeHtml(openLevels.join(", ") || "Ei avoimia turvavalintoja")}</strong></div>
+      </div>
+      <div class="contact-handoff-list">
+        ${selectedAreas.map((key) => `
+          <div class="contact-handoff-line">
+            <strong>${escapeHtml(types()[key].title)}</strong>
+            <span>${escapeHtml(assessmentSelectedTitle(key) || "Turvavaihtoehtoa ei ole vielä valittu")}</span>
+          </div>
+        `).join("") || `<p>Voit valita keskusteltavat vakuutukset alta.</p>`}
+      </div>
+      ${selectedLevels.length ? `<p class="handoff-selection-note">Valitut turvavaihtoehdot välitetään asiantuntijalle täsmälleen yllä esitetyssä muodossa.</p>` : ""}
     </section>
   `;
 }
@@ -11225,12 +11028,6 @@ function renderCustomerSummary() {
     ...covers.map((item) => renderCustomerSummaryCover(item, assessment))
   ].join("");
   const summaryProductCount = (assessment.mandatoryChecks?.length || 0) + covers.length;
-  const hasIntake = activeIntakeQuestions().length > 0
-    && hasCompletedIntake()
-    && (
-      toArray(st().quickAnswers.reviewGoal).some((item) => item !== "unsure")
-      || currentInsuranceLabels().some((label) => !label.toLocaleLowerCase("fi-FI").includes("epäselvä"))
-    );
   const introTitle = mode === "business" ? "Yrityksellesi muodostettu vakuutusnäkymä" : "Sinulle muodostettu vakuutusnäkymä";
   const introText = assessment.flowType === "direct_expert_contact"
     ? "Yrityksesi koko tai tilanne ohjaa suoraan asiantuntijakeskusteluun. Yhteenveto auttaa aloittamaan keskustelun oikeista riskialueista."
@@ -11247,7 +11044,7 @@ function renderCustomerSummary() {
       </div>
     </section>
 
-    ${(baseTags.length || hasIntake) ? `
+    ${baseTags.length ? `
       <details class="summary-context-disclosure">
         <summary>Näytä kartoituksen lähtötiedot</summary>
         <div class="summary-context-content">
@@ -11255,18 +11052,6 @@ function renderCustomerSummary() {
             <div>
               <strong>Tilanteesi</strong>
               <div class="profile-tag-row">${baseTags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
-            </div>
-          ` : ""}
-          ${hasIntake ? `
-            <div class="summary-intake-grid compact">
-              <div>
-                <span>Nykyiset vakuutukset</span>
-                <strong>${escapeHtml(currentInsuranceLabels().join(", "))}</strong>
-              </div>
-              <div>
-                <span>Tavoite</span>
-                <strong>${escapeHtml(reviewGoalLabel(st().quickAnswers.reviewGoal))}</strong>
-              </div>
             </div>
           ` : ""}
         </div>
@@ -11399,7 +11184,7 @@ function renderCustomerSummaryCover(item, assessment) {
           ${refined ? `<span>Vertailtu</span>` : ""}
         </div>
         <h5>${escapeHtml(meta.title)}</h5>
-        <p>${escapeHtml(shortenText(item.reason || item.condition || card.lead || productSummary(meta), 150))}</p>
+        <p>${escapeHtml(shortenText(card.lead || productSummary(meta), 150))}</p>
         ${level?.chosen ? `
           <div class="summary-coverage-level">
             <span>Asiakkaan valitsema vaihtoehto</span>
@@ -11424,7 +11209,7 @@ function renderCustomerSummaryCover(item, assessment) {
 
 function restoreContactFields() {
   const contact = st().contact;
-  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "freeText"]) {
+  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactTime", "freeText"]) {
     if ($(id) && Object.prototype.hasOwnProperty.call(contact, id)) $(id).value = contact[id] || "";
   }
   $("privacyConsent").checked = Boolean(contact.privacyConsent);
@@ -11432,7 +11217,7 @@ function restoreContactFields() {
 
 function readContactFields() {
   const contact = {};
-  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "freeText"]) {
+  for (const id of ["contactName", "contactOrg", "contactEmail", "contactPhone", "contactChannel", "contactTime", "freeText"]) {
     contact[id] = $(id).value.trim();
   }
   if (mode !== "business") contact.contactOrg = "";
@@ -11478,6 +11263,7 @@ function buildCrmSummary(contact) {
   lines.push(`- Sähköposti: ${contact.contactEmail}`);
   if (contact.contactPhone) lines.push(`- Puhelin: ${contact.contactPhone}`);
   lines.push(`- Toivottu yhteydenottotapa: ${contact.contactChannel || "Ei valittu"}`);
+  lines.push(`- Paras aika ottaa yhteyttä: ${contact.contactTime || "Ei valittu"}`);
   lines.push("");
   lines.push("Asiakkaan profiili");
   lines.push(`- Asiakastyyppi: ${profile().label}`);
@@ -11489,6 +11275,16 @@ function buildCrmSummary(contact) {
   lines.push("");
   lines.push("Kartoituksen tyyppi");
   lines.push(`- ${flowTypeLabel(assessment.flowType)}`);
+
+  const selectedContactKeys = recommendedContactKeys();
+  if (selectedContactKeys.length) {
+    lines.push("");
+    lines.push("Asiakkaan valitsemat keskusteluaiheet");
+    selectedContactKeys.forEach((key) => {
+      const selectedTitle = assessmentSelectedTitle(key);
+      lines.push(`- ${types()[key]?.title || key}${selectedTitle ? `: ${selectedTitle}` : ": turvavaihtoehto avoin"}`);
+    });
+  }
 
   if (assessment.mandatoryChecks.length) {
     lines.push("");
@@ -11524,13 +11320,6 @@ function buildCrmSummary(contact) {
     assessment.selectedRelevantNeeds.forEach((id) => {
       lines.push(`- ${options.find((item) => item.id === id)?.label || id}`);
     });
-  }
-
-  if (activeIntakeQuestions().length && hasCompletedIntake()) {
-    lines.push("");
-    lines.push("Nykytilanne ja tavoite");
-    lines.push(`- Nykyiset vakuutukset: ${currentInsuranceLabels().join(", ")}`);
-    lines.push(`- Tavoite: ${reviewGoalLabel(st().quickAnswers.reviewGoal)}`);
   }
 
   const coverageLevels = Object.entries(assessment.selectedCoverageLevels || {}).filter(([, level]) => level.chosen);
@@ -11602,12 +11391,6 @@ function renderSummaryList() {
 
   parts.push(`<div class="summary-item"><strong>Yhteydenotto</strong><span class="muted small">${selected.length ? `${selected.length} aihetta valittuna` : "Ei valintoja"}</span></div>`);
   $("summaryList").innerHTML = parts.join("");
-}
-
-function renderCalculatorPanel() {
-  const panel = $("calculatorPanel");
-  if (!panel) return;
-  panel.innerHTML = "";
 }
 
 function renderChatPanel() {
@@ -11736,7 +11519,7 @@ function chatContext() {
   const suggestions = [
     topTitle ? `Miksi minulle suositellaan: ${topTitle}?` : "Miten tämä kartoitus auttaa minua?",
     activeType ? "Mitä eroa näillä turvavaihtoehdoilla on?" : "Mitä minun kannattaa tehdä seuraavaksi?",
-    "Miten hinta-arvio muodostuisi?"
+    "Mitä tietoja asiantuntija saa kartoituksesta?"
   ];
   return { aiContext, topItems, activeDetail, activeType, suggestions };
 }
@@ -11751,12 +11534,11 @@ function buildChatAnswer(question) {
   }
 
   if (st().chatEscalated) {
-    return "Asiantuntija voi jatkaa tästä samasta keskustelusta. Tässä demossa näytän samalla, mitä tietoja asiantuntijalle siirtyisi: asiakastyyppi, kartoituksen vastaukset, suositellut vakuutusalueet ja valitut hinta-arvion aiheet.";
+    return "Asiantuntija voi jatkaa tästä samasta keskustelusta. Kartoituksesta siirtyisivät asiakastyyppi, vastaukset, suositellut vakuutusalueet ja asiakkaan valitsemat turvavaihtoehdot.";
   }
 
   if (lowered.includes("hinta") || lowered.includes("laskuri")) {
-    const symbol = context.aiContext.pricingPayload?.priceImpactSymbol || "ei vielä arvioitu";
-    return `Tässä ei lasketa oikeaa hintaa. Valintojesi suuntaa antava hintavaikutus on ${symbol}. Valitut vakuutukset ja turvatasot siirtyisivät LähiTapiolan laskuriin tai asiantuntijan arvioon. ${context.aiContext.pricingPayload?.disclaimer || priceImpactDisclaimer}`;
+    return "Tämä kartoitin ei laske hintoja. Tarkka vakuutusturva ja hinta varmistetaan asiantuntijan kanssa.";
   }
 
   if (lowered.includes("ero") || lowered.includes("turva") || lowered.includes("laaja") || lowered.includes("suppea")) {
@@ -11781,71 +11563,7 @@ function buildChatAnswer(question) {
   }
 
   const topText = topItems.length ? topItems.map((item) => types()[item.key].title).join(", ") : context.aiContext.riskAreas.map((item) => item.title).join(", ") || "asiantuntijan arvio";
-  return `Kartoituksesi nykyiset keskeiset aiheet ovat: ${topText}. Voin selittää vain tämän kartoitustuloksen suosituksia, valittuja turvatasoja ja suuntaa antavaa hintavaikutusta.`;
-}
-
-function selectedPriceItems() {
-  return Object.keys(st().selectedPrice)
-    .filter((key) => st().selectedPrice[key] && types()[key])
-    .map((key) => {
-      const meta = types()[key];
-      const result = meta.detailFlow ? st().detailResults[meta.detailFlow] : null;
-      const selectedOption = result?.comparison ? selectedCoverageOption(meta.detailFlow, result.comparison) : null;
-      return {
-        key,
-        title: meta.title,
-        detail: selectedOption ? selectedOption.title : meta.area
-      };
-    });
-}
-
-function calculatorContext() {
-  const detailEntries = Object.entries(st().detailResults);
-  const activeDetail = st().activeDetail && st().detailResults[st().activeDetail] ? st().activeDetail : "";
-  const detailKey = activeDetail || (detailEntries.length ? detailEntries[detailEntries.length - 1][0] : "");
-
-  if (detailKey) {
-    const result = st().detailResults[detailKey];
-    const typeKey = typeKeyFromDetail(detailKey);
-    const meta = typeKey ? types()[typeKey] : null;
-    const selectedOption = result.comparison ? selectedCoverageOption(detailKey, result.comparison) : null;
-    const recommended = selectedOption?.title || result.comparison?.recommended?.map((option) => option.title).join(", ") || result.primaryTag;
-    return {
-      title: meta?.title || result.title,
-      subtitle: selectedOption ? `Vertailun lähtökohta: ${selectedOption.title}` : result.title,
-      recommended,
-      nextStep: "Hinta-arvio",
-      detailKey,
-      typeKey
-    };
-  }
-
-  const assessment = st().assessmentResult;
-  if (assessment) {
-    const item = assessment.recommendedCovers[0];
-    if (!item) {
-      return {
-        title: assessment.title,
-        subtitle: assessment.summary || flowTypeLabel(assessment.flowType),
-        recommended: assessment.pricingPayload?.priceImpactSymbol || "Asiantuntijan arvio",
-        nextStep: "Asiantuntijan arvio",
-        detailKey: "",
-        typeKey: ""
-      };
-    }
-    const meta = types()[item.key];
-    const level = assessment.selectedCoverageLevels?.[item.key];
-    return {
-      title: meta.title,
-      subtitle: item.reason || meta.desc,
-      recommended: level?.refined ? level.selectedTitle : "Turvatasoa ei ole vielä arvioitu",
-      nextStep: meta.detailFlow ? "Avaa vakuutuksen turvien vertailu" : "Asiantuntijan arvio",
-      detailKey: meta.detailFlow || "",
-      typeKey: item.key
-    };
-  }
-
-  return {};
+  return `Kartoituksesi nykyiset keskeiset aiheet ovat: ${topText}. Voin selittää tämän kartoitustuloksen suosituksia, valittuja turvatasoja ja asiantuntijalle välitettäviä tietoja.`;
 }
 
 function showView(next) {
@@ -11866,7 +11584,6 @@ function showView(next) {
   $("appShell")?.classList.toggle("flow-only", focusOnly);
   updateSteps(next);
   renderSummaryList();
-  renderCalculatorPanel();
   renderChatPanel();
   savedView = next;
   persistAssessment();
@@ -11907,7 +11624,6 @@ function resetAssessment(next = "intro") {
   persistedAt = "";
   renderIntro();
   renderBaseInfo();
-  renderCalculatorPanel();
   renderChatPanel();
   renderSummaryList();
   closeChatPopup();
@@ -11931,7 +11647,6 @@ function hasProgress() {
     Object.keys(current.detailAnswers).length ||
     Object.keys(current.detailResults).length ||
     Object.keys(current.selectedContact).length ||
-    Object.keys(current.selectedPrice).length ||
     Object.keys(current.contact).length ||
     current.chatMessages.length
   );
@@ -11964,13 +11679,11 @@ function persistAssessment() {
       recommendationRefined: current.recommendationRefined,
       selectedRelevantNeeds: current.selectedRelevantNeeds,
       selectedContact: current.selectedContact,
-      selectedPrice: current.selectedPrice,
       activeDetail: current.activeDetail,
       detailIndex: current.detailIndex,
       detailAnswers: current.detailAnswers,
       detailResults: current.detailResults,
       selectedCoverage: current.selectedCoverage,
-      priceEstimateInterest: current.priceEstimateInterest,
       contactSelectionInitialized: current.contactSelectionInitialized
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify({

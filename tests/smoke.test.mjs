@@ -105,15 +105,13 @@ assert.match(
   appSource,
   /function activeIntakeQuestions\(\) \{\s*\/\/ Nykyisiä vakuutuksia tai kartoituksen tavoitetta ei kysytä\.\s*return \[\];\s*\}/,
 );
-assert.match(appSource, /if \(!activeIntakeQuestions\(\)\.length\) return true;/);
+assert.match(appSource, /function hasCompletedIntake\(\) \{\s*return true;\s*\}/);
 assert.doesNotMatch(appSource, /Mitä vakuutuksia sinulla on jo/);
 assert.doesNotMatch(appSource, /Mikä on kartoituksen tavoite/);
 assert.doesNotMatch(appSource, /Mitä vakuutusalueita yrityksellä on jo/);
 assert.doesNotMatch(appSource, /Mitä haluat tehdä yrityksen vakuutuksille/);
-assert.match(
-  appSource,
-  /function currentInsuranceLabels\(\) \{\s*if \(!activeIntakeQuestions\(\)\.length\) return \[\];/,
-);
+assert.doesNotMatch(appSource, /function currentInsuranceLabels/);
+assert.doesNotMatch(appSource, /pricingPayload|selectedPrice|priceEstimateInterest/);
 assert.match(appSource, /traffic: businessImages\.traffic/);
 assert.match(appSource, /vehicle: businessImages\.vehicle/);
 assert.match(appSource, /home: .*LT_kotivakuutus_nuoretsohvalla_3/);
@@ -132,7 +130,15 @@ assert.doesNotMatch(appSource, /Miksi tämä ehdotus syntyi/);
 assert.doesNotMatch(appSource, /coverage-choice-grid/);
 assert.doesNotMatch(appSource, /coverage-selection-note/);
 assert.doesNotMatch(appSource, /Suuntaa antava hintavaikutus/);
+assert.match(appSource, /function renderResultsSnapshot/);
+assert.match(appSource, /results-snapshot-stats/);
+assert.match(appSource, /Vertaile ja valitse turva/);
+assert.match(appSource, /function renderContactHandoffSummary/);
+assert.match(appSource, /Nämä tiedot välitetään asiantuntijalle/);
+assert.match(appSource, /Turvavaihtoehtoa ei ole vielä valittu/);
 assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
+assert.match(templateSource, /id="contactTime"/);
+assert.match(templateSource, /id="editAnswersFromContact"/);
 assert.doesNotMatch(appSource, /function isMandatoryRelatedType/);
 assert.doesNotMatch(appSource, /const isLegal = isMandatoryRelatedType/);
 assert.match(templateSource, /Oma vakuutusyhteenveto/);

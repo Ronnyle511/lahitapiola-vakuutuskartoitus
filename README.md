@@ -6,21 +6,22 @@ Verkkosivulle upotettava vakuutuskartoitus henkilö- ja yritysasiakkaille.
 
 - Asiakas valitsee henkilöasiakas- tai yritysasiakaskartoituksen.
 - Lyhyt kyllä/ei-kartoitus tunnistaa relevantit vakuutuslajit ilman tuotekohtaista syventymistä.
-- Suosituksissa näytetään perustelut, opastava vakuutuskortti, turvan vertailu ja hinta-arvion laskuripaikka.
+- Tulosnäkymä kokoaa lakisääteiset tarkistukset, suositellut vakuutukset ja harkittavat lisäturvat dynaamiseksi yhteenvedoksi.
+- Selkeistä vakuutuskorteista pääsee suoraan turvavaihtoehtojen vertailuun ja valintaan.
 - Yrityspuolella tulokset jaetaan lakisääteisiin tarkistuksiin, kriittisiin tarpeisiin ja tilannekohtaisiin hyötyihin.
 - Asiakas voi valita turvavaihtoehdon itse, vaikka kone ehdottaisi toista vaihtoehtoa.
-- Hinta-arvion sivupaneeli kokoaa valitut vakuutukset samaan näkymään ja näyttää, miten LähiTapiolan laskuri-integraatio toimisi demona.
+- Kartoitin ei esitä hinta-arvioita. Tarkka vakuutusturva ja hinta varmistetaan asiantuntijan kanssa.
 - Chat-avustajan demo hyödyntää kartoituksen vastauksia taustakontekstina ja auttaa ymmärtämään suosituksia.
 - Asiakas voi tarkentaa valittua vakuutusta syventävällä päätöspolulla.
 - Yksittäisen vakuutuksen tarkennetussa näkymässä asiakas voi avata tuoteselosteet, avaintietoasiakirjat ja ehdot.
-- Kevyt yhteydenottopyyntö kokoaa valitut aiheet ja tuottaa kopioitavan yhteenvedon asiakaspalvelulle.
+- Vapaaehtoinen yhteydenottopyyntö näyttää asiakkaalle etukäteen asiantuntijalle välitettävät tiedot, mukaan lukien asiakkaan valitsemat turvavaihtoehdot.
 
 ## Rakenne
 
 - `index.html` - sivun runko
 - `src/page-template.html` - lähdetemplaatti, josta julkaistava `index.html` rakennetaan
 - `src/styles.css` - visuaalinen tyyli
-- `src/data.js` - vakuutuslajit, tuotemateriaalien linkit, kysymykset ja laskurivertailun mallit
+- `src/data.js` - vakuutuslajit, tuotemateriaalien linkit, kysymykset ja turvavertailun mallit
 - `src/scoring.js` - suositusten pisteytys
 - `src/detailResults.js` - syventävien tarkennusten tuloslogiikka
 - `src/app.js` - käyttöliittymän renderöinti ja tilanhallinta

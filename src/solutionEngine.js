@@ -1,25 +1,25 @@
 import { coverageModels, insuranceTypes } from "./data.js";
-import { businessIndustries, businessPlaybooks, businessRelevantNeedOptions, businessRiskAreaPlaybooks, companySizeClasses, employeeBandAliases, industryAliases, indicativePriceSymbol, mandatoryInsuranceRules, priceImpactDisclaimer, privatePlaybooks, privateRelevantNeedOptions } from "./solutionData.js";
+import { businessIndustries, businessPlaybooks, businessRelevantNeedOptions, businessRiskAreaPlaybooks, companySizeClasses, employeeBandAliases, industryAliases, mandatoryInsuranceRules, privatePlaybooks, privateRelevantNeedOptions } from "./solutionData.js";
 
 const businessBaseNeedOptions = [
-  { id: "people_risk", baseQuestionId: "hasEmployees", affects: ["bizPeople"], priceImpact: 1 },
-  { id: "business_travel", baseQuestionId: "businessTravelNeed", affects: ["bizTravel", "bizPeople"], priceImpact: 1 },
-  { id: "property_or_assets", baseQuestionId: "hasPremises", affects: ["bizProperty", "bizInterruption"], priceImpact: 2 },
-  { id: "property_or_assets", baseQuestionId: "hasBusinessAssets", affects: ["bizProperty"], priceImpact: 1 },
-  { id: "owns_business_property", baseQuestionId: "ownsBusinessProperty", affects: ["bizRealEstate", "bizProperty", "bizInterruption"], priceImpact: 2 },
-  { id: "vehicles_or_transport", baseQuestionId: "hasVehicles", affects: ["bizVehicle"], priceImpact: 1 },
-  { id: "system_dependency", baseQuestionId: "digitalDependency", affects: ["bizCyber", "bizInterruption"], priceImpact: 2 }
+  { id: "people_risk", baseQuestionId: "hasEmployees", affects: ["bizPeople"] },
+  { id: "business_travel", baseQuestionId: "businessTravelNeed", affects: ["bizTravel", "bizPeople"] },
+  { id: "property_or_assets", baseQuestionId: "hasPremises", affects: ["bizProperty", "bizInterruption"] },
+  { id: "property_or_assets", baseQuestionId: "hasBusinessAssets", affects: ["bizProperty"] },
+  { id: "owns_business_property", baseQuestionId: "ownsBusinessProperty", affects: ["bizRealEstate", "bizProperty", "bizInterruption"] },
+  { id: "vehicles_or_transport", baseQuestionId: "hasVehicles", affects: ["bizVehicle"] },
+  { id: "system_dependency", baseQuestionId: "digitalDependency", affects: ["bizCyber", "bizInterruption"] }
 ];
 
 const personalBaseNeedOptions = [
-  { id: "children_health", baseQuestionId: "hasChildren", affects: ["health", "life"], priceImpact: 1 },
-  { id: "vehicle", baseQuestionId: "hasPersonalVehicle", affects: ["vehicle"], priceImpact: 1 },
-  { id: "travel", baseQuestionId: "travelsRegularly", affects: ["travel"], priceImpact: 1 },
-  { id: "health", baseQuestionId: "healthCoverInterest", affects: ["health"], priceImpact: 1 },
-  { id: "family_financial_security", baseQuestionId: "financialDependents", affects: ["life"], priceImpact: 1 },
-  { id: "pet", baseQuestionId: "hasPets", affects: ["pet"], priceImpact: 1 },
-  { id: "valuable_hobbies", baseQuestionId: "valuableOrLeisureProperty", affects: ["home"], priceImpact: 1 },
-  { id: "cottage_forest_boat", baseQuestionId: "valuableOrLeisureProperty", affects: ["apartment", "forest", "boat"], priceImpact: 1 }
+  { id: "children_health", baseQuestionId: "hasChildren", affects: ["health", "life"] },
+  { id: "vehicle", baseQuestionId: "hasPersonalVehicle", affects: ["vehicle"] },
+  { id: "travel", baseQuestionId: "travelsRegularly", affects: ["travel"] },
+  { id: "health", baseQuestionId: "healthCoverInterest", affects: ["health"] },
+  { id: "family_financial_security", baseQuestionId: "financialDependents", affects: ["life"] },
+  { id: "pet", baseQuestionId: "hasPets", affects: ["pet"] },
+  { id: "valuable_hobbies", baseQuestionId: "valuableOrLeisureProperty", affects: ["home"] },
+  { id: "cottage_forest_boat", baseQuestionId: "valuableOrLeisureProperty", affects: ["apartment", "forest", "boat"] }
 ];
 
 export function normalizeEmployeeBand(value) {
@@ -46,7 +46,7 @@ export function relevantNeedOptions(mode, state = {}) {
   const playbook = businessPlaybooks[industryKey] || businessPlaybooks.other;
   const group = playbook.relevantGroup || "generic";
   const options = businessRelevantNeedOptions[group] || businessRelevantNeedOptions.generic;
-  return [...options, { id: "current_cover_unclear", label: "Nykyinen vakuutusturva on epäselvä tai haluan tarkistaa riittävyyden", affects: ["all"], priceImpact: 0 }, { id: "unsure", label: "En osaa sanoa", affects: [], priceImpact: 0 }];
+  return [...options, { id: "unsure", label: "En osaa sanoa", affects: [] }];
 }
 
 export function buildAssessmentResult(mode, state = {}, legacyRecommendation = null) {
@@ -117,10 +117,8 @@ export function buildBusinessAssessmentResult(state = {}, legacyRecommendation =
       reason: "Vastaustesi perusteella tämä vakuutusalue kannattaa avata ymmärrettävästi.",
       defaultCoverageKey: ""
     }));
-  const existingCoverReviews = currentCoverReviewCovers("business", state);
-  const existingCoverKeys = new Set(existingCoverReviews.map((item) => item.key));
-  const recommendedCovers = uniqueCovers([...existingCoverReviews, ...(playbook.recommendedCovers || []), ...activatedOptional, ...selectedNeedCovers])
-    .filter((item) => existingCoverKeys.has(item.key) || !businessCoverExplicitlyExcluded(item.key, state, selectedRelevantNeeds));
+  const recommendedCovers = uniqueCovers([...(playbook.recommendedCovers || []), ...activatedOptional, ...selectedNeedCovers])
+    .filter((item) => !businessCoverExplicitlyExcluded(item.key, state, selectedRelevantNeeds));
   const riskAreas = flowType === "risk_area_discussion"
     ? businessRiskAreaPlaybooks.generic.riskAreas
     : [];
@@ -152,7 +150,6 @@ export function buildPrivateAssessmentResult(state = {}, legacyRecommendation = 
     livingType: state.baseAnswers?.livingType || "",
     lifeSituation: state.baseAnswers?.lifeSituation || "",
     hasVehicles: vehicleAnswer === "yes"
-      || (!vehicleAnswer && (state.currentInsuranceAreas || []).includes("vehicle"))
       || (!vehicleAnswer && (state.selectedRelevantNeeds || []).includes("vehicle"))
   };
   const priorityKey = profile.lifeSituation === "entrepreneur"
@@ -185,8 +182,7 @@ export function buildPrivateAssessmentResult(state = {}, legacyRecommendation = 
     });
   }
 
-  const existingCoverReviews = currentCoverReviewCovers("personal", state);
-  const recommendedCovers = uniqueCovers([...existingCoverReviews, ...(playbook.recommendedCovers || []), ...inferred]);
+  const recommendedCovers = uniqueCovers([...(playbook.recommendedCovers || []), ...inferred]);
   const recommendedKeys = new Set(recommendedCovers.map((item) => item.key));
   const optionalCovers = privateRelevantNeedOptions
     .flatMap((item) => item.affects || [])
@@ -234,7 +230,6 @@ export function refreshDerivedAssessmentData(result, state = {}) {
     ])
   };
   next.selectedCoverageLevels = buildCoverageLevelRecommendations(next, state.detailResults || {}, state.selectedCoverage || {});
-  next.pricingPayload = buildPricingPayload(next);
   next.contactSummary = buildContactSummary(next);
   next.aiContext = buildAiContext(next);
   return next;
@@ -270,42 +265,11 @@ export function buildCoverageLevelRecommendations(result, detailResults = {}, se
       selectedKey,
       selectedTitle: selectedOption.title,
       basis: detailComparison?.basis || coverItem.reason || "Ehdotus perustuu asiakasprofiiliin ja valittuihin tilanteisiin.",
-      priceImpactSymbol: indicativePriceSymbol(selectedKey),
       refined,
       chosen
     };
   });
   return levels;
-}
-
-export function buildPricingPayload(result) {
-  const selectedCovers = uniqueCovers([
-    ...(result.recommendedCovers || []),
-    ...(result.optionalCovers || []).filter((item) => item.active)
-  ]).map((item) => item.key);
-  const refinedCoverageLevels = Object.fromEntries(
-    Object.entries(result.selectedCoverageLevels || {}).filter(([, item]) => item.chosen)
-  );
-  const symbols = Object.values(refinedCoverageLevels).map((item) => item.priceImpactSymbol);
-  const priceImpactSymbol = symbols.includes("€€€") ? "€€€" : symbols.includes("€€") ? "€€" : symbols.length ? "€" : "";
-  return {
-    customerType: result.mode,
-    flowType: result.flowType,
-    selectedCovers,
-    mandatoryChecks: (result.mandatoryChecks || []).map((item) => item.id),
-    selectedCoverageLevels: refinedCoverageLevels,
-    selectedRelevantNeeds: result.selectedRelevantNeeds || [],
-    riskFactors: (result.riskAreas || []).map((item) => item.id),
-    calculatorInputs: {
-      industry: result.profile?.industryKey || "",
-      companySize: result.profile?.sizeClass || "",
-      ageGroup: result.profile?.ageGroup || "",
-      livingType: result.profile?.livingType || ""
-    },
-    priceImpactLevel: priceImpactSymbol === "€€€" ? "laaja" : priceImpactSymbol === "€€" ? "tasapainoinen" : priceImpactSymbol ? "kevyt" : "ei arvioitu",
-    priceImpactSymbol,
-    disclaimer: priceImpactDisclaimer
-  };
 }
 
 export function buildAiContext(result) {
@@ -321,7 +285,6 @@ export function buildAiContext(result) {
     riskAreas: result.riskAreas || [],
     selectedRelevantNeeds: result.selectedRelevantNeeds || [],
     selectedCoverageLevels: result.selectedCoverageLevels || {},
-    pricingPayload: result.pricingPayload || null,
     sellerDiscussionPoints: result.sellerDiscussionPoints || []
   };
 }
@@ -340,9 +303,6 @@ export function buildContactSummary(result) {
     coverTitles.length ? `Suositellut vakuutusalueet: ${coverTitles.join(", ")}` : "",
     activeOptionalTitles.length ? `Tilanteesta riippuvat valinnat: ${activeOptionalTitles.join(", ")}` : "",
     result.riskAreas?.length ? `Riskialueet: ${result.riskAreas.map((item) => item.title).join(", ")}` : "",
-    result.pricingPayload?.priceImpactLevel
-      ? `Valittujen laajuuksien suunta: ${result.pricingPayload.priceImpactLevel}`
-      : "",
     "Lopullinen sisältö ja soveltuvuus varmistetaan vakuutusehdoista, LähiTapiolan palvelussa tai asiantuntijan kanssa."
   ].filter(Boolean).join("\n");
 }
@@ -370,33 +330,6 @@ function businessCoverExplicitlyExcluded(key, state = {}, selectedRelevantNeeds 
       && !selected.has("people_risk") && !selected.has("owner_key_person");
   }
   return false;
-}
-
-function currentCoverReviewCovers(mode, state = {}) {
-  if (!shouldPrioritizeCurrentCovers(state)) return [];
-  return toArray(state.quickAnswers?.currentInsuranceAreas)
-    .filter((key) => key !== "none" && key !== "unsure" && insuranceTypes[mode]?.[key])
-    .map((key) => ({
-      key,
-      reason: mode === "business"
-        ? "Kerroit, että yrityksellä on tämä vakuutusalue jo voimassa. Siksi sen riittävyys, laajuus ja kilpailukyky kannattaa tarkistaa."
-        : "Kerroit, että sinulla on tämä vakuutus jo voimassa. Siksi sen riittävyys, laajuus ja omavastuut kannattaa tarkistaa.",
-      defaultCoverageKey: mode === "personal" ? defaultPersonalCoverageKey(key) : ""
-    }));
-}
-
-function shouldPrioritizeCurrentCovers(state = {}) {
-  const selected = toArray(state.quickAnswers?.currentInsuranceAreas)
-    .filter((key) => key !== "none" && key !== "unsure");
-  if (!selected.length) return false;
-  const goals = toArray(state.quickAnswers?.reviewGoal);
-  if (!goals.length) return true;
-  return goals.some((goal) => ["check", "compare", "understand", "unsure"].includes(goal));
-}
-
-function toArray(value) {
-  if (Array.isArray(value)) return value;
-  return value ? [value] : [];
 }
 
 function businessBaseRelevantNeeds(baseAnswers = {}) {

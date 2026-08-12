@@ -636,7 +636,7 @@ function attachCoverageComparison(profileId, flowKey, answers, output) {
     recommended,
     alternatives,
     basis: recommendation.basis,
-    nextStep: recommendation.nextStep || model.calculatorAction
+    nextStep: recommendation.nextStep || "Tarkista valittu vaihtoehto asiantuntijan kanssa."
   };
   return output;
 }

@@ -332,28 +332,28 @@ export const businessRiskAreaPlaybooks = {
 
 export const businessRelevantNeedOptions = {
   professional: [
-    { id: "financial_error", label: "Virhe neuvossa, suunnitelmassa, koodissa tai laskelmassa voisi aiheuttaa taloudellista vahinkoa", affects: ["bizLiability"], priceImpact: 2 },
-    { id: "system_dependency", label: "Järjestelmät, asiakasdata tai tietoturva ovat toiminnalle olennaisia", affects: ["bizCyber", "bizInterruption"], priceImpact: 2 },
-    { id: "owner_key_person", label: "Laskutus riippuu yrittäjästä tai muutamasta avainhenkilöstä", affects: ["bizPeople", "bizInterruption"], priceImpact: 1 },
-    { id: "property_or_assets", label: "Yrityksellä on arvokkaita laitteita tai toimitila", affects: ["bizProperty"], priceImpact: 1 },
-    { id: "contract_requirements", label: "Asiakassopimuksissa on vastuu- tai vakuutusvaatimuksia", affects: ["bizLiability", "bizCyber"], priceImpact: 1 }
+    { id: "financial_error", label: "Virhe neuvossa, suunnitelmassa, koodissa tai laskelmassa voisi aiheuttaa taloudellista vahinkoa", affects: ["bizLiability"] },
+    { id: "system_dependency", label: "Järjestelmät, asiakasdata tai tietoturva ovat toiminnalle olennaisia", affects: ["bizCyber", "bizInterruption"] },
+    { id: "owner_key_person", label: "Laskutus riippuu yrittäjästä tai muutamasta avainhenkilöstä", affects: ["bizPeople", "bizInterruption"] },
+    { id: "property_or_assets", label: "Yrityksellä on arvokkaita laitteita tai toimitila", affects: ["bizProperty"] },
+    { id: "contract_requirements", label: "Asiakassopimuksissa on vastuu- tai vakuutusvaatimuksia", affects: ["bizLiability", "bizCyber"] }
   ],
   restaurant: [
-    { id: "business_interruption", label: "Toimitilan tai laitteen vahinko pysäyttäisi toiminnan nopeasti", affects: ["bizProperty", "bizInterruption"], priceImpact: 2 },
-    { id: "customer_liability", label: "Asiakkaalle voi aiheutua allergia-, ruokamyrkytys-, liukastumis- tai muu vahinko", affects: ["bizLiability"], priceImpact: 1 },
-    { id: "system_dependency", label: "Kassa-, maksu-, tilaus- tai varausjärjestelmä on tärkeä", affects: ["bizCyber", "bizInterruption"], priceImpact: 1 },
-    { id: "vehicles_or_transport", label: "Yrityksellä on kuljetuksia, cateringia tai food truck -toimintaa", affects: ["bizVehicle"], priceImpact: 1 }
+    { id: "business_interruption", label: "Toimitilan tai laitteen vahinko pysäyttäisi toiminnan nopeasti", affects: ["bizProperty", "bizInterruption"] },
+    { id: "customer_liability", label: "Asiakkaalle voi aiheutua allergia-, ruokamyrkytys-, liukastumis- tai muu vahinko", affects: ["bizLiability"] },
+    { id: "system_dependency", label: "Kassa-, maksu-, tilaus- tai varausjärjestelmä on tärkeä", affects: ["bizCyber", "bizInterruption"] },
+    { id: "vehicles_or_transport", label: "Yrityksellä on kuljetuksia, cateringia tai food truck -toimintaa", affects: ["bizVehicle"] }
   ],
   generic: [
-    { id: "property_or_assets", label: "Toimitila, koneet, laitteet, työkalut tai varasto ovat toiminnalle tärkeitä", affects: ["bizProperty"], priceImpact: 1 },
-    { id: "business_interruption", label: "Toiminnan keskeytyminen aiheuttaisi nopeasti taloudellista vahinkoa", affects: ["bizInterruption"], priceImpact: 2 },
-    { id: "customer_liability", label: "Yrityksen työ, tuote tai palvelu voi aiheuttaa vahinkoa asiakkaalle", affects: ["bizLiability"], priceImpact: 1 },
-    { id: "people_risk", label: "Työntekijöiden tai avainhenkilöiden poissaolo olisi olennainen riski", affects: ["bizPeople"], priceImpact: 1 },
-    { id: "system_dependency", label: "Järjestelmät, maksaminen, verkkokauppa tai asiakasdata ovat olennaisia", affects: ["bizCyber"], priceImpact: 1 },
-    { id: "vehicles_or_transport", label: "Ajoneuvot, kuljetukset tai liikkuva työ ovat olennaisia", affects: ["bizVehicle"], priceImpact: 1 },
-    { id: "cargo_or_goods", label: "Yritys kuljettaa omaa tai asiakkaan tavaraa", affects: ["bizCargo"], priceImpact: 1 },
-    { id: "contract_requirements", label: "Sopimuksissa on erityisiä vakuutus- tai vastuuvaatimuksia", affects: ["bizLiability", "bizLegal"], priceImpact: 1 },
-    { id: "patient_work", label: "Toimintaan liittyy potilas- tai hoitotyötä", affects: ["bizPatient"], priceImpact: 1 }
+    { id: "property_or_assets", label: "Toimitila, koneet, laitteet, työkalut tai varasto ovat toiminnalle tärkeitä", affects: ["bizProperty"] },
+    { id: "business_interruption", label: "Toiminnan keskeytyminen aiheuttaisi nopeasti taloudellista vahinkoa", affects: ["bizInterruption"] },
+    { id: "customer_liability", label: "Yrityksen työ, tuote tai palvelu voi aiheuttaa vahinkoa asiakkaalle", affects: ["bizLiability"] },
+    { id: "people_risk", label: "Työntekijöiden tai avainhenkilöiden poissaolo olisi olennainen riski", affects: ["bizPeople"] },
+    { id: "system_dependency", label: "Järjestelmät, maksaminen, verkkokauppa tai asiakasdata ovat olennaisia", affects: ["bizCyber"] },
+    { id: "vehicles_or_transport", label: "Ajoneuvot, kuljetukset tai liikkuva työ ovat olennaisia", affects: ["bizVehicle"] },
+    { id: "cargo_or_goods", label: "Yritys kuljettaa omaa tai asiakkaan tavaraa", affects: ["bizCargo"] },
+    { id: "contract_requirements", label: "Sopimuksissa on erityisiä vakuutus- tai vastuuvaatimuksia", affects: ["bizLiability", "bizLegal"] },
+    { id: "patient_work", label: "Toimintaan liittyy potilas- tai hoitotyötä", affects: ["bizPatient"] }
   ]
 };
 
@@ -417,32 +417,17 @@ export const privatePlaybooks = [
 ];
 
 export const privateRelevantNeedOptions = [
-  { id: "home", label: "Koti ja tavarat", affects: ["home"], priceImpact: 1 },
-  { id: "building_or_cottage", label: "Omakotitalo, rakennus tai vapaa-ajan asunto", affects: ["home", "apartment"], priceImpact: 2 },
-  { id: "vehicle", label: "Auto, moottoripyörä, mopo tai muu ajoneuvo", affects: ["vehicle"], priceImpact: 1 },
-  { id: "health", label: "Oma terveys ja tapaturmat", affects: ["health"], priceImpact: 1 },
-  { id: "children_health", label: "Lasten terveys ja tapaturmat", affects: ["health", "life"], priceImpact: 1 },
-  { id: "fast_care", label: "Nopea hoitoon pääsy", affects: ["health"], priceImpact: 1 },
-  { id: "travel", label: "Matkat", affects: ["travel"], priceImpact: 1 },
-  { id: "pet", label: "Lemmikki", affects: ["pet"], priceImpact: 1 },
-  { id: "family_financial_security", label: "Läheisten taloudellinen turva", affects: ["life"], priceImpact: 1 },
-  { id: "loan", label: "Asuntolaina tai muu iso taloudellinen vastuu", affects: ["life"], priceImpact: 1 },
-  { id: "cottage_forest_boat", label: "Mökki, metsä, vene tai muu vapaa-ajan omaisuus", affects: ["apartment", "forest", "boat"], priceImpact: 1 },
-  { id: "valuable_hobbies", label: "Harrastusvälineet tai arvokkaat tavarat", affects: ["home"], priceImpact: 1 },
-  { id: "current_cover_unclear", label: "Nykyiset vakuutukset ovat epäselvät", affects: ["all"], priceImpact: 0 },
-  { id: "unsure", label: "En osaa sanoa", affects: [], priceImpact: 0 }
+  { id: "home", label: "Koti ja tavarat", affects: ["home"] },
+  { id: "building_or_cottage", label: "Omakotitalo, rakennus tai vapaa-ajan asunto", affects: ["home", "apartment"] },
+  { id: "vehicle", label: "Auto, moottoripyörä, mopo tai muu ajoneuvo", affects: ["vehicle"] },
+  { id: "health", label: "Oma terveys ja tapaturmat", affects: ["health"] },
+  { id: "children_health", label: "Lasten terveys ja tapaturmat", affects: ["health", "life"] },
+  { id: "fast_care", label: "Nopea hoitoon pääsy", affects: ["health"] },
+  { id: "travel", label: "Matkat", affects: ["travel"] },
+  { id: "pet", label: "Lemmikki", affects: ["pet"] },
+  { id: "family_financial_security", label: "Läheisten taloudellinen turva", affects: ["life"] },
+  { id: "loan", label: "Asuntolaina tai muu iso taloudellinen vastuu", affects: ["life"] },
+  { id: "cottage_forest_boat", label: "Mökki, metsä, vene tai muu vapaa-ajan omaisuus", affects: ["apartment", "forest", "boat"] },
+  { id: "valuable_hobbies", label: "Harrastusvälineet tai arvokkaat tavarat", affects: ["home"] },
+  { id: "unsure", label: "En osaa sanoa", affects: [] }
 ];
-
-export const priceImpactDisclaimer = "Tämä ei ole lopullinen hinta, vaan suuntaa antava arvio siitä, miten valinnat vaikuttavat vakuutuskokonaisuuden laajuuteen.";
-
-export function indicativePriceSymbol(value) {
-  if (typeof value === "number") {
-    if (value <= 1) return "€";
-    if (value <= 3) return "€€";
-    return "€€€";
-  }
-  const text = String(value || "").toLocaleLowerCase("fi-FI");
-  if (text.includes("suppea") || text.includes("liikenne") || text.includes("narrow")) return "€";
-  if (text.includes("laaja") || text.includes("plus") || text.includes("pro") || text.includes("fleet") || text.includes("broad")) return "€€€";
-  return "€€";
-}

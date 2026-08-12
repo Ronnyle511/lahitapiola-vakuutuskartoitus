@@ -84,7 +84,8 @@ const businessBaseNeeds = buildAssessmentResult("business", state({
 assert.ok(businessBaseNeeds.recommendedCovers.some((item) => item.key === "bizVehicle"));
 assert.ok(businessBaseNeeds.recommendedCovers.some((item) => item.key === "bizCyber"));
 assert.ok(businessBaseNeeds.recommendedCovers.some((item) => item.key === "bizTravel"));
-assert.ok(businessBaseNeeds.pricingPayload.selectedRelevantNeeds.includes("vehicles_or_transport"));
+assert.ok(businessBaseNeeds.selectedRelevantNeeds.includes("vehicles_or_transport"));
+assert.equal(Object.hasOwn(businessBaseNeeds, "pricingPayload"), false);
 assert.equal(businessBaseNeeds.profile.employeeBand, "Työntekijöitä");
 assert.equal(businessBaseNeeds.mandatoryChecks.find((item) => item.id === "traffic")?.badgeLabel, "Lakisääteinen liikennekäytössä");
 assert.equal(businessBaseNeeds.mandatoryChecks.find((item) => item.id === "group_life")?.obligationKind, "collective_agreement");
@@ -110,23 +111,7 @@ assert.ok(family.mandatoryChecks.some((item) => item.id === "traffic"));
 assert.ok(!family.mandatoryChecks.some((item) => item.id === "yel"));
 assert.equal(family.selectedCoverageLevels.home.refined, false);
 assert.equal(family.selectedCoverageLevels.home.chosen, false);
-assert.equal(family.pricingPayload.selectedCoverageLevels.home, undefined);
-assert.equal(family.pricingPayload.priceImpactSymbol, "");
-
-const currentCoverReview = buildAssessmentResult("personal", state({
-  ageGroup: "26_35",
-  livingType: "rent",
-  lifeSituation: "employed"
-}, [], {}, {}, {
-  currentInsuranceAreas: ["home", "vehicle", "travel", "health"],
-  reviewGoal: ["check", "compare"]
-}));
-const currentReviewKeys = currentCoverReview.recommendedCovers.map((item) => item.key);
-assert.ok(currentReviewKeys.includes("vehicle"));
-assert.ok(currentReviewKeys.includes("travel"));
-assert.match(currentCoverReview.recommendedCovers.find((item) => item.key === "vehicle").reason, /voimassa/i);
-assert.ok(currentCoverReview.pricingPayload.selectedCovers.includes("vehicle"));
-assert.ok(currentCoverReview.pricingPayload.selectedCovers.includes("travel"));
+assert.equal(Object.hasOwn(family, "pricingPayload"), false);
 
 const entrepreneurNotWorking = buildAssessmentResult("business", state({
   industry: "professional",
@@ -168,9 +153,7 @@ const familyPerus = buildAssessmentResult("personal", state({
 assert.equal(familyPerus.selectedCoverageLevels.home.selectedKey, "perus");
 assert.equal(familyPerus.selectedCoverageLevels.home.refined, true);
 assert.equal(familyPerus.selectedCoverageLevels.home.chosen, true);
-assert.equal(familyPerus.pricingPayload.selectedCoverageLevels.home.selectedKey, "perus");
 assert.equal(familyPerus.aiContext.selectedCoverageLevels.home.selectedKey, "perus");
-assert.match(familyPerus.contactSummary, /Valittujen laajuuksien suunta/);
-assert.match(familyPerus.pricingPayload.disclaimer, /ei ole lopullinen hinta/i);
+assert.equal(Object.hasOwn(familyPerus, "pricingPayload"), false);
 
 console.log("Solution engine tests passed");

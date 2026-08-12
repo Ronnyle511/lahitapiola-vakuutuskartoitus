@@ -7,7 +7,11 @@
     "build": "node scripts/build-standalone.mjs",
     "serve": "node server.mjs",
     "pretest": "npm run build",
-    "test": "node tests/smoke.test.mjs && node tests/solution-engine.test.mjs && node tests/direct-comparison.test.mjs",
+    "test": "node tests/smoke.test.mjs && node tests/solution-engine.test.mjs && node tests/direct-comparison.test.mjs && node tests/ui.test.mjs",
     "check:links": "node tests/link-check.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "^4.13.0",
+    "jsdom": "^29.1.1"
   }
 }

@@ -192,7 +192,7 @@
           <div id="contactView" class="hidden">
             <h3>Vapaaehtoinen yhteydenotto</h3>
             <p class="muted">Voit käyttää kartoitusta ja nähdä oman yhteenvedon myös ilman yhteystietojen antamista. Täytä tämä osio vain, jos haluat valmistella yhteydenottopyynnön.</p>
-            <div id="contactPriceSummary"></div>
+            <div id="contactHandoffSummary"></div>
             <h4 class="contact-subtitle">Mistä haluat keskustella?</h4>
             <div class="contact-list" id="contactChoices"></div>
             <div class="form-grid">
@@ -200,7 +200,8 @@
               <label class="field" id="contactOrgField">Yrityksen nimi <input id="contactOrg"></label>
               <label class="field">Sähköposti <input id="contactEmail" type="email" autocomplete="email" required></label>
               <label class="field">Puhelin <input id="contactPhone" autocomplete="tel"></label>
-              <label class="field">Toivottu yhteydenottotapa <select id="contactChannel"><option>Puhelu</option><option>Sähköposti</option><option>Verkkotapaaminen</option></select></label>
+              <label class="field">Toivottu yhteydenottotapa <select id="contactChannel"><option value="">Ei valittu</option><option>Puhelu</option><option>Sähköposti</option><option>Verkkotapaaminen</option></select></label>
+              <label class="field">Paras aika ottaa yhteyttä <select id="contactTime"><option value="">Ei valittu</option><option>Arkisin aamupäivällä</option><option>Arkisin iltapäivällä</option><option>Arkisin alkuillasta</option><option>Sähköpostilla milloin vain</option></select></label>
               <label class="field full">Lisätiedot tai kysymykset
                 <textarea id="freeText" placeholder="Kuvaa tilannettasi omin sanoin"></textarea>
               </label>
@@ -209,7 +210,8 @@
             <p class="form-error hidden" id="formError"></p>
             <div class="actions">
               <button class="btn btn-secondary" id="contactBack" type="button">Takaisin suosituksiin</button>
-              <button class="btn btn-primary" id="createSummary" type="button">Näytä yhteenveto</button>
+              <button class="btn btn-secondary" id="editAnswersFromContact" type="button">Muokkaa vastauksia</button>
+              <button class="btn btn-primary" id="createSummary" type="button">Muodosta yhteydenoton yhteenveto</button>
             </div>
           </div>
 
@@ -226,11 +228,12 @@
             <details class="crm-summary-details hidden" id="crmSummaryDetails">
               <summary>Yhteydenoton taustayhteenveto</summary>
               <p class="muted small">Tämä kooste voidaan siirtää asiakaspalvelulle yhteydenoton yhteydessä.</p>
-              <textarea id="crmSummary" class="summary-box" readonly></textarea>
+              <textarea id="crmSummary" class="summary-box" aria-label="Asiantuntijalle välitettävä yhteenveto" readonly></textarea>
               <button class="btn btn-secondary btn-small" id="backToContact" type="button">Muokkaa yhteydenottoa</button>
             </details>
             <div class="summary-actions">
               <button class="btn btn-secondary" id="summaryBackToResults" type="button">Takaisin suosituksiin</button>
+              <button class="btn btn-secondary" id="editAnswers" type="button">Muokkaa vastauksia</button>
               <button class="btn btn-soft" id="summaryRefine" type="button">Tarkenna vakuutuksia</button>
               <button class="btn btn-primary" id="summaryContact" type="button">Pyydä yhteydenottoa</button>
               <button class="link-button summary-restart" id="restartFromSummary" type="button">Aloita alusta</button>
