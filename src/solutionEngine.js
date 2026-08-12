@@ -254,6 +254,7 @@ export function buildCoverageLevelRecommendations(result, detailResults = {}, se
     if (!model?.options?.length) return;
     const detailComparison = detailResults[detailKey]?.comparison;
     const refined = Boolean(detailComparison);
+    const chosen = Boolean(selectedCoverage[detailKey] && model.options.some((option) => option.key === selectedCoverage[detailKey]));
     const machineKey = detailComparison?.recommendedKeys?.[0]
       || findCoverageKey(model.options, coverItem.defaultCoverageKey)
       || model.options[0].key;
@@ -270,7 +271,8 @@ export function buildCoverageLevelRecommendations(result, detailResults = {}, se
       selectedTitle: selectedOption.title,
       basis: detailComparison?.basis || coverItem.reason || "Ehdotus perustuu asiakasprofiiliin ja valittuihin tilanteisiin.",
       priceImpactSymbol: indicativePriceSymbol(selectedKey),
-      refined
+      refined,
+      chosen
     };
   });
   return levels;
@@ -282,7 +284,7 @@ export function buildPricingPayload(result) {
     ...(result.optionalCovers || []).filter((item) => item.active)
   ]).map((item) => item.key);
   const refinedCoverageLevels = Object.fromEntries(
-    Object.entries(result.selectedCoverageLevels || {}).filter(([, item]) => item.refined)
+    Object.entries(result.selectedCoverageLevels || {}).filter(([, item]) => item.chosen)
   );
   const symbols = Object.values(refinedCoverageLevels).map((item) => item.priceImpactSymbol);
   const priceImpactSymbol = symbols.includes("€€€") ? "€€€" : symbols.includes("€€") ? "€€" : symbols.length ? "€" : "";
