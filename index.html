@@ -37,10 +37,7 @@ html {
 }
 
 #appShell,
-#contactView,
-#results-mandatory,
-#results-recommended,
-#results-optional {
+#contactView {
   scroll-margin-top: 118px;
 }
 
@@ -1224,99 +1221,6 @@ h4 {
   background: #f7fcff;
 }
 
-.results-snapshot {
-  display: grid;
-  gap: 20px;
-  margin: 0 0 24px;
-  padding: 24px;
-  border: 1px solid #a9d4e9;
-  border-left: 6px solid var(--blue-700);
-  border-radius: 10px;
-  background: linear-gradient(135deg, #f3fbff 0%, #ffffff 72%);
-}
-
-.results-snapshot h3 {
-  margin: 4px 0 7px;
-  color: var(--blue-950);
-  font-size: 24px;
-  line-height: 1.2;
-}
-
-.results-snapshot p:last-child {
-  max-width: 760px;
-  margin: 0;
-  color: #315b78;
-}
-
-.results-snapshot-stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.results-snapshot-stats button {
-  display: grid;
-  gap: 2px;
-  min-height: 82px;
-  padding: 13px 15px;
-  border: 1px solid #c4ddea;
-  border-radius: 8px;
-  color: var(--blue-950);
-  background: #ffffff;
-  cursor: pointer;
-  text-align: left;
-}
-
-.results-snapshot-stats button:hover {
-  border-color: var(--blue-700);
-  background: var(--blue-050);
-}
-
-.results-snapshot-stats strong {
-  color: var(--blue-700);
-  font-size: 27px;
-  line-height: 1.1;
-}
-
-.results-snapshot-stats span {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.results-section-nav,
-.results-primary-actions {
-  display: flex;
-  gap: 9px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.results-section-nav {
-  padding-top: 16px;
-  border-top: 1px solid #d3e6f0;
-}
-
-.results-section-nav button {
-  min-height: 38px;
-  padding: 7px 11px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--blue-800);
-  background: #ffffff;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.results-section-nav button:hover {
-  border-color: var(--blue-700);
-  background: var(--blue-050);
-}
-
-.results-primary-actions {
-  padding-top: 2px;
-}
-
 .recommendation-context h4 {
   margin: 3px 0 6px;
   font-size: 20px;
@@ -1704,13 +1608,13 @@ h4 {
 
 .contact-handoff-summary {
   display: grid;
-  gap: 18px;
+  gap: 16px;
   margin: 18px 0 24px;
   padding: 20px;
   border: 1px solid #9dcfe7;
-  border-left: 6px solid var(--blue-700);
+  border-left: 5px solid var(--blue-700);
   border-radius: 9px;
-  background: var(--blue-050);
+  background: #ffffff;
 }
 
 .contact-handoff-head {
@@ -1732,54 +1636,153 @@ h4 {
   color: #315b78;
 }
 
-.handoff-facts {
+.handoff-overview {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 13px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
-.handoff-facts > div,
-.contact-handoff-line {
+.handoff-overview > div {
   display: grid;
-  gap: 4px;
-  padding: 12px 14px;
-  border: 1px solid #d1e4ef;
-  border-radius: 7px;
-  background: #ffffff;
+  gap: 3px;
+  padding: 0 15px;
+  border-right: 1px solid var(--line);
 }
 
-.handoff-facts span,
-.contact-handoff-line span {
+.handoff-overview > div:first-child {
+  padding-left: 0;
+}
+
+.handoff-overview > div:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.handoff-overview span,
+.handoff-details-content span {
   color: #486b83;
   font-size: 12px;
 }
 
-.handoff-facts strong,
-.contact-handoff-line strong {
+.handoff-overview strong,
+.handoff-details-content strong {
   color: var(--blue-950);
   line-height: 1.4;
 }
 
-.contact-handoff-list {
-  display: grid;
-  gap: 8px;
+.handoff-details {
+  border-radius: 7px;
+  background: var(--blue-050);
 }
 
-.contact-handoff-line {
-  grid-template-columns: minmax(0, 1fr) minmax(180px, auto);
+.handoff-details summary {
+  display: flex;
+  min-height: 44px;
   align-items: center;
+  justify-content: space-between;
+  padding: 10px 13px;
+  color: var(--blue-800);
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
 }
 
-.contact-handoff-line span {
+.handoff-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.handoff-details summary::after {
+  content: "+";
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.handoff-details[open] summary::after {
+  content: "−";
+}
+
+.handoff-details-content {
+  display: grid;
+  gap: 0;
+  padding: 0 13px 13px;
+}
+
+.handoff-details-content > div {
+  display: grid;
+  gap: 4px;
+  padding: 11px 0;
+  border-top: 1px solid #d3e6f0;
+}
+
+.handoff-coverage-details ul {
+  display: grid;
+  gap: 0;
+  margin: 5px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.handoff-coverage-details li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, auto);
+  gap: 12px;
+  padding: 7px 0;
+  border-top: 1px solid #dceaf2;
+}
+
+.handoff-coverage-details li:first-child {
+  border-top: 0;
+}
+
+.handoff-coverage-details li span {
   color: #285b48;
   font-weight: 700;
   text-align: right;
 }
 
-.handoff-selection-note {
-  margin: 0;
-  color: #315b78;
-  font-size: 13px;
+.contact-choice-editor {
+  margin: 0 0 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.contact-choice-editor summary {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+  color: var(--blue-800);
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+}
+
+.contact-choice-editor summary::-webkit-details-marker {
+  display: none;
+}
+
+.contact-choice-editor summary::after {
+  content: "+";
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.contact-choice-editor[open] summary::after {
+  content: "−";
+}
+
+.contact-choice-editor > p,
+.contact-choice-editor .contact-list {
+  margin-right: 14px;
+  margin-left: 14px;
+}
+
+.contact-choice-editor .contact-list {
+  margin-bottom: 14px;
 }
 
 .product-card-body h4 {
@@ -4554,48 +4557,13 @@ details.source-details summary {
 }
 
 @media (max-width: 720px) {
-  .results-snapshot {
-    gap: 16px;
-    padding: 18px 16px;
-  }
-
-  .results-snapshot h3 {
-    font-size: 21px;
-  }
-
-  .results-snapshot-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .results-snapshot-stats button {
-    grid-template-columns: 44px minmax(0, 1fr);
-    min-height: 56px;
-    align-items: center;
-  }
-
-  .results-snapshot-stats strong {
-    font-size: 23px;
-  }
-
-  .results-primary-actions,
-  .results-primary-actions .btn,
   .contact-handoff-head {
     width: 100%;
   }
 
-  .results-primary-actions,
   .contact-handoff-head {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .results-section-nav {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .results-section-nav button {
-    border-radius: 7px;
   }
 
   .product-card-actions,
@@ -4612,12 +4580,28 @@ details.source-details summary {
     padding: 17px 15px;
   }
 
-  .handoff-facts,
-  .contact-handoff-line {
+  .handoff-overview,
+  .handoff-coverage-details li {
     grid-template-columns: 1fr;
   }
 
-  .contact-handoff-line span {
+  .handoff-overview {
+    padding: 0;
+  }
+
+  .handoff-overview > div,
+  .handoff-overview > div:first-child,
+  .handoff-overview > div:last-child {
+    padding: 10px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .handoff-overview > div:last-child {
+    border-bottom: 0;
+  }
+
+  .handoff-coverage-details li span {
     text-align: left;
   }
 
@@ -5326,8 +5310,11 @@ details.source-details summary {
             <h3>Vapaaehtoinen yhteydenotto</h3>
             <p class="muted">Voit käyttää kartoitusta ja nähdä oman yhteenvedon myös ilman yhteystietojen antamista. Täytä tämä osio vain, jos haluat valmistella yhteydenottopyynnön.</p>
             <div id="contactHandoffSummary"></div>
-            <h4 class="contact-subtitle">Mistä haluat keskustella?</h4>
-            <div class="contact-list" id="contactChoices"></div>
+            <details class="contact-choice-editor">
+              <summary>Muokkaa keskusteluun valittuja vakuutuksia</summary>
+              <p class="muted small">Valitse ne vakuutukset, joista haluat keskustella asiantuntijan kanssa.</p>
+              <div class="contact-list" id="contactChoices"></div>
+            </details>
             <div class="form-grid">
               <label class="field">Nimi <input id="contactName" autocomplete="name" required></label>
               <label class="field" id="contactOrgField">Yrityksen nimi <input id="contactOrg"></label>
@@ -9602,12 +9589,11 @@ function renderRecommendations() {
   if (!st().assessmentResult) refreshAssessmentResult();
   const assessment = st().assessmentResult;
   const buckets = assessmentBuckets(assessment);
-  const hasSnapshot = ["solution_package", "personal_solution_package"].includes(assessment.flowType);
   $("resultsTitle").textContent = resultsTitleFor(assessment);
-  $("resultsIntro").textContent = resultsIntroFor(assessment, buckets);
-  $("resultsTitle").classList.toggle("hidden", hasSnapshot);
-  $("resultsIntro").classList.toggle("hidden", hasSnapshot);
-  $("recommendationInsights").innerHTML = `${renderResultsSnapshot(assessment, buckets)}${renderRecommendationContext(assessment)}`;
+  $("resultsIntro").textContent = resultsIntroFor(assessment);
+  $("resultsTitle").classList.remove("hidden");
+  $("resultsIntro").classList.remove("hidden");
+  $("recommendationInsights").innerHTML = renderRecommendationContext(assessment);
   $("contactFromResults")?.classList.add("hidden");
 
   $("recommendationBuckets").innerHTML = `${renderMandatoryChecks(assessment.mandatoryChecks)}${buckets.map(renderBucket).join("")}${renderNextStepPrompt(assessment)}`;
@@ -9618,24 +9604,17 @@ function renderRecommendations() {
   $("recommendationBuckets").querySelectorAll("[data-card-refine]").forEach((button) => {
     button.addEventListener("click", () => openDetail(button.dataset.cardRefine || ""));
   });
-  $("recommendationInsights").querySelectorAll("[data-result-target]").forEach((button) => {
-    button.addEventListener("click", () => openResultTarget(button.dataset.resultTarget || "", assessment));
-  });
-  $("recommendationInsights").querySelector("[data-start-comparison]")?.addEventListener("click", () => {
-    const detailKey = firstRelevantDetailFlow(assessment);
-    if (detailKey) openDetail(detailKey);
-  });
 }
 
 function resultsTitleFor(assessment) {
   if (assessment.flowType === "direct_expert_contact") return "Asiantuntijan arvio yrityksellenne";
   if (assessment.flowType === "risk_area_discussion") return "Yrityksenne keskeiset riskialueet";
-  return "Kartoituksesi on valmis";
+  return mode === "business" ? "Yrityksellesi ehdotetut vakuutukset" : "Sinulle ehdotetut vakuutukset";
 }
 
-function resultsIntroFor(assessment, buckets = assessmentBuckets(assessment)) {
+function resultsIntroFor(assessment) {
   if (assessment.flowType === "solution_package") {
-    return resultsCountSentence(assessment, buckets);
+    return "Tutustu ehdotuksiin ja vertaa halutessasi vakuutusten turvavaihtoehtoja.";
   }
   if (assessment.flowType === "risk_area_discussion") {
     return "Alla olevat alueet eivät ole valmis vakuutuspaketti, vaan keskustelun pohja nykyisen vakuutusohjelman ja riskien tarkistamiseen.";
@@ -9643,74 +9622,7 @@ function resultsIntroFor(assessment, buckets = assessmentBuckets(assessment)) {
   if (assessment.flowType === "direct_expert_contact") {
     return "Tämän kokoinen yritys tarvitsee räätälöidyn vakuutusohjelman ja suoran yritysasiantuntijan arvion.";
   }
-  return resultsCountSentence(assessment, buckets);
-}
-
-function resultsCountSentence(assessment, buckets = assessmentBuckets(assessment)) {
-  const mandatory = assessment.mandatoryChecks?.length || 0;
-  const recommended = buckets.find((bucket) => bucket.key === "primary")?.items.length || 0;
-  const optional = buckets.find((bucket) => bucket.key === "possible")?.items.length || 0;
-  return `Löysimme tilanteeseesi ${countLabel(mandatory, "lakisääteisesti tarkistettavan vakuutuksen", "lakisääteisesti tarkistettavaa vakuutusta")}, ${countLabel(recommended, "suositellun vakuutuksen", "suositeltua vakuutusta")} ja ${countLabel(optional, "harkittavan lisäturvan", "harkittavaa lisäturvaa")}.`;
-}
-
-function countLabel(count, singular, plural) {
-  return `${count} ${count === 1 ? singular : plural}`;
-}
-
-function renderResultsSnapshot(assessment, buckets) {
-  if (!["solution_package", "personal_solution_package"].includes(assessment.flowType)) return "";
-  const mandatory = assessment.mandatoryChecks?.length || 0;
-  const recommended = buckets.find((bucket) => bucket.key === "primary")?.items.length || 0;
-  const optional = buckets.find((bucket) => bucket.key === "possible")?.items.length || 0;
-  const detailKey = firstRelevantDetailFlow(assessment);
-  return `
-    <section class="results-snapshot" aria-labelledby="resultsSnapshotTitle">
-      <div>
-        <p class="eyebrow compact">Kartoituksesi tulos</p>
-        <h3 id="resultsSnapshotTitle">Kartoituksesi on valmis</h3>
-        <p>${escapeHtml(resultsCountSentence(assessment, buckets))}</p>
-      </div>
-      <div class="results-snapshot-stats" aria-label="Tulosten lukumäärät">
-        <button type="button" data-result-target="results-mandatory"><strong>${mandatory}</strong><span>Lakisääteiset</span></button>
-        <button type="button" data-result-target="results-recommended"><strong>${recommended}</strong><span>Suositellut</span></button>
-        <button type="button" data-result-target="results-optional"><strong>${optional}</strong><span>Harkittavat</span></button>
-      </div>
-      <nav class="results-section-nav" aria-label="Tulossivun osiot">
-        <button type="button" data-result-target="results-mandatory">Lakisääteiset</button>
-        <button type="button" data-result-target="results-recommended">Suositellut</button>
-        <button type="button" data-result-target="results-optional">Harkittavat</button>
-        ${detailKey ? `<button type="button" data-result-target="comparison">Turvatasojen vertailu</button>` : ""}
-        <button type="button" data-result-target="contact">Yhteydenotto</button>
-      </nav>
-      <div class="results-primary-actions">
-        ${detailKey ? `<button class="btn btn-primary" type="button" data-start-comparison>Vertaile turvatasoja</button>` : ""}
-        <button class="btn btn-secondary" type="button" data-result-target="contact">Pyydä asiantuntijaa ottamaan yhteyttä</button>
-      </div>
-    </section>
-  `;
-}
-
-function firstRelevantDetailFlow(assessment = st().assessmentResult) {
-  const covers = [
-    ...(assessment?.recommendedCovers || []),
-    ...(assessment?.optionalCovers || []).filter((item) => item.active)
-  ];
-  return covers
-    .map((item) => types()[item.key]?.detailFlow)
-    .find((detailKey) => detailKey && coverageModels[mode]?.[detailKey]?.options?.length) || "";
-}
-
-function openResultTarget(target, assessment) {
-  if (target === "contact") {
-    openContact();
-    return;
-  }
-  if (target === "comparison") {
-    const detailKey = firstRelevantDetailFlow(assessment);
-    if (detailKey) openDetail(detailKey);
-    return;
-  }
-  document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  return "Tutustu ehdotuksiin ja vertaa halutessasi vakuutusten turvavaihtoehtoja.";
 }
 
 function renderAssessmentOverview(assessment) {
@@ -10959,34 +10871,54 @@ function renderContactHandoffSummary() {
     .map((item) => types()[item.key]?.title)
     .filter(Boolean);
   const baseSummary = baseAnswerTags().join(" · ") || "Ei kirjattuja lähtötietoja";
+  const selectedAreaLabel = selectedAreas.length === 1 ? "1 vakuutus" : `${selectedAreas.length} vakuutusta`;
+  const coverageChoiceLabel = selectedAreas.length
+    ? `${selectedLevels.length} valittu · ${openLevels.length} avoinna`
+    : "Ei vielä valintoja";
+  const contactPreference = [st().contact.contactChannel, st().contact.contactTime].filter(Boolean).join(" · ") || "Ei vielä valittu";
 
   return `
     <section class="contact-handoff-summary" aria-labelledby="handoffTitle">
       <div class="contact-handoff-head">
         <div>
-          <p class="eyebrow compact">Ennen vahvistamista</p>
           <h4 id="handoffTitle">Nämä tiedot välitetään asiantuntijalle</h4>
-          <p>Kooste päivittyy valintojesi mukana. Voit palata muokkaamaan kartoituksen vastauksia ennen vahvistamista.</p>
+          <p>Välitämme kartoituksen vastaukset, alla valitsemasi keskusteluaiheet ja tekemäsi turvavalinnat.</p>
         </div>
-        <button class="btn btn-secondary btn-small" type="button" data-edit-contact-answers>Muokkaa vastauksia</button>
       </div>
-      <div class="handoff-facts">
-        <div><span>Asiakastyyppi ja tilanne</span><strong>${escapeHtml(`${profile().label} · ${baseSummary}`)}</strong></div>
-        <div><span>Lakisääteiset tarkistukset</span><strong>${escapeHtml(assessment.mandatoryChecks?.map((item) => item.name).join(", ") || "Ei tunnistettuja")}</strong></div>
-        <div><span>Suositellut vakuutukset</span><strong>${escapeHtml(recommendedTitles.join(", ") || "Ei tunnistettuja")}</strong></div>
-        <div><span>Harkittavat lisäturvat</span><strong>${escapeHtml(optionalTitles.join(", ") || "Ei tunnistettuja")}</strong></div>
-        <div><span>Yhteydenottotapa</span><strong>${escapeHtml([st().contact.contactChannel, st().contact.contactTime].filter(Boolean).join(" · ") || "Ei vielä valittu")}</strong></div>
-        <div><span>Avoimet turvavalinnat</span><strong>${escapeHtml(openLevels.join(", ") || "Ei avoimia turvavalintoja")}</strong></div>
+      <div class="handoff-overview" aria-label="Yhteydenoton tiivistelmä">
+        <div><span>Asiakastyyppi</span><strong>${escapeHtml(profile().label)}</strong></div>
+        <div><span>Keskusteluun valittu</span><strong>${escapeHtml(selectedAreaLabel)}</strong></div>
+        <div><span>Turvavaihtoehdot</span><strong>${escapeHtml(coverageChoiceLabel)}</strong></div>
       </div>
-      <div class="contact-handoff-list">
-        ${selectedAreas.map((key) => `
-          <div class="contact-handoff-line">
-            <strong>${escapeHtml(types()[key].title)}</strong>
-            <span>${escapeHtml(assessmentSelectedTitle(key) || "Turvavaihtoehtoa ei ole vielä valittu")}</span>
+      <details class="handoff-details">
+        <summary>Näytä kaikki välitettävät tiedot</summary>
+        <div class="handoff-details-content">
+          <div>
+            <span>Kartoituksen vastaukset</span>
+            <strong>${escapeHtml(baseSummary)}</strong>
           </div>
-        `).join("") || `<p>Voit valita keskusteltavat vakuutukset alta.</p>`}
-      </div>
-      ${selectedLevels.length ? `<p class="handoff-selection-note">Valitut turvavaihtoehdot välitetään asiantuntijalle täsmälleen yllä esitetyssä muodossa.</p>` : ""}
+          <div>
+            <span>Lakisääteiset tarkistukset</span>
+            <strong>${escapeHtml(assessment.mandatoryChecks?.map((item) => item.name).join(", ") || "Ei tunnistettuja")}</strong>
+          </div>
+          <div>
+            <span>Suositellut ja harkittavat vakuutukset</span>
+            <strong>${escapeHtml([...recommendedTitles, ...optionalTitles].join(", ") || "Ei tunnistettuja")}</strong>
+          </div>
+          <div>
+            <span>Yhteydenottotoive</span>
+            <strong>${escapeHtml(contactPreference)}</strong>
+          </div>
+          <div class="handoff-coverage-details">
+            <span>Keskusteluun valitut vakuutukset ja turvavaihtoehdot</span>
+            <ul>
+              ${selectedAreas.map((key) => `
+                <li><strong>${escapeHtml(types()[key].title)}</strong><span>${escapeHtml(assessmentSelectedTitle(key) || "Turvavaihtoehto avoinna")}</span></li>
+              `).join("") || `<li>Ei vielä valittuja vakuutuksia.</li>`}
+            </ul>
+          </div>
+        </div>
+      </details>
     </section>
   `;
 }

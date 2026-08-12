@@ -6,7 +6,7 @@ Verkkosivulle upotettava vakuutuskartoitus henkilö- ja yritysasiakkaille.
 
 - Asiakas valitsee henkilöasiakas- tai yritysasiakaskartoituksen.
 - Lyhyt kyllä/ei-kartoitus tunnistaa relevantit vakuutuslajit ilman tuotekohtaista syventymistä.
-- Tulosnäkymä kokoaa lakisääteiset tarkistukset, suositellut vakuutukset ja harkittavat lisäturvat dynaamiseksi yhteenvedoksi.
+- Tulosnäkymä jakaa lakisääteiset tarkistukset, suositellut vakuutukset ja harkittavat lisäturvat selkeiksi osioiksi.
 - Selkeistä vakuutuskorteista pääsee suoraan turvavaihtoehtojen vertailuun ja valintaan.
 - Yrityspuolella tulokset jaetaan lakisääteisiin tarkistuksiin, kriittisiin tarpeisiin ja tilannekohtaisiin hyötyihin.
 - Asiakas voi valita turvavaihtoehdon itse, vaikka kone ehdottaisi toista vaihtoehtoa.

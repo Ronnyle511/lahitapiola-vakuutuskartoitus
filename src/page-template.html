@@ -193,8 +193,11 @@
             <h3>Vapaaehtoinen yhteydenotto</h3>
             <p class="muted">Voit käyttää kartoitusta ja nähdä oman yhteenvedon myös ilman yhteystietojen antamista. Täytä tämä osio vain, jos haluat valmistella yhteydenottopyynnön.</p>
             <div id="contactHandoffSummary"></div>
-            <h4 class="contact-subtitle">Mistä haluat keskustella?</h4>
-            <div class="contact-list" id="contactChoices"></div>
+            <details class="contact-choice-editor">
+              <summary>Muokkaa keskusteluun valittuja vakuutuksia</summary>
+              <p class="muted small">Valitse ne vakuutukset, joista haluat keskustella asiantuntijan kanssa.</p>
+              <div class="contact-list" id="contactChoices"></div>
+            </details>
             <div class="form-grid">
               <label class="field">Nimi <input id="contactName" autocomplete="name" required></label>
               <label class="field" id="contactOrgField">Yrityksen nimi <input id="contactOrg"></label>

@@ -39,9 +39,8 @@ for (let index = 0; index < 20 && document.querySelector("#resultsView").classLi
 }
 
 assert.equal(document.querySelector("#resultsView").classList.contains("hidden"), false, "Kartoituksen pitää päättyä tuloksiin");
-assert.match(document.querySelector(".results-snapshot").textContent, /Kartoituksesi tulos/);
-assert.equal(document.querySelectorAll(".results-snapshot-stats button").length, 3);
-assert.ok(document.querySelector(".results-section-nav"), "Tuloksissa pitää olla osionavigaatio");
+assert.match(document.querySelector("#resultsTitle").textContent, /Sinulle ehdotetut vakuutukset/);
+assert.equal(document.querySelector(".results-snapshot"), null);
 const compareButton = document.querySelector(".product-rec-card [data-card-refine]");
 assert.ok(compareButton, "Tuloksissa pitää olla vakuutuskohtainen Vertaa turvia -painike");
 compareButton.click();
@@ -69,6 +68,8 @@ document.querySelector("#summaryContact").click();
 assert.equal(document.querySelector("#contactView").classList.contains("hidden"), false);
 assert.match(document.querySelector("#contactHandoffSummary").textContent, /Nämä tiedot välitetään asiantuntijalle/);
 assert.match(document.querySelector("#contactHandoffSummary").textContent, new RegExp(selectedTitle));
+assert.ok(document.querySelector("#contactHandoffSummary .handoff-overview"));
+assert.ok(document.querySelector("#contactHandoffSummary .handoff-details"));
 assert.ok(document.querySelector("#editAnswersFromContact"));
 document.querySelector("#contactName").value = "Demo Asiakas";
 document.querySelector("#contactEmail").value = "demo@example.com";

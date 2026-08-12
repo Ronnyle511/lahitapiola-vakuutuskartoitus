@@ -11,8 +11,8 @@ await testPersonalResultsAndContact();
 await testBusinessResults();
 
 assert.deepEqual(runtimeErrors, [], `Käyttöliittymässä havaittiin ajonaikaisia virheitä:\n${runtimeErrors.join("\n")}`);
-assert.match(css, /@media \(max-width: 720px\)[\s\S]*\.results-snapshot-stats\s*{[\s\S]*grid-template-columns: 1fr/);
-assert.match(css, /@media \(max-width: 720px\)[\s\S]*\.handoff-facts,[\s\S]*grid-template-columns: 1fr/);
+assert.doesNotMatch(css, /results-snapshot|results-section-nav|results-primary-actions/);
+assert.match(css, /@media \(max-width: 720px\)[\s\S]*\.handoff-overview,[\s\S]*grid-template-columns: 1fr/);
 assert.doesNotMatch(css, /calculator-|contact-price|#laskuri/);
 
 console.log("UI tests passed: personal and business results, navigation, contact handoff and accessibility");
@@ -69,11 +69,9 @@ async function testPersonalResultsAndContact() {
   const { document } = dom.window;
   await completeAssessment(dom, "personal");
 
-  const snapshot = document.querySelector(".results-snapshot");
-  assert.ok(snapshot, "Tulossivun yläkooste puuttuu");
-  assert.match(snapshot.textContent, /Kartoituksesi tulos/);
-  assert.equal(snapshot.querySelectorAll(".results-snapshot-stats button").length, 3);
-  assert.equal(snapshot.querySelectorAll(".results-section-nav button").length >= 4, true);
+  assert.equal(document.querySelector(".results-snapshot"), null);
+  assert.match(document.querySelector("#resultsTitle").textContent, /Sinulle ehdotetut vakuutukset/);
+  assert.match(document.querySelector("#resultsIntro").textContent, /Tutustu ehdotuksiin/);
 
   const cards = [...document.querySelectorAll(".product-rec-card")];
   assert.equal(cards.length > 0, true, "Tuloksissa pitää olla vakuutuskortteja");
@@ -81,10 +79,12 @@ async function testPersonalResultsAndContact() {
   assert.doesNotMatch(document.querySelector("#resultsView").textContent, /Miksi tämä nousi esiin|Mitä vakuutus yleisesti tekee/);
   assert.ok(document.querySelector(".product-card-actions [data-card-refine]"));
 
-  document.querySelector("[data-result-target='contact']").click();
+  document.querySelector("[data-expert-contact]").click();
   assert.equal(isHidden(document, "#contactView"), false);
   assert.match(document.querySelector("#contactHandoffSummary").textContent, /Nämä tiedot välitetään asiantuntijalle/);
-  assert.match(document.querySelector("#contactHandoffSummary").textContent, /Suositellut vakuutukset/);
+  assert.equal(document.querySelectorAll("#contactHandoffSummary .handoff-overview > div").length, 3);
+  assert.equal(document.querySelector("#contactHandoffSummary .handoff-details").open, false);
+  assert.equal(document.querySelector(".contact-choice-editor").open, false);
   assert.ok(document.querySelector("#contactTime"));
 
   await assertAccessible(dom.window);
@@ -98,14 +98,14 @@ async function testBusinessResults() {
 
   assert.ok(document.querySelector("#results-mandatory"));
   assert.ok(document.querySelector("#results-recommended"));
-  assert.ok(document.querySelector("#results-optional") || document.querySelector(".results-snapshot-stats"));
+  assert.ok(document.querySelector("#results-optional"));
   assert.match(document.querySelector("#resultsView").textContent, /Pakolliset ja sopimusperusteiset|Lakisääteiset vakuutukset/);
   assert.match(document.querySelector("#resultsView").textContent, /Suositellut vakuutukset/);
 
-  const contactButton = document.querySelector(".results-primary-actions [data-result-target='contact']");
+  const contactButton = document.querySelector("[data-expert-contact]");
   assert.ok(contactButton);
   contactButton.click();
-  assert.match(document.querySelector("#contactHandoffSummary").textContent, /Asiakastyyppi ja tilanne/);
+  assert.match(document.querySelector("#contactHandoffSummary").textContent, /Asiakastyyppi/);
   assert.ok(document.querySelector("#editAnswersFromContact"));
 
   dom.window.close();
