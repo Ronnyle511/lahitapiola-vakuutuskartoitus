@@ -2786,6 +2786,7 @@ function showView(next) {
   document.body.classList.toggle("assessment-active", !$("appShell").classList.contains("hidden"));
   const focusOnly = ["intro", "base", "quick", "results", "detail", "detailResult", "contact", "summary"].includes(next);
   $("appShell")?.classList.toggle("flow-only", focusOnly);
+  if ($("appShell")) $("appShell").dataset.view = next;
   updateSteps(next);
   renderSummaryList();
   renderChatPanel();

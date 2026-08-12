@@ -141,6 +141,8 @@ assert.doesNotMatch(appSource, /mandatory-disclosure|Avaa pakolliset ja sopimusp
 assert.match(appSource, /Nämä on erotettu vapaaehtoisista vakuutuksista/);
 assert.match(templateSource, /Muokkaa keskusteluun valittuja vakuutuksia/);
 assert.match(templateSource, /id="questionTitle" tabindex="-1"/);
+assert.match(templateSource, /Ei virallisessa käytössä/);
+assert.match(templateSource, /Konseptidemo – ei virallisessa käytössä/);
 assert.match(templateSource, /id="contactTime"/);
 assert.match(templateSource, /id="editAnswersFromContact"/);
 assert.doesNotMatch(appSource, /function isMandatoryRelatedType/);

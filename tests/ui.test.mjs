@@ -14,6 +14,9 @@ assert.deepEqual(runtimeErrors, [], `Käyttöliittymässä havaittiin ajonaikais
 assert.doesNotMatch(css, /results-snapshot|results-section-nav|results-primary-actions/);
 assert.match(css, /@media \(max-width: 720px\)[\s\S]*\.handoff-overview,[\s\S]*grid-template-columns: 1fr/);
 assert.doesNotMatch(css, /calculator-|contact-price|#laskuri/);
+assert.match(css, /\.site-brand\.demo-brand small\s*{[\s\S]*color:\s*#d00000/);
+assert.match(css, /\.app-shell\[data-view="results"\][\s\S]*max-width:\s*1320px/);
+assert.match(css, /@media \(min-width: 1180px\)[\s\S]*repeat\(4, minmax\(0, 1fr\)\)/);
 
 console.log("UI tests passed: personal and business results, navigation, contact handoff and accessibility");
 
@@ -62,6 +65,7 @@ async function completeAssessment(dom, mode = "personal") {
   }
 
   assert.equal(isHidden(document, "#resultsView"), false, `${mode}-kartoituksen pitää päättyä tuloksiin`);
+  assert.equal(document.querySelector("#appShell").dataset.view, "results");
 }
 
 async function testPersonalResultsAndContact() {

@@ -234,7 +234,7 @@ body:not(.assessment-active) .header-home-button {
 
 .hero {
   min-height: auto;
-  padding: 36px 24px 34px;
+  padding: 32px 24px 34px;
   background:
     linear-gradient(180deg, #ffffff 0%, #ffffff 42%, var(--blue-050) 42%, var(--blue-050) 100%);
 }
@@ -250,7 +250,7 @@ body:not(.assessment-active) .header-home-button {
   gap: 24px;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 42px;
+  margin-bottom: 32px;
   padding: 18px 20px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -320,15 +320,15 @@ body:not(.assessment-active) .header-home-button {
 }
 
 .hero-actions {
-  margin-top: 34px;
+  margin-top: 28px;
 }
 
 .hero-note {
   display: none;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
-  max-width: 980px;
-  margin-top: 54px;
+  max-width: 1180px;
+  margin-top: 36px;
 }
 
 .resume-notice {
@@ -452,7 +452,7 @@ body:not(.assessment-active) .header-home-button {
   gap: 24px;
   justify-content: center;
   max-width: 1040px;
-  margin: 34px auto 80px;
+  margin: 28px auto 56px;
   padding: 0 24px;
   align-items: start;
 }
@@ -461,6 +461,14 @@ body:not(.assessment-active) .header-home-button {
   grid-template-columns: minmax(0, 900px);
   justify-content: center;
   max-width: 1040px;
+}
+
+.app-shell[data-view="results"],
+.app-shell[data-view="detailResult"],
+.app-shell[data-view="contact"],
+.app-shell[data-view="summary"] {
+  grid-template-columns: minmax(0, 1240px);
+  max-width: 1320px;
 }
 
 .app-shell .support-grid,
@@ -1400,6 +1408,7 @@ h4 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
+  align-items: stretch;
 }
 
 .mandatory-product-grid {
@@ -1407,7 +1416,10 @@ h4 {
 }
 
 .product-rec-card {
+  display: flex;
   overflow: hidden;
+  min-width: 0;
+  flex-direction: column;
   border: 0;
   border-radius: 10px;
   background: var(--blue-050);
@@ -1519,6 +1531,7 @@ h4 {
 
 .product-card-body {
   display: grid;
+  flex: 1;
   gap: 14px;
   min-height: 214px;
   padding: 22px;
@@ -3899,9 +3912,15 @@ details.source-details summary {
   margin-top: 20px;
 }
 
+.assessment-active {
+  background: #f6fafc;
+}
+
 .app-panel {
-  border: 0;
-  box-shadow: none;
+  overflow: hidden;
+  border: 1px solid #d7e5ee;
+  border-radius: 12px;
+  box-shadow: 0 14px 38px rgba(0, 48, 87, 0.07);
 }
 
 .section {
@@ -4460,6 +4479,60 @@ details.source-details summary {
   line-height: 1.5;
 }
 
+#resultsView > .muted,
+#contactView > .muted {
+  max-width: 780px;
+  margin: 7px 0 0;
+}
+
+#resultsView > .top-actions.spaced {
+  margin: 16px 0 22px;
+}
+
+.app-shell[data-view="contact"] .contact-handoff-summary,
+.app-shell[data-view="contact"] .contact-choice-editor {
+  max-width: none;
+}
+
+@media (min-width: 1180px) {
+  .site-topline-inner,
+  .site-nav,
+  .site-servicebar-inner {
+    max-width: 1320px;
+  }
+
+  body:not(.assessment-active) .hero-note {
+    display: grid;
+  }
+
+  .app-shell[data-view="results"] .product-bucket .product-card-grid,
+  .app-shell[data-view="summary"] .summary-product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .app-shell[data-view="results"] .mandatory-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .app-shell[data-view="contact"] .form-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px 18px;
+  }
+
+  .app-shell[data-view="contact"] .contact-handoff-summary {
+    padding: 22px 24px;
+  }
+
+  .app-shell[data-view="summary"] .summary-profile-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .app-shell[data-view="detailResult"] .coverage-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+}
+
 @media (max-width: 980px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -4607,6 +4680,16 @@ details.source-details summary {
 
   .assessment-active .app-shell {
     margin-top: 0;
+  }
+
+  .assessment-active {
+    background: #ffffff;
+  }
+
+  .app-panel {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .section {
@@ -5079,7 +5162,7 @@ details.source-details summary {
       </div>
     </div>
     <div class="site-nav">
-      <div class="site-brand demo-brand" aria-label="Demo">
+      <div class="site-brand demo-brand" aria-label="Konseptidemo – ei virallisessa käytössä">
         <span>DEMO</span>
         <small>Ei virallisessa käytössä</small>
       </div>
@@ -11451,6 +11534,7 @@ function showView(next) {
   document.body.classList.toggle("assessment-active", !$("appShell").classList.contains("hidden"));
   const focusOnly = ["intro", "base", "quick", "results", "detail", "detailResult", "contact", "summary"].includes(next);
   $("appShell")?.classList.toggle("flow-only", focusOnly);
+  if ($("appShell")) $("appShell").dataset.view = next;
   updateSteps(next);
   renderSummaryList();
   renderChatPanel();
